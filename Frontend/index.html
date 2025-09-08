@@ -2,85 +2,27 @@
 <html lang="en">
 
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ArtSpace</title>
-    <meta name="description"
-        content="ArtSpace — ตัวอย่างหน้าเว็บโชว์ผลงานศิลปะ/ภาพถ่าย พร้อมกริด รูปขยาย และฟิลเตอร์" />
-
-    <link rel="stylesheet" href="styles.css" />
-    <link rel="icon" type="image/png" href="src/icon.png" />
-
+    <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
+    <nav>
+        <ul>
+            <li><a href="#Activity">ACTIVITY</a></li>
+            <li><a href="#Tips">TIPS</a></li>
+            <li><a href="#About">ABOUT</a></li>
+            <li><a href="#Myprofile">MyProfile</a></li>
+            <li><a href="#MyActivity">MyActivity</a></li>
+        </ul>
+    </nav>
 
-    <header>
-        <div class="brand">
-            <div class="logo">AS</div>
-            <div>
-                <h1>ArtSpace</h1>
-                <p>แกลเลอรีออนไลน์ — ตัวอย่างโค้ด HTML/CSS/JS</p>
-            </div>
-        </div>
-
-
-        <div class="controls">
-            <input id="q" class="search" placeholder="ค้นหาชื่อหรือคำอธิบาย...">
-            <select id="sort" class="select">
-                <option value="new">ใหม่ล่าสุด</option>
-                <option value="old">เก่าที่สุด</option>
-                <option value="title">ชื่อ (A‑Z)</option>
-            </select>
-            <button id="uploadBtn" class="btn">อัพโหลด (จำลอง)</button>
-        </div>
-    </header>
-
-
-    <section>
-        <div style="display:flex;gap:12px;align-items:center;">
-            <div class="tags" id="categories">
-                <!-- dynamic tags -->
-            </div>
-            <div style="margin-left:auto;color:#9fb0c8;font-size:13px">ภาพทั้งหมด <span id="count">0</span></div>
-        </div>
-
-
-        <div class="gallery" id="gallery"></div>
-    </section>
-
-
-    <!-- Viewer modal -->
-    <div id="viewer" class="viewer" role="dialog" aria-hidden="true">
-        <div class="viewer-card" role="document">
-            <div class="viewer-left"><img id="viewImg" alt=""></div>
-            <div class="viewer-right">
-                <h2 id="viewTitle"></h2>
-                <p id="viewDesc"></p>
-                <div id="viewTags" class="tags"></div>
-                <div class="viewer-actions">
-                    <button id="prev" class="select">ก่อนหน้า</button>
-                    <button id="next" class="select">ถัดไป</button>
-                    <button id="close" class="btn">ปิด</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-    <template id="cardTpl">
-        <article class="card">
-            <img class="thumb" alt="">
-            <div class="meta">
-                <h3></h3>
-                <p></p>
-                <div class="tags" style="margin-top:8px"></div>
-            </div>
-        </article>
-    </template>
-    <script src="script.js"></script>
-
-
+    <main>
+        <p>This is a sample web page.</p>
+    </main>
+    <script src="script.js" defer></script>
 </body>
 
 </html>
