@@ -1,28 +1,20 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="th">
 
 <head>
     <meta charset="UTF-8">
-    <title>Home</title>
+    <title>Login</title>
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-    <header>
-        <h1>My App</h1>
-        <nav>
-            <a href="./index.html">Home</a>
-            <a href="./pages/register.html">Register</a>
-            <a href="./pages/login.html">Login</a>
-            <a href="./pages/profile.html">Profile</a>
-            <a href="./pages/createActivity.html">Create Activity</a>
-            <a href="./pages/loadActivity.html">Activities</a>
-        </nav>
-    </header>
-    <div class="container">
-        <h2>Welcome!</h2>
-        <p>This is the Home Page.</p>
-    </div>
+    <h2>เข้าสู่ระบบ</h2>
+    <input type="text" id="loginUsername" placeholder="Username">
+    <input type="password" id="loginPassword" placeholder="Password">
+    <button onclick="login()">Login</button>
+    <p>ยังไม่มีบัญชี? <a href="register.html">สมัครสมาชิก</a></p>
+
+    <script src="app.js"></script>
 </body>
 
 </html>

@@ -51,6 +51,7 @@ public class ActivityController : ControllerBase
             AnnounceDateEnd = dto.AnnounceDateEnd,
             AnnounceTimeEnd = dto.AnnounceTimeEnd,
             ActivityType = dto.ActivityType,
+            MaxParticipants = dto.MaxParticipants,
             ImageUrl = activityImgPath,
             IsActive = true,
             CreatedByUserName = username, // ✅ ใช้ JWT
@@ -82,6 +83,8 @@ public class ActivityController : ControllerBase
                 a.AnnounceDateEnd,
                 a.AnnounceTimeEnd,
                 a.ActivityType,
+                cerrentParticipants = a.UserJoined.Count+a.UserRegistered.Count,
+                a.MaxParticipants,
                 a.ImageUrl,
                 a.IsActive,
                 a.CreatedByUserName,
@@ -227,6 +230,8 @@ public class ActivityController : ControllerBase
                 a.AnnounceDateEnd,
                 a.AnnounceTimeEnd,
                 a.ActivityType,
+                cerrentParticipants = a.UserJoined.Count,
+                a.MaxParticipants,
                 a.ImageUrl,
                 a.IsActive,
                 a.UserJoined,
@@ -257,7 +262,7 @@ public class ActivityController : ControllerBase
 
         if (!string.Equals(activity.CreatedByUserName, username, StringComparison.OrdinalIgnoreCase))
         {
-            return Forbid("Only the creator can delete this activity.");
+            return BadRequest("Only the creator can delete this activity.");
         }
 
         activity.IsActive = false;
@@ -299,6 +304,7 @@ public class ActivityController : ControllerBase
         activity.ActivityTimeStart = dto.ActivityTimeStart;
         activity.ActivityTimeEnd = dto.ActivityTimeEnd;
         activity.Location = dto.Location;
+        activity.MaxParticipants = dto.MaxParticipants;
         activity.AnnounceDateEnd = dto.AnnounceDateEnd;
         activity.AnnounceTimeEnd = dto.AnnounceTimeEnd;
         activity.ActivityType = dto.ActivityType;

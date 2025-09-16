@@ -13,6 +13,7 @@ namespace MyWebApi.Models
         public string AnnounceDateEnd { get; set; } = "";
         public string AnnounceTimeEnd { get; set; } = "";
         public string ActivityType { get; set; } = "";
+        public int MaxParticipants { get; set; } = 0;
         public string ImageUrl { get; set; } = "";
         public bool IsActive { get; set; } = true;
 
