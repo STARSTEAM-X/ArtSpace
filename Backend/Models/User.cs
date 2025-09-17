@@ -12,6 +12,10 @@ public class User
     public string DateOfBirth { get; set; } = "";
     public string Gender { get; set; } = "";
     public string ProfileImg { get; set; } = "";
+    public List<string> GalleryList { get; set; } = new();
+    public List<string> JoinedList { get; set; } = new();
+    public List<string> CreatedList { get; set; } = new();
+    public List<string> PostedList { get; set; } = new();
     public bool IsAdmin { get; set; } = false;
     public bool IsActive { get; set; } = true;
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;

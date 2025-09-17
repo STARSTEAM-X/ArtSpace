@@ -12,7 +12,7 @@ using MyWebApi.Data;
 namespace Backend.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250916215805_initialCreate")]
+    [Migration("20250917154559_initialCreate")]
     partial class initialCreate
     {
         /// <inheritdoc />
@@ -33,13 +33,11 @@ namespace Backend.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("ActivityDateEnd")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                    b.Property<DateTime>("ActivityDateEnd")
+                        .HasColumnType("datetime(6)");
 
-                    b.Property<string>("ActivityDateStart")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                    b.Property<DateTime>("ActivityDateStart")
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("ActivityDescription")
                         .IsRequired()
@@ -61,9 +59,8 @@ namespace Backend.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<string>("AnnounceDateEnd")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                    b.Property<DateTime>("AnnounceDateEnd")
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("AnnounceTimeEnd")
                         .IsRequired()
@@ -90,6 +87,10 @@ namespace Backend.Migrations
                     b.Property<int>("MaxParticipants")
                         .HasColumnType("int");
 
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
                     b.Property<string>("UserJoined")
                         .IsRequired()
                         .HasColumnType("longtext");
@@ -103,6 +104,68 @@ namespace Backend.Migrations
                     b.ToTable("Activities");
                 });
 
+            modelBuilder.Entity("MyWebApi.Models.Notification", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<bool>("IsRead")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("Message")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Notifications");
+                });
+
+            modelBuilder.Entity("MyWebApi.Models.Rating", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("AgvScore")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Score")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Ratings");
+                });
+
             modelBuilder.Entity("MyWebApi.Models.User", b =>
                 {
                     b.Property<int>("Id")
@@ -113,6 +176,10 @@ namespace Backend.Migrations
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime(6)");
+
+                    b.Property<string>("CreatedList")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.Property<string>("DateOfBirth")
                         .IsRequired()
@@ -126,6 +193,10 @@ namespace Backend.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.PrimitiveCollection<string>("GalleryList")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
                     b.Property<string>("Gender")
                         .IsRequired()
                         .HasColumnType("longtext");
@@ -136,6 +207,10 @@ namespace Backend.Migrations
                     b.Property<bool>("IsAdmin")
                         .HasColumnType("tinyint(1)");
 
+                    b.Property<string>("JoinedList")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnType("longtext");
@@ -145,6 +220,10 @@ namespace Backend.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<string>("PasswordHash")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("PostedList")
                         .IsRequired()
                         .HasColumnType("longtext");
 

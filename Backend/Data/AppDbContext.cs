@@ -11,10 +11,12 @@ public class AppDbContext : DbContext
 
     public DbSet<Activity> Activities { get; set; }
     public DbSet<User> Users { get; set; }
+    public DbSet<Notification> Notifications { get; set; }
+    public DbSet<Rating> Ratings { get; set; }
+
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        // ไม่ต้องส่ง JsonSerializerOptions = null
         var listToJsonConverter = new ValueConverter<List<string>, string>(
             v => JsonSerializer.Serialize(v, (JsonSerializerOptions?)null), // ✅ cast ให้ชัด
             v => JsonSerializer.Deserialize<List<string>>(v, (JsonSerializerOptions?)null) ?? new List<string>()
@@ -27,6 +29,26 @@ public class AppDbContext : DbContext
 
         modelBuilder.Entity<Activity>()
             .Property(a => a.UserRegistered)
+            .HasConversion(listToJsonConverter)
+            .HasColumnType("longtext");   // ✅ MySQL
+
+        modelBuilder.Entity<User>()
+            .Property(u => u.JoinedList)
+            .HasConversion(listToJsonConverter)
+            .HasColumnType("longtext");   // ✅ MySQL
+
+        modelBuilder.Entity<User>()
+            .Property(u => u.CreatedList)
+            .HasConversion(listToJsonConverter)
+            .HasColumnType("longtext");   // ✅ MySQL
+
+        modelBuilder.Entity<User>()
+            .Property(u => u.PostedList)
+            .HasConversion(listToJsonConverter)
+            .HasColumnType("longtext");   // ✅ MySQL
+
+        modelBuilder.Entity<Rating>()
+            .Property(u => u.Score)
             .HasConversion(listToJsonConverter)
             .HasColumnType("longtext");   // ✅ MySQL
     }

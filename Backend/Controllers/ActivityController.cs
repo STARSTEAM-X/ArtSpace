@@ -52,6 +52,7 @@ public class ActivityController : ControllerBase
             AnnounceTimeEnd = dto.AnnounceTimeEnd,
             ActivityType = dto.ActivityType,
             MaxParticipants = dto.MaxParticipants,
+            Status = "Upcoming",
             ImageUrl = activityImgPath,
             IsActive = true,
             CreatedByUserName = username, // ✅ ใช้ JWT
@@ -61,6 +62,29 @@ public class ActivityController : ControllerBase
         _db.Activities.Add(activity);
         await _db.SaveChangesAsync();
 
+        _db.Users
+            .Where(u => u.Username == username)
+            .ToList()
+            .ForEach(u =>
+            {
+                var createdList = u.CreatedList.ToList();
+                createdList.Add(activity.Id.ToString());
+                u.CreatedList = createdList;
+            });
+        await _db.SaveChangesAsync();
+
+         // ✅ สร้าง notification
+        var noti = new Notification
+        {
+            Username = username, // ผู้สร้าง activity
+            Title = "สร้างกิจกรรมสำเร็จ",
+            Message = $"คุณได้สร้างกิจกรรมใหม่: {activity.ActivityName}",
+            Type = "success"
+        };
+
+        _db.Notifications.Add(noti);
+        await _db.SaveChangesAsync();
+
         return CreatedAtAction(nameof(GetActivities), new { id = activity.Id }, activity);
     }
 
@@ -68,8 +92,13 @@ public class ActivityController : ControllerBase
     [HttpGet("list")]
     public async Task<IActionResult> GetActivities()
     {
+        var today = DateTime.UtcNow.Date;
+
         var activities = await _db.Activities
             .Where(a => a.IsActive)
+            .ToListAsync();
+
+        var result = activities
             .Select(a => new
             {
                 a.Id,
@@ -83,15 +112,24 @@ public class ActivityController : ControllerBase
                 a.AnnounceDateEnd,
                 a.AnnounceTimeEnd,
                 a.ActivityType,
-                cerrentParticipants = a.UserJoined.Count+a.UserRegistered.Count,
+                currentParticipants = a.UserJoined.Count + a.UserRegistered.Count,
                 a.MaxParticipants,
                 a.ImageUrl,
                 a.IsActive,
+
+                // ✅ คำนวณสถานะใหม่ทุกครั้ง
+                Status = today >= a.ActivityDateStart.Date && today <= a.ActivityDateEnd.Date
+                            ? "Ongoing"
+                            : today > a.ActivityDateEnd.Date
+                                ? "Done"
+                                : "Upcoming",
+
                 a.CreatedByUserName,
                 a.CreatedAt
             })
-            .ToListAsync();
-        return Ok(activities);
+            .ToList();
+
+        return Ok(result);
     }
 
     // POST: api/activity/join
@@ -110,9 +148,34 @@ public class ActivityController : ControllerBase
             return BadRequest(new { message = "User already joined or registered" });
         }
 
+        // ✅ เพิ่ม user เข้า Registered list
         var registered = activity.UserRegistered.ToList();
         registered.Add(username);
         activity.UserRegistered = registered;
+
+        await _db.SaveChangesAsync();
+
+        // ✅ Noti สำหรับ "ผู้เข้าร่วม"
+        var userNoti = new Notification
+        {
+            Username = username,
+            Title = "เข้าร่วมกิจกรรมสำเร็จ",
+            Message = $"คุณได้ลงทะเบียนเข้าร่วมกิจกรรม: {activity.ActivityName}",
+            Type = "success",
+            CreatedAt = DateTime.UtcNow
+        };
+        _db.Notifications.Add(userNoti);
+
+        // ✅ Noti สำหรับ "เจ้าของกิจกรรม"
+        var ownerNoti = new Notification
+        {
+            Username = activity.CreatedByUserName,
+            Title = "มีผู้เข้าร่วมใหม่",
+            Message = $"{username} ได้ลงทะเบียนเข้าร่วมกิจกรรม: {activity.ActivityName}",
+            Type = "update",
+            CreatedAt = DateTime.UtcNow
+        };
+        _db.Notifications.Add(ownerNoti);
 
         await _db.SaveChangesAsync();
 
@@ -124,6 +187,7 @@ public class ActivityController : ControllerBase
             JoinedUsers = activity.UserJoined
         });
     }
+
 
     // POST: api/activity/leave
     [HttpPost("leave")]
@@ -144,13 +208,19 @@ public class ActivityController : ControllerBase
             registered.Remove(username);
             activity.UserRegistered = registered;
             removed = true;
-        }
-        else if (activity.UserJoined.Contains(username))
-        {
-            var joined = activity.UserJoined.ToList();
-            joined.Remove(username);
-            activity.UserJoined = joined;
-            removed = true;
+            _db.Activities.Update(activity);
+            await _db.SaveChangesAsync();
+
+            _db.Users
+                .Where(u => u.Username == username)
+                .ToList()
+                .ForEach(u =>
+                {
+                    var joinedList = u.JoinedList.ToList();
+                    joinedList.Remove(activity.Id.ToString());
+                    u.JoinedList = joinedList;
+                });
+            await _db.SaveChangesAsync();
         }
 
         if (!removed)
@@ -158,7 +228,28 @@ public class ActivityController : ControllerBase
             return BadRequest(new { message = "User is not registered or joined in this activity" });
         }
 
-        _db.Activities.Update(activity);
+        // ✅ Noti สำหรับผู้ใช้
+        var userNoti = new Notification
+        {
+            Username = username,
+            Title = "ออกจากกิจกรรมสำเร็จ",
+            Message = $"คุณได้ออกจากกิจกรรม: {activity.ActivityName}",
+            Type = "warning",
+            CreatedAt = DateTime.UtcNow
+        };
+        _db.Notifications.Add(userNoti);
+
+        // ✅ Noti สำหรับเจ้าของกิจกรรม
+        var ownerNoti = new Notification
+        {
+            Username = activity.CreatedByUserName,
+            Title = "ผู้เข้าร่วมออกจากกิจกรรม",
+            Message = $"{username} ได้ออกจากกิจกรรม: {activity.ActivityName}",
+            Type = "update",
+            CreatedAt = DateTime.UtcNow
+        };
+        _db.Notifications.Add(ownerNoti);
+
         await _db.SaveChangesAsync();
 
         return Ok(new
@@ -169,6 +260,7 @@ public class ActivityController : ControllerBase
             JoinedUsers = activity.UserJoined
         });
     }
+
 
     // POST: api/activity/confirmjoin
     [HttpPost("confirmjoin")]
@@ -200,6 +292,41 @@ public class ActivityController : ControllerBase
         activity.UserJoined = joined;
 
         _db.Activities.Update(activity);
+        await _db.SaveChangesAsync();
+
+        _db.Users
+            .Where(u => u.Username == username)
+            .ToList()
+            .ForEach(u =>
+            {
+                var joinedList = u.JoinedList.ToList();
+                joinedList.Add(activity.Id.ToString());
+                u.JoinedList = joinedList;
+            });
+        await _db.SaveChangesAsync();
+
+        // ✅ Noti สำหรับผู้ใช้
+        var userNoti = new Notification
+        {
+            Username = username,
+            Title = "เข้าร่วมกิจกรรมสำเร็จ",
+            Message = $"คุณได้เข้าร่วมกิจกรรม: {activity.ActivityName}",
+            Type = "success",
+            CreatedAt = DateTime.UtcNow
+        };
+        _db.Notifications.Add(userNoti);
+
+        // ✅ Noti สำหรับเจ้าของกิจกรรม
+        var ownerNoti = new Notification
+        {
+            Username = activity.CreatedByUserName,
+            Title = "ผู้เข้าร่วมใหม่ยืนยันแล้ว",
+            Message = $"{username} ได้ยืนยันการเข้าร่วมกิจกรรม: {activity.ActivityName}",
+            Type = "update",
+            CreatedAt = DateTime.UtcNow
+        };
+        _db.Notifications.Add(ownerNoti);
+
         await _db.SaveChangesAsync();
 
         return Ok(new
@@ -265,12 +392,43 @@ public class ActivityController : ControllerBase
             return BadRequest("Only the creator can delete this activity.");
         }
 
+        // ✅ Soft delete
         activity.IsActive = false;
+        activity.Status = "Canceled"; 
+
         _db.Activities.Update(activity);
+        await _db.SaveChangesAsync();
+
+        // ✅ Noti ให้เจ้าของ
+        var ownerNoti = new Notification
+        {
+            Username = username,
+            Title = "ลบกิจกรรมสำเร็จ",
+            Message = $"คุณได้ลบกิจกรรม: {activity.ActivityName}",
+            Type = "danger",
+            CreatedAt = DateTime.UtcNow
+        };
+        _db.Notifications.Add(ownerNoti);
+
+        // ✅ Noti ให้ผู้เข้าร่วมทุกคน
+        foreach (var participant in activity.UserJoined.Concat(activity.UserRegistered))
+        {
+            var participantNoti = new Notification
+            {
+                Username = participant,
+                Title = "กิจกรรมถูกยกเลิก",
+                Message = $"กิจกรรม: {activity.ActivityName} ถูกลบโดยผู้สร้าง",
+                Type = "error",
+                CreatedAt = DateTime.UtcNow
+            };
+            _db.Notifications.Add(participantNoti);
+        }
+
         await _db.SaveChangesAsync();
 
         return Ok(new { message = "Activity deleted successfully" });
     }
+
 
     // PUT: api/activity/update/{id}
     [HttpPut("update/{id}")]
@@ -287,7 +445,7 @@ public class ActivityController : ControllerBase
 
         // ✅ ตรวจสอบว่าเป็นเจ้าของเท่านั้น
         if (!string.Equals(activity.CreatedByUserName, username, StringComparison.OrdinalIgnoreCase))
-            return Forbid("Only the creator can update this activity.");
+            return BadRequest("Only the creator can update this activity.");
 
         // อัปโหลดรูปใหม่ (ถ้ามี)
         string activityImgPath = activity.ImageUrl;
@@ -310,10 +468,44 @@ public class ActivityController : ControllerBase
         activity.ActivityType = dto.ActivityType;
         activity.ImageUrl = activityImgPath;
 
+        // ✅ คำนวณสถานะใหม่ทุกครั้งที่อัปเดต
+        var today = DateTime.UtcNow.Date;
+        if (today >= activity.ActivityDateStart.Date && today <= activity.ActivityDateEnd.Date)
+            activity.Status = "Ongoing";
+        else if (today > activity.ActivityDateEnd.Date)
+            activity.Status = "Done";
+        else
+            activity.Status = "Upcoming";
+
         _db.Activities.Update(activity);
         await _db.SaveChangesAsync();
 
+        // ✅ Noti ให้เจ้าของกิจกรรม
+        var ownerNoti = new Notification
+        {
+            Username = username,
+            Title = "อัปเดตกิจกรรมสำเร็จ",
+            Message = $"คุณได้แก้ไขกิจกรรม: {activity.ActivityName}",
+            Type = "success",
+            CreatedAt = DateTime.UtcNow
+        };
+        _db.Notifications.Add(ownerNoti);
+
+        // ✅ Noti ให้ผู้เข้าร่วมทั้งหมด
+        foreach (var participant in activity.UserJoined.Concat(activity.UserRegistered))
+        {
+            var participantNoti = new Notification
+            {
+                Username = participant,
+                Title = "กิจกรรมมีการอัปเดต",
+                Message = $"กิจกรรม: {activity.ActivityName} มีการแก้ไขข้อมูล โปรดตรวจสอบอีกครั้ง",
+                Type = "update",
+                CreatedAt = DateTime.UtcNow
+            };
+            _db.Notifications.Add(participantNoti);
+        }
+
+        await _db.SaveChangesAsync();
         return Ok(new { message = "Activity updated successfully", activity });
     }
-
 }

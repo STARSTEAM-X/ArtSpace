@@ -65,7 +65,7 @@ public class AuthController : ControllerBase
         return Ok(new { message = "User registered successfully", userId = user.Id, profileImg = user.ProfileImg });
     }
 
-    
+
     // POST: api/auth/login
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginDto dto)
@@ -84,8 +84,23 @@ public class AuthController : ControllerBase
         }
 
         var token = GenerateJwtToken(user);
+
+        // ✅ สร้าง notification
+        var noti = new Notification
+        {
+            Username = dto.Username,
+            Title = "Login สำเร็จ",
+            Message = $"ยินดีต้อนรับ {dto.Username}",
+            Type = "success",
+            CreatedAt = DateTime.UtcNow
+        };
+
+        _db.Notifications.Add(noti);
+        await _db.SaveChangesAsync();
+
         return Ok(new { token });
     }
+
 
     // GET: api/auth/me
     [HttpGet("me")]
@@ -108,9 +123,16 @@ public class AuthController : ControllerBase
             user.DateOfBirth,
             user.Email,
             user.ProfileImg,
-            user.CreatedAt,
+            user.JoinedList,
+            user.CreatedList,
+            user.PostedList,
+            JoinedCount = user.JoinedList.Count,
+            CreatedCount = user.CreatedList.Count,
+            PostedCount = user.PostedList.Count,
             user.IsAdmin,
-            user.IsActive
+            user.IsActive,
+            user.CreatedAt
+
         });
     }
 
