@@ -12,7 +12,7 @@ using MyWebApi.Data;
 namespace Backend.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250917154559_initialCreate")]
+    [Migration("20250917175039_initialCreate")]
     partial class initialCreate
     {
         /// <inheritdoc />
@@ -146,9 +146,6 @@ namespace Backend.Migrations
                         .HasColumnType("int");
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("AgvScore")
-                        .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime(6)");

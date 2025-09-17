@@ -56,30 +56,40 @@ public class ActivityController : ControllerBase
             ImageUrl = activityImgPath,
             IsActive = true,
             CreatedByUserName = username, // ✅ ใช้ JWT
-            CreatedAt = DateTime.UtcNow
+            CreatedAt = DateTime.UtcNow,
+            UserJoined = new List<string> { username } // ✅ ผู้จัด join อัตโนมัติ
         };
 
         _db.Activities.Add(activity);
         await _db.SaveChangesAsync();
 
-        _db.Users
-            .Where(u => u.Username == username)
-            .ToList()
-            .ForEach(u =>
-            {
-                var createdList = u.CreatedList.ToList();
-                createdList.Add(activity.Id.ToString());
-                u.CreatedList = createdList;
-            });
-        await _db.SaveChangesAsync();
+        // ✅ อัปเดต User.CreatedList และ User.JoinedList ของผู้จัด
+        var creator = await _db.Users.FirstOrDefaultAsync(u => u.Username == username);
+        if (creator != null)
+        {
+            var createdList = creator.CreatedList.ToList();
+            createdList.Add(activity.Id.ToString());
+            creator.CreatedList = createdList;
 
-         // ✅ สร้าง notification
+            var joinedList = creator.JoinedList.ToList();
+            if (!joinedList.Contains(activity.Id.ToString()))
+            {
+                joinedList.Add(activity.Id.ToString());
+            }
+            creator.JoinedList = joinedList;
+
+            _db.Users.Update(creator);
+            await _db.SaveChangesAsync();
+        }
+
+        // ✅ สร้าง notification
         var noti = new Notification
         {
             Username = username, // ผู้สร้าง activity
             Title = "สร้างกิจกรรมสำเร็จ",
             Message = $"คุณได้สร้างกิจกรรมใหม่: {activity.ActivityName}",
-            Type = "success"
+            Type = "success",
+            CreatedAt = DateTime.UtcNow
         };
 
         _db.Notifications.Add(noti);
@@ -87,6 +97,7 @@ public class ActivityController : ControllerBase
 
         return CreatedAtAction(nameof(GetActivities), new { id = activity.Id }, activity);
     }
+
 
     // GET: api/activity/list
     [HttpGet("list")]
@@ -200,51 +211,54 @@ public class ActivityController : ControllerBase
         var activity = await _db.Activities.FindAsync(dto.ActivityId);
         if (activity == null) return NotFound(new { message = "Activity not found" });
 
+        // ❌ เจ้าของกิจกรรมห้ามออก
+        if (activity.CreatedByUserName.Equals(username, StringComparison.OrdinalIgnoreCase))
+        {
+            return BadRequest(new { message = "Owner cannot leave their own activity." });
+        }
+
         bool removed = false;
 
-        if (activity.UserRegistered.Contains(username))
+        // ❌ ถ้า user ถูก confirm แล้ว (อยู่ใน UserJoined) → ไม่อนุญาตให้ออก
+        if (activity.UserJoined.Any(u => u.Equals(username, StringComparison.OrdinalIgnoreCase)))
+        {
+            return BadRequest(new { message = "You cannot leave after being confirmed." });
+        }
+
+        // ✅ อนุญาตให้ออกจาก Registered ได้
+        if (activity.UserRegistered.Any(u => u.Equals(username, StringComparison.OrdinalIgnoreCase)))
         {
             var registered = activity.UserRegistered.ToList();
-            registered.Remove(username);
+            registered.RemoveAll(u => u.Equals(username, StringComparison.OrdinalIgnoreCase));
             activity.UserRegistered = registered;
             removed = true;
-            _db.Activities.Update(activity);
-            await _db.SaveChangesAsync();
 
-            _db.Users
-                .Where(u => u.Username == username)
-                .ToList()
-                .ForEach(u =>
-                {
-                    var joinedList = u.JoinedList.ToList();
-                    joinedList.Remove(activity.Id.ToString());
-                    u.JoinedList = joinedList;
-                });
+            _db.Activities.Update(activity);
             await _db.SaveChangesAsync();
         }
 
         if (!removed)
         {
-            return BadRequest(new { message = "User is not registered or joined in this activity" });
+            return BadRequest(new { message = "User is not registered in this activity" });
         }
 
-        // ✅ Noti สำหรับผู้ใช้
+        // ✅ Notification: User
         var userNoti = new Notification
         {
             Username = username,
-            Title = "ออกจากกิจกรรมสำเร็จ",
-            Message = $"คุณได้ออกจากกิจกรรม: {activity.ActivityName}",
+            Title = "ยกเลิกการลงทะเบียน",
+            Message = $"คุณได้ยกเลิกการลงทะเบียนกิจกรรม: {activity.ActivityName}",
             Type = "warning",
             CreatedAt = DateTime.UtcNow
         };
         _db.Notifications.Add(userNoti);
 
-        // ✅ Noti สำหรับเจ้าของกิจกรรม
+        // ✅ Notification: Owner
         var ownerNoti = new Notification
         {
             Username = activity.CreatedByUserName,
-            Title = "ผู้เข้าร่วมออกจากกิจกรรม",
-            Message = $"{username} ได้ออกจากกิจกรรม: {activity.ActivityName}",
+            Title = "มีผู้ยกเลิกการลงทะเบียน",
+            Message = $"{username} ได้ยกเลิกการลงทะเบียนกิจกรรม: {activity.ActivityName}",
             Type = "update",
             CreatedAt = DateTime.UtcNow
         };
@@ -264,51 +278,63 @@ public class ActivityController : ControllerBase
 
     // POST: api/activity/confirmjoin
     [HttpPost("confirmjoin")]
-    [Authorize]
+    [Authorize] // ✅ ต้อง login เป็นเจ้าของ activity
     public async Task<IActionResult> ConfirmJoin([FromBody] JoinRequest dto)
     {
-        var username = User.FindFirstValue(ClaimTypes.Name);
-        if (string.IsNullOrEmpty(username)) return Unauthorized();
+        var ownerUsername = User.FindFirstValue(ClaimTypes.Name); // ✅ เจ้าของ activity
+        if (string.IsNullOrEmpty(ownerUsername)) return Unauthorized();
 
         var activity = await _db.Activities.FindAsync(dto.ActivityId);
         if (activity == null) return NotFound(new { message = "Activity not found" });
 
-        if (!activity.UserRegistered.Contains(username))
+        // ✅ ตรวจสอบว่าเป็นเจ้าของกิจกรรมหรือไม่
+        if (!string.Equals(activity.CreatedByUserName, ownerUsername, StringComparison.OrdinalIgnoreCase))
         {
-            return BadRequest(new { message = "User is not registered for this activity" });
+            return Forbid(); // ป้องกันไม่ให้คนอื่นมากดยืนยันแทน
         }
 
-        if (activity.UserJoined.Contains(username))
+        // ❌ กันไม่ให้ confirm ถ้า user อยู่ใน Joined อยู่แล้ว
+        if (activity.UserJoined.Any(u => u.Equals(dto.Username, StringComparison.OrdinalIgnoreCase)))
         {
             return BadRequest(new { message = "User already joined" });
         }
 
+        // ✅ เช็กว่ามีชื่อใน Registered หรือไม่ (ignore case)
+        if (!activity.UserRegistered.Any(u => u.Equals(dto.Username, StringComparison.OrdinalIgnoreCase)))
+        {
+            return BadRequest(new { message = "User is not registered for this activity" });
+        }
+
+        // ย้ายจาก Registered → Joined
         var registered = activity.UserRegistered.ToList();
-        registered.Remove(username);
+        registered.RemoveAll(u => u.Equals(dto.Username, StringComparison.OrdinalIgnoreCase));
         activity.UserRegistered = registered;
 
         var joined = activity.UserJoined.ToList();
-        joined.Add(username);
+        joined.Add(dto.Username);
         activity.UserJoined = joined;
 
         _db.Activities.Update(activity);
         await _db.SaveChangesAsync();
 
-        _db.Users
-            .Where(u => u.Username == username)
-            .ToList()
-            .ForEach(u =>
+        // ✅ update User.JoinedList ของคนที่ถูก confirm
+        var user = await _db.Users.FirstOrDefaultAsync(u => u.Username == dto.Username);
+        if (user != null)
+        {
+            var joinedList = user.JoinedList.ToList();
+            if (!joinedList.Contains(activity.Id.ToString()))
             {
-                var joinedList = u.JoinedList.ToList();
                 joinedList.Add(activity.Id.ToString());
-                u.JoinedList = joinedList;
-            });
-        await _db.SaveChangesAsync();
+            }
+            user.JoinedList = joinedList;
+            _db.Users.Update(user);
+            await _db.SaveChangesAsync();
+        }
 
-        // ✅ Noti สำหรับผู้ใช้
+        // ✅ Notification: User ที่ถูก confirm
         var userNoti = new Notification
         {
-            Username = username,
+            Username = dto.Username,
             Title = "เข้าร่วมกิจกรรมสำเร็จ",
             Message = $"คุณได้เข้าร่วมกิจกรรม: {activity.ActivityName}",
             Type = "success",
@@ -316,12 +342,12 @@ public class ActivityController : ControllerBase
         };
         _db.Notifications.Add(userNoti);
 
-        // ✅ Noti สำหรับเจ้าของกิจกรรม
+        // ✅ Notification: Owner
         var ownerNoti = new Notification
         {
-            Username = activity.CreatedByUserName,
-            Title = "ผู้เข้าร่วมใหม่ยืนยันแล้ว",
-            Message = $"{username} ได้ยืนยันการเข้าร่วมกิจกรรม: {activity.ActivityName}",
+            Username = ownerUsername,
+            Title = "ยืนยันผู้เข้าร่วมแล้ว",
+            Message = $"คุณได้ยืนยัน {dto.Username} เข้าร่วมกิจกรรม: {activity.ActivityName}",
             Type = "update",
             CreatedAt = DateTime.UtcNow
         };
@@ -337,6 +363,8 @@ public class ActivityController : ControllerBase
             JoinedUsers = activity.UserJoined
         });
     }
+
+
 
     // GET: api/activity/detail/{id}
     [HttpGet("detail/{id}")]

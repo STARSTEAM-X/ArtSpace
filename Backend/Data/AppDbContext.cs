@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using System.Text.Json;
 using MyWebApi.Models;
-
+using Backend.Helper;
 namespace MyWebApi.Data;
 
 public class AppDbContext : DbContext
@@ -22,10 +22,15 @@ public class AppDbContext : DbContext
             v => JsonSerializer.Deserialize<List<string>>(v, (JsonSerializerOptions?)null) ?? new List<string>()
         );
 
+        var scoreListConverter = new ValueConverter<List<ScoreEntry>, string>(
+            v => JsonSerializer.Serialize<List<ScoreEntry>>(v, new JsonSerializerOptions()),
+            v => JsonSerializer.Deserialize<List<ScoreEntry>>(v, new JsonSerializerOptions()) ?? new List<ScoreEntry>()
+        );
+
         modelBuilder.Entity<Activity>()
-        .Property(a => a.UserJoined)
-        .HasConversion(listToJsonConverter)
-        .HasColumnType("longtext");   // ✅ MySQL
+            .Property(a => a.UserJoined)
+            .HasConversion(listToJsonConverter)
+            .HasColumnType("longtext");   // ✅ MySQL
 
         modelBuilder.Entity<Activity>()
             .Property(a => a.UserRegistered)
@@ -48,8 +53,8 @@ public class AppDbContext : DbContext
             .HasColumnType("longtext");   // ✅ MySQL
 
         modelBuilder.Entity<Rating>()
-            .Property(u => u.Score)
-            .HasConversion(listToJsonConverter)
-            .HasColumnType("longtext");   // ✅ MySQL
+            .Property(r => r.Score)
+            .HasConversion(scoreListConverter)
+            .HasColumnType("longtext");  // ✅ MySQL
     }
 }

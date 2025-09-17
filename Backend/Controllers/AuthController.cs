@@ -62,6 +62,13 @@ public class AuthController : ControllerBase
         _db.Users.Add(user);
         await _db.SaveChangesAsync();
 
+        var rating = new Rating
+        {
+            Username = dto.Username,
+        };
+        _db.Ratings.Add(rating);
+        await _db.SaveChangesAsync();
+
         return Ok(new { message = "User registered successfully", userId = user.Id, profileImg = user.ProfileImg });
     }
 
@@ -126,13 +133,9 @@ public class AuthController : ControllerBase
             user.JoinedList,
             user.CreatedList,
             user.PostedList,
-            JoinedCount = user.JoinedList.Count,
-            CreatedCount = user.CreatedList.Count,
-            PostedCount = user.PostedList.Count,
             user.IsAdmin,
             user.IsActive,
             user.CreatedAt
-
         });
     }
 
