@@ -104,4 +104,24 @@ public class RatingController : ControllerBase
         return Ok(new { message = "Rating saved successfully", ratingId = rating.Id });
     }
 
+    // api/rating/average/{username}
+    [HttpGet("average/{username}")]
+    public async Task<IActionResult> GetAverageScore(string username)
+    {
+        var ratings = await _db.Ratings
+            .Where(r => r.Username == username)
+            .ToListAsync();
+
+        if (ratings == null || ratings.Count == 0)
+        {
+            return NotFound(new { message = "No ratings found for this user." });
+        }
+        var allScores = ratings.SelectMany(r => r.Score);
+        var totalScore = allScores.Sum(s => s.Score);
+        var countScore = allScores.Count();
+        var avgScore = countScore > 0 ? (double)totalScore / countScore : 0;
+
+        return Ok(new { AverageScore = avgScore });
+    }
+    
 }

@@ -139,6 +139,54 @@ public class AuthController : ControllerBase
         });
     }
 
+    // POST: api/auth/changepassword
+    [HttpPost("changepassword")]
+    [Authorize]
+    public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordDto dto)
+    {
+        var username = User.FindFirstValue(ClaimTypes.Name);
+        if (string.IsNullOrEmpty(username)) return Unauthorized();
+
+        var user = await _db.Users.FirstOrDefaultAsync(u => u.Username == username);
+        if (user == null) return NotFound(new { message = "User not found" });
+
+        // ตรวจสอบรหัสผ่านเดิม
+        if (!BCrypt.Net.BCrypt.Verify(dto.OldPassword, user.PasswordHash))
+            return BadRequest(new { message = "รหัสผ่านเดิมไม่ถูกต้อง" });
+
+        // ตรวจสอบรหัสผ่านใหม่กับยืนยันรหัสผ่าน
+        if (dto.NewPassword != dto.ConfirmPassword)
+            return BadRequest(new { message = "รหัสผ่านใหม่ไม่ตรงกัน" });
+
+        // อัปเดตรหัสผ่านใหม่
+        user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.NewPassword);
+        _db.Users.Update(user);
+        await _db.SaveChangesAsync();
+
+        // ✅ สร้าง Notification
+        var noti = new Notification
+        {
+            Username = username,
+            Title = "เปลี่ยนรหัสผ่าน",
+            Message = "คุณได้ทำการเปลี่ยนรหัสผ่านสำเร็จ",
+            Type = "info",
+            CreatedAt = DateTime.UtcNow
+        };
+
+        _db.Notifications.Add(noti);
+        await _db.SaveChangesAsync();
+
+        return Ok(new { message = "เปลี่ยนรหัสผ่านเรียบร้อยแล้ว" });
+    }
+
+
+
+
+
+
+
+
+
     private string GenerateJwtToken(User user)
     {
         var jwtKey = _config["Jwt:Key"];

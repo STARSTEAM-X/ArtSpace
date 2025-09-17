@@ -119,4 +119,44 @@ public class ProfileController : ControllerBase
             AverageScore = avgScore
         });
     }
+
+
+    // add Gallery image
+    // POST: api/profile/addGallery
+    [HttpPost("addGallery")]
+    [Authorize]
+    public async Task<IActionResult> AddGalleryImage([FromForm] IFormFile galleryImage)
+    {
+        var username = User.FindFirstValue(ClaimTypes.Name);
+        if (string.IsNullOrEmpty(username)) return Unauthorized();
+
+        var user = await _db.Users.FirstOrDefaultAsync(u => u.Username == username);
+        if (user == null) return NotFound();
+
+        if (galleryImage == null || galleryImage.Length == 0)
+        {
+            return BadRequest(new { message = "No image uploaded." });
+        }
+
+        // ✅ อัปโหลดไฟล์เหมือน register (เก็บลงโฟลเดอร์ gallery)
+        var galleryImgPath = await FileService.UploadFileAsync(galleryImage, "gallery");
+
+        // ✅ เพิ่ม path เข้าไปใน GalleryList
+        var galleryList = user.GalleryList.ToList();
+        galleryList.Add(galleryImgPath);
+        user.GalleryList = galleryList;
+
+        _db.Users.Update(user);
+        await _db.SaveChangesAsync();
+
+        return Ok(new
+        {
+            message = "Image added to gallery successfully.",
+            galleryList = user.GalleryList
+        });
+    }
+
+
+
+
 }
