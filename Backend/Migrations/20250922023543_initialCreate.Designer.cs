@@ -12,7 +12,7 @@ using MyWebApi.Data;
 namespace Backend.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250917182951_initialCreate")]
+    [Migration("20250922023543_initialCreate")]
     partial class initialCreate
     {
         /// <inheritdoc />
