@@ -4,7 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <title>ARTSPACE</title>
-    <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="./css/merged.css">
+    <!-- <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="./css/profile.css"> -->
 </head>
 
 <body>
@@ -72,7 +74,188 @@
         </div>
     </div>
 
+
+
+
+
+
+
+    <div class="profile-container">
+        <!-- ส่วนข้อมูลผู้ใช้ -->
+        <div class="profile-card">
+            <!-- Profile Left -->
+            <div class="profile-left">
+                <img id="profileImg" src="https://via.placeholder.com/150" alt="Profile">
+                <div class="rating">
+                    <span id="avgScore">0.0</span>
+                    <span id="stars">⭐</span>
+                </div>
+            </div>
+
+            <!-- Profile Right -->
+            <div class="profile-right">
+                <div class="profile-header">
+                    <h2 id="nickname">กำลังโหลด...</h2>
+                    <div class="profile-actions">
+                        <button class="btn-edit" id="openEditProfile">Edit Profile</button>
+                        <button class="btn-gray">Change your password</button>
+                    </div>
+
+                </div>
+
+                <!-- Bio -->
+                <p class="bio" id="bio">"ยังไม่มี Bio"</p>
+                <hr>
+
+                <p>👤 ชื่อผู้ใช้: <span id="username">-</span></p>
+                <p>🪪 ชื่อ-นามสกุล: <span id="fullname">-</span></p>
+                <p>📧 อีเมล: <span id="email">-</span></p>
+                <p>🎂 วันเกิด: <span id="dob">-</span></p>
+            </div>
+        </div>
+
+        <!-- สรุปกิจกรรม -->
+        <div class="stats">
+            <div class="stat-box">
+                <h3 id="joinedCount">0</h3>
+                <p>Joined</p>
+            </div>
+            <div class="stat-box">
+                <h3 id="createdCount">0</h3>
+                <p>Created</p>
+            </div>
+            <div class="stat-box">
+                <h3 id="postedCount">0</h3>
+                <p>Posted</p>
+            </div>
+        </div>
+
+        <!-- Gallery Section -->
+        <section class="section">
+            <div class="section-header">
+                <h2>🖼 Gallery</h2>
+                <button class="btn-edit small" id="editGalleryBtn">Edit</button>
+            </div>
+            <div id="galleryList" class="gallery-list"></div>
+        </section>
+
+
+        <!-- กิจกรรมที่เข้าร่วม -->
+        <section class="section">
+            <h2>📑 Joined</h2>
+            <div id="joinedList" class="activity-list"></div>
+        </section>
+
+        <!-- กิจกรรมที่สร้าง -->
+        <section class="section">
+            <h2>➕ Created</h2>
+            <div id="createdList" class="activity-list"></div>
+        </section>
+
+        <!-- บทความที่โพสต์ -->
+        <section class="section">
+            <h2>👥 Posted</h2>
+            <div id="postedList" class="post-list"></div>
+        </section>
+    </div>
+
+
+    <!-- Change Password Modal -->
+    <div class="modal" id="changePasswordModal">
+        <div class="modal-content password-modal">
+            <span class="close" id="closeChangePassword">&times;</span>
+            <h2>Change your password</h2>
+
+            <!-- ✅ Success Message -->
+            <div class="alert success" id="successMsg" style="display:none;">
+                <i class="fa fa-check-circle"></i>
+                <span>บันทึกสำเร็จ เปลี่ยนรหัสผ่านเรียบร้อยแล้ว</span>
+            </div>
+
+            <!-- ❌ Error Message -->
+            <div class="alert error" id="errorMsg" style="display:none;">
+                <i class="fa fa-times-circle"></i>
+                <span>มีข้อผิดพลาด รหัสผ่านเดิมไม่ถูกต้อง หรือไม่ตรงกัน</span>
+            </div>
+
+            <form id="changePasswordForm">
+                <label>รหัสผ่านเดิม :</label>
+                <input type="password" id="oldPassword" required>
+                <small class="error-text" id="oldPasswordError"></small>
+
+                <label>รหัสผ่านใหม่ :</label>
+                <input type="password" id="newPassword" required>
+
+                <label>ยืนยันรหัสผ่านใหม่อีกครั้ง :</label>
+                <input type="password" id="confirmPassword" required>
+
+                <div class="form-actions">
+                    <button type="button" class="btn cancel" id="cancelChangePassword">Cancel</button>
+                    <button type="submit" class="btn save">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 🔹 Edit Profile Modal -->
+    <div class="modal" id="editProfileModal">
+        <div class="modal-content edit-profile-modal">
+            <span class="close" id="closeEditProfile">&times;</span>
+            <h2>Edit Profile</h2>
+
+            <form id="editProfileForm" enctype="multipart/form-data">
+                <!-- Profile Image -->
+                <div class="profile-img-upload">
+                    <img id="editProfileImgPreview" src="https://via.placeholder.com/120" alt="Profile">
+                    <label for="editProfileImg" class="upload-btn">
+                        <i class="fa fa-upload"></i> อัปโหลดรูปโปรไฟล์
+                    </label>
+                    <input type="file" id="editProfileImg" name="profileImage" accept="image/*" hidden>
+                </div>
+
+                <!-- Nickname -->
+                <label>นามปากกา :</label>
+                <input type="text" id="editNickname" name="nickname" placeholder="ใส่นามปากกาของคุณ" required>
+
+                <!-- Bio -->
+                <label>หน้า Bio :</label>
+                <textarea id="editBio" name="bio" rows="3" placeholder="เล่าเกี่ยวกับคุณหน่อย..."></textarea>
+
+                <!-- Buttons -->
+                <div class="form-actions">
+                    <button type="button" class="btn cancel" id="cancelEditProfile">Cancel</button>
+                    <button type="submit" class="btn save">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Edit Gallery Modal -->
+    <div class="modal" id="editGalleryModal">
+        <div class="modal-content gallery-modal">
+            <span class="close" id="closeGallery">&times;</span>
+            <h2>Edit Gallery</h2>
+
+            <!-- ✅ แสดงรูปเก่า -->
+            <div id="galleryPreview" class="gallery-preview"></div>
+
+            <label>เพิ่มรูปภาพใหม่</label>
+            <div class="upload-box" id="uploadBox">
+                <input type="file" id="newGalleryFiles" name="files" multiple accept="image/*">
+                <p>ลากไฟล์มาวางที่นี่ หรือคลิกเพื่อเลือกไฟล์</p>
+            </div>
+
+            <div class="form-actions">
+                <button type="button" class="btn cancel" id="cancelGallery">Cancel</button>
+                <button type="button" class="btn save" id="saveGallery">Save</button>
+            </div>
+        </div>
+    </div>
+
+
+
     <script src="./js/app.js"></script>
+    <script src="./js/profile.js"></script>
 </body>
 
 </html>

@@ -7,6 +7,7 @@ using MyWebApi.Data;
 using MyWebApi.Models;
 using MyWebApi.Services;
 using Backend.Helper;
+using MyWebApi.Dto;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -58,6 +59,7 @@ public class ProfileController : ControllerBase
             user.Username,
             user.Email,
             user.Nickname,
+            user.Bio,
             user.FirstName,
             user.LastName,
             user.DateOfBirth,
@@ -125,7 +127,7 @@ public class ProfileController : ControllerBase
     // POST: api/profile/addGallery
     [HttpPost("addGallery")]
     [Authorize]
-    public async Task<IActionResult> AddGalleryImage([FromForm] IFormFile galleryImage)
+    public async Task<IActionResult> AddGalleryImage([FromForm] List<IFormFile> files)
     {
         var username = User.FindFirstValue(ClaimTypes.Name);
         if (string.IsNullOrEmpty(username)) return Unauthorized();
@@ -133,28 +135,116 @@ public class ProfileController : ControllerBase
         var user = await _db.Users.FirstOrDefaultAsync(u => u.Username == username);
         if (user == null) return NotFound();
 
-        if (galleryImage == null || galleryImage.Length == 0)
-        {
+        if (files == null || files.Count == 0)
             return BadRequest(new { message = "No image uploaded." });
+
+        var galleryList = user.GalleryList.ToList();
+
+        foreach (var file in files)
+        {
+            var galleryImgPath = await FileService.UploadFileAsync(file, "gallery");
+            galleryList.Add(galleryImgPath);
         }
 
-        // ✅ อัปโหลดไฟล์เหมือน register (เก็บลงโฟลเดอร์ gallery)
-        var galleryImgPath = await FileService.UploadFileAsync(galleryImage, "gallery");
-
-        // ✅ เพิ่ม path เข้าไปใน GalleryList
-        var galleryList = user.GalleryList.ToList();
-        galleryList.Add(galleryImgPath);
         user.GalleryList = galleryList;
+        _db.Users.Update(user);
+        await _db.SaveChangesAsync();
+
+        return Ok(new
+        {
+            message = "Images added to gallery successfully.",
+            galleryList = user.GalleryList
+        });
+    }
+
+
+    // POST: api/profile/update
+    [HttpPost("update")]
+    [Authorize]
+    public async Task<IActionResult> UpdateProfile([FromForm] UpdateProfileDto dto, IFormFile? profileImage)
+    {
+        var username = User.FindFirstValue(ClaimTypes.Name);
+        if (string.IsNullOrEmpty(username)) return Unauthorized();
+
+        var user = await _db.Users.FirstOrDefaultAsync(u => u.Username == username);
+        if (user == null) return NotFound(new { message = "User not found" });
+
+        // ✅ อัปโหลดรูปใหม่ (ถ้ามี)
+        if (profileImage != null && profileImage.Length > 0)
+        {
+            var profilePath = await FileService.UploadFileAsync(profileImage, "profile");
+            user.ProfileImg = profilePath;
+        }
+
+        // ✅ อัปเดตข้อมูล
+        if (!string.IsNullOrWhiteSpace(dto.Nickname))
+            user.Nickname = dto.Nickname;
+
+        if (!string.IsNullOrWhiteSpace(dto.Bio))
+            user.Bio = dto.Bio;
+
+        _db.Users.Update(user);
+        await _db.SaveChangesAsync();
+
+        // ✅ บันทึก Notification
+        var noti = new Notification
+        {
+            Username = username,
+            Title = "แก้ไขโปรไฟล์",
+            Message = "คุณได้อัปเดตโปรไฟล์เรียบร้อยแล้ว",
+            Type = "info",
+            CreatedAt = DateTime.UtcNow
+        };
+
+        _db.Notifications.Add(noti);
+        await _db.SaveChangesAsync();
+
+        return Ok(new
+        {
+            message = "อัปเดตโปรไฟล์สำเร็จ",
+            user.ProfileImg,
+            user.Nickname,
+            user.Bio
+        });
+    }
+
+
+    // POST: api/profile/updateGallery
+    [HttpPost("updateGallery")]
+    [Authorize]
+    public async Task<IActionResult> UpdateGallery([FromForm] List<IFormFile> files, [FromForm] string keepGallery)
+    {
+        var username = User.FindFirstValue(ClaimTypes.Name);
+        if (string.IsNullOrEmpty(username)) return Unauthorized();
+
+        var user = await _db.Users.FirstOrDefaultAsync(u => u.Username == username);
+        if (user == null) return NotFound();
+
+        // keepGallery = JSON string เก็บ path ของไฟล์เก่าที่ต้องการเก็บไว้
+        var keepList = System.Text.Json.JsonSerializer.Deserialize<List<string>>(keepGallery);
+        user.GalleryList = keepList ?? new List<string>();
+
+        // เพิ่มไฟล์ใหม่
+        foreach (var file in files)
+        {
+            if (file.Length > 0)
+            {
+                var imgPath = await FileService.UploadFileAsync(file, "gallery");
+                user.GalleryList = user.GalleryList.Append(imgPath).ToList();
+            }
+        }
 
         _db.Users.Update(user);
         await _db.SaveChangesAsync();
 
         return Ok(new
         {
-            message = "Image added to gallery successfully.",
+            message = "Gallery updated successfully",
             galleryList = user.GalleryList
         });
     }
+
+    
 
 
 
