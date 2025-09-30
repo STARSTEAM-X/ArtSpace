@@ -364,10 +364,76 @@ public class ActivityController : ControllerBase
         });
     }
 
+    // rejectjoin
+    [HttpPost("rejectjoin")]
+    [Authorize] // ✅ ต้อง login เป็นเจ้าของ activity
+    public async Task<IActionResult> RejectJoin([FromBody] JoinRequest dto)
+    {
+        var ownerUsername = User.FindFirstValue(ClaimTypes.Name); // ✅ เจ้าของ activity
+        if (string.IsNullOrEmpty(ownerUsername)) return Unauthorized();
 
+        var activity = await _db.Activities.FindAsync(dto.ActivityId);
+        if (activity == null) return NotFound(new { message = "Activity not found" });
+
+        // ✅ ตรวจสอบว่าเป็นเจ้าของกิจกรรมหรือไม่
+        if (!string.Equals(activity.CreatedByUserName, ownerUsername, StringComparison.OrdinalIgnoreCase))
+        {
+            return Forbid(); // ป้องกันไม่ให้คนอื่นมากดยืนยันแทน
+        }
+
+        // ❌ กันไม่ให้ reject ถ้า user อยู่ใน Joined อยู่แล้ว
+        if (activity.UserJoined.Any(u => u.Equals(dto.Username, StringComparison.OrdinalIgnoreCase)))
+        {
+            return BadRequest(new { message = "User already joined" });
+        }
+
+        // ✅ เช็กว่ามีชื่อใน Registered หรือไม่ (ignore case)
+        if (!activity.UserRegistered.Any(u => u.Equals(dto.Username, StringComparison.OrdinalIgnoreCase)))
+        {
+            return BadRequest(new { message = "User is not registered for this activity" });
+        }
+
+        // เอาออกจาก Registered ไปเลย
+        var registered = activity.UserRegistered.ToList();
+        registered.RemoveAll(u => u.Equals(dto.Username, StringComparison.OrdinalIgnoreCase));
+        activity.UserRegistered = registered;
+
+        _db.Activities.Update(activity);
+        await _db.SaveChangesAsync();
+
+        // ✅ Notification: User ที่ถูก reject
+        var userNoti = new Notification
+        {
+            Username = dto.Username,
+            Title = "ถูกปฏิเสธการเข้าร่วมกิจกรรม",
+            Message = $"คุณถูกปฏิเสธการเข้าร่วมกิจกรรม: {activity.ActivityName}",
+            Type = "error",
+            CreatedAt = DateTime.UtcNow
+        };
+        _db.Notifications.Add(userNoti);
+
+        // ✅ Notification: Owner
+        var ownerNoti = new Notification
+        {
+            Username = ownerUsername,
+            Title = "ปฏิเสธผู้เข้าร่วมแล้ว",
+            Message = $"คุณได้ปฏิเสธ {dto.Username} เข้าร่วมกิจกรรม: {activity.ActivityName}",
+            Type = "update",
+            CreatedAt = DateTime.UtcNow
+        };
+        _db.Notifications.Add(ownerNoti);
+        await _db.SaveChangesAsync();
+        return Ok(new
+        {
+            message = "User rejected join successfully",
+            activity.Id,
+            RegisteredUsers = activity.UserRegistered,
+            JoinedUsers = activity.UserJoined
+        });
+    }
 
     // GET: api/activity/detail/{id}
-    [HttpGet("detail/{id}")]
+        [HttpGet("detail/{id}")]
     public async Task<IActionResult> GetActivityDetail(int id)
     {
         var activity = await _db.Activities
