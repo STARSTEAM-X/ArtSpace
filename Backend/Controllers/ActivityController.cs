@@ -183,7 +183,7 @@ public class ActivityController : ControllerBase
             Username = activity.CreatedByUserName,
             Title = "มีผู้เข้าร่วมใหม่",
             Message = $"{username} ได้ลงทะเบียนเข้าร่วมกิจกรรม: {activity.ActivityName}",
-            Type = "update",
+            Type = "info",
             CreatedAt = DateTime.UtcNow
         };
         _db.Notifications.Add(ownerNoti);
@@ -259,7 +259,7 @@ public class ActivityController : ControllerBase
             Username = activity.CreatedByUserName,
             Title = "มีผู้ยกเลิกการลงทะเบียน",
             Message = $"{username} ได้ยกเลิกการลงทะเบียนกิจกรรม: {activity.ActivityName}",
-            Type = "update",
+            Type = "error",
             CreatedAt = DateTime.UtcNow
         };
         _db.Notifications.Add(ownerNoti);
@@ -348,7 +348,7 @@ public class ActivityController : ControllerBase
             Username = ownerUsername,
             Title = "ยืนยันผู้เข้าร่วมแล้ว",
             Message = $"คุณได้ยืนยัน {dto.Username} เข้าร่วมกิจกรรม: {activity.ActivityName}",
-            Type = "update",
+            Type = "success",
             CreatedAt = DateTime.UtcNow
         };
         _db.Notifications.Add(ownerNoti);
@@ -418,7 +418,7 @@ public class ActivityController : ControllerBase
             Username = ownerUsername,
             Title = "ปฏิเสธผู้เข้าร่วมแล้ว",
             Message = $"คุณได้ปฏิเสธ {dto.Username} เข้าร่วมกิจกรรม: {activity.ActivityName}",
-            Type = "update",
+            Type = "info",
             CreatedAt = DateTime.UtcNow
         };
         _db.Notifications.Add(ownerNoti);
@@ -499,7 +499,7 @@ public class ActivityController : ControllerBase
             Username = username,
             Title = "ลบกิจกรรมสำเร็จ",
             Message = $"คุณได้ลบกิจกรรม: {activity.ActivityName}",
-            Type = "danger",
+            Type = "error",
             CreatedAt = DateTime.UtcNow
         };
         _db.Notifications.Add(ownerNoti);
@@ -593,7 +593,7 @@ public class ActivityController : ControllerBase
                 Username = participant,
                 Title = "กิจกรรมมีการอัปเดต",
                 Message = $"กิจกรรม: {activity.ActivityName} มีการแก้ไขข้อมูล โปรดตรวจสอบอีกครั้ง",
-                Type = "update",
+                Type = "info",
                 CreatedAt = DateTime.UtcNow
             };
             _db.Notifications.Add(participantNoti);

@@ -145,97 +145,156 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     });
 });
-
-const userMenu = document.getElementById("userMenu");
-const userToggle = document.getElementById("userToggle");
-
-userToggle.addEventListener("click", () => {
-    userMenu.classList.toggle("open");
-});
-
-// ปิด dropdown เมื่อคลิกนอก
-window.addEventListener("click", (e) => {
-    if (!userMenu.contains(e.target)) {
-        userMenu.classList.remove("open");
-    }
-});
-
-
-
 // -------------------- Notification ----------------------- //
-document.addEventListener("DOMContentLoaded", async () => {
-    const token = localStorage.getItem("token");
-    const notifyBtn = document.getElementById("notifyBtn");
-    const notifyCount = document.getElementById("notifyCount");
-    const notifyDropdown = document.getElementById("notifyDropdown");
+const notifyBtn = document.getElementById("notifyBtn");
+const notifyDropdown = document.getElementById("notifyDropdown");
+const notifyCount = document.getElementById("notifyCount");
+let notiWorker = null;
 
-    // โหลด notification ของ user
-    async function loadNotifications() {
-        if (!token) return;
+/* ============================
+   Render Notification UI
+============================ */
+function renderNotifications(notis) {
+    // ✅ badge อัปเดตเสมอ
+    const unreadCount = notis.filter(n => !n.isRead).length;
+    notifyCount.textContent = unreadCount;
 
-        try {
-            const res = await fetch(`${BASE_URL}/api/notification/my`, {
-                headers: { "Authorization": `Bearer ${token}` }
-            });
+    // ❌ return ตรงนี้ทิ้ง
+    // if (!notifyDropdown.classList.contains("active")) return;
 
-            if (!res.ok) throw new Error("โหลด notifications ไม่ได้");
-            const notifications = await res.json();
-
-            // ✅ นับเฉพาะที่ยังไม่ได้อ่าน
-            const unreadCount = notifications.filter(n => !n.isRead).length;
-            notifyCount.textContent = unreadCount;
-
-            // ✅ สร้าง dropdown list
-            notifyDropdown.innerHTML = notifications.map(n => `
-        <div class="item ${n.type}" data-id="${n.id}">
-          <strong>${n.title}</strong><br>
-          <small>${n.message}</small><br>
-          <small style="color:gray;">${new Date(n.createdAt).toLocaleString()}</small>
-          ${n.isRead ? "" : `<button class="mark-read" data-id="${n.id}">✓</button>`}
-        </div>
-      `).join("");
-
-            // ✅ ติด event ให้ปุ่ม mark-read
-            document.querySelectorAll(".mark-read").forEach(btn => {
-                btn.addEventListener("click", async e => {
-                    const id = e.target.getAttribute("data-id");
-                    await markAsRead(id);
-                    console.log("Marked as read:", id);
-                    await loadNotifications();
-                });
-            });
-
-        } catch (err) {
-            console.error("Error loading notifications:", err);
+    // ✅ render list แค่ตอนเปิด
+    if (notifyDropdown.classList.contains("active")) {
+        if (notis.length === 0) {
+            notifyDropdown.innerHTML = `<div class="empty">ไม่มีการแจ้งเตือน</div>`;
+            return;
         }
-    }
 
-    // ✅ API mark as read
-    async function markAsRead(id) {
-        const res = await fetch(`${BASE_URL}/api/notification/read/${id}`, {
+        notifyDropdown.innerHTML = notis.map(n => `
+            <div class="noti-item ${n.isRead ? "" : "unread"} ${n.type}" data-id="${n.id}">
+                <strong>${n.title}</strong>
+                <span>${n.message}</span>
+                <small>${new Date(n.createdAt).toLocaleString()}</small>
+            </div>
+        `).join("");
+
+        // bind event mark as read
+        notifyDropdown.querySelectorAll(".noti-item").forEach(item => {
+            item.onclick = async () => {
+                const id = item.dataset.id;
+                if (id) await markAsRead(id);
+            };
+        });
+    }
+}
+
+
+/* ============================
+   Mark as Read API
+============================ */
+async function markAsRead(id) {
+    const token = localStorage.getItem("token");
+    if (!token) return;
+
+    try {
+        await fetch(`${BASE_URL}/api/notification/read/${id}`, {
             method: "PUT",
             headers: { "Authorization": `Bearer ${token}` }
         });
-        if (!res.ok) console.error("Mark as read failed");
+    } catch (err) {
+        console.error("MarkAsRead error:", err);
     }
+}
 
-    // toggle dropdown
-    notifyBtn?.addEventListener("click", () => {
-        notifyDropdown.style.display =
-            notifyDropdown.style.display === "block" ? "none" : "block";
-    });
+/* ============================
+   Worker Start/Stop
+============================ */
+let lastNotis = [];
 
-    // ปิด dropdown เมื่อคลิกนอก
-    window.addEventListener("click", e => {
-        if (!notifyBtn.contains(e.target)) {
-            notifyDropdown.style.display = "none";
+function isSameNotifications(newNotis, oldNotis) {
+    if (newNotis.length !== oldNotis.length) return false;
+
+    for (let i = 0; i < newNotis.length; i++) {
+        const n1 = newNotis[i];
+        const n2 = oldNotis[i];
+
+        if (!n2) return false;
+
+        if (
+            n1.id !== n2.id ||
+            n1.isRead !== n2.isRead ||
+            n1.title !== n2.title ||
+            n1.message !== n2.message ||
+            new Date(n1.createdAt).getTime() !== new Date(n2.createdAt).getTime()
+        ) {
+            return false;
         }
+    }
+    return true;
+}
+
+
+function startNotificationWorker() {
+    const token = localStorage.getItem("token");
+    if (!token) return;
+
+    if (notiWorker) stopNotificationWorker(); // กันซ้ำ
+    notiWorker = new Worker("./js/notiWorker.js");
+
+    // notiWorker = new Worker("./notiWorker.js");
+    notiWorker.postMessage({
+        action: "start",
+        url: `${BASE_URL}/api/notification/my`,
+        token: token
     });
 
-    // โหลด noti ครั้งแรก
-    if (token) {
-        await loadNotifications();
+    notiWorker.onmessage = (e) => {
+        if (e.data.success) {
+            const newNotis = e.data.notis;
+
+            // 🔎 Compare ทุก field สำคัญ
+            if (!isSameNotifications(newNotis, lastNotis)) {
+                renderNotifications(newNotis);
+                // copy object กัน mutation
+                lastNotis = JSON.parse(JSON.stringify(newNotis));
+            }
+        } else {
+            console.error("Worker error:", e.data.error);
+        }
+    };
+
+
+}
+
+function stopNotificationWorker() {
+    if (notiWorker) {
+        notiWorker.postMessage({ action: "stop" });
+        notiWorker.terminate();
+        notiWorker = null;
+    }
+}
+
+/* ============================
+   UI Events
+============================ */
+notifyBtn.addEventListener("click", () => {
+    notifyDropdown.classList.toggle("active");
+
+    if (notifyDropdown.classList.contains("active")) {
+        // ✅ render notis ล่าสุดทันที
+        renderNotifications(lastNotis);
     }
 });
 
 
+document.addEventListener("click", (e) => {
+    if (!notifyBtn.contains(e.target)) {
+        notifyDropdown.classList.remove("active");
+    }
+});
+
+/* ============================
+   Init
+============================ */
+if (localStorage.getItem("token")) {
+    startNotificationWorker();
+}
