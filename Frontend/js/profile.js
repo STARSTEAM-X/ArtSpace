@@ -82,6 +82,7 @@ async function loadProfile() {
 document.addEventListener("DOMContentLoaded", loadProfile);
 
 
+
 // ------------------ Modal Change Password ------------------ //
 const modal = document.getElementById("changePasswordModal");
 const closeBtn = document.getElementById("closeChangePassword");

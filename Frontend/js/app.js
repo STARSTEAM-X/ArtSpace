@@ -125,6 +125,33 @@ document.addEventListener("DOMContentLoaded", async () => {
             alert("Login ไม่สำเร็จ: " + err.message);
         }
     });
+    document.querySelectorAll("[data-close]").forEach(btn => {
+    btn.addEventListener("click", () => {
+        const modalId = btn.getAttribute("data-close");
+        document.getElementById(modalId).style.display = "none";
+    });
+});
+function clearRegisterForm() {
+    const fileInput = document.querySelector('#registerModal input[type="file"]');
+    if (fileInput) fileInput.value = "";
+    const fileName = document.querySelector('#registerModal .file-name');
+    if (fileName) fileName.textContent = "ไม่ได้เลือกไฟล์ใด";
+    // เคลียร์ input อื่นๆ ถ้าต้องการ
+}
+
+// เมื่อปิด register modal ด้วย Cancel
+document.querySelectorAll('[data-close="registerModal"]').forEach(btn => {
+    btn.addEventListener("click", () => {
+        document.getElementById("registerModal").style.display = "none";
+        clearRegisterForm();
+    });
+});
+
+// เมื่อเปิด login modal
+document.getElementById("openLogin")?.addEventListener("click", () => {
+    document.getElementById("loginModal").style.display = "flex";
+    clearRegisterForm();
+});
 
     // ✅ Handle Register
     document.getElementById("registerForm").addEventListener("submit", async e => {

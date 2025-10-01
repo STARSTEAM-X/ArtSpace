@@ -68,7 +68,151 @@ body {
   gap: 22px;
 }
 
+/* ======== AUTH (Login/Sign in) ========= */
+.modal-content.auth-card.large { width: 920px; padding: 0; overflow: hidden; }
 
+.auth-wrapper {
+  display: grid;
+  grid-template-columns: 1.05fr 1fr;
+  min-height: 520px;
+}
+
+/* ฝั่งซ้าย: พื้นหลังม่วง + โลโก้ + อิลลัส */
+.auth-left {
+  position: relative;
+  padding: 28px;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: url('../img/index1.png') center bottom / cover no-repeat;
+  background-blend-mode: multiply; /* ช่วยดรอปสีให้ตัวหนังสือ/โลโก้เด่น */
+}
+.auth-left .brand {
+  display: flex; align-items: center; gap: 12px; justify-content: center; gap: 12px;
+}
+.auth-left .brand-icon { width: 60px; height: 60px; filter: drop-shadow(0 2px 6px rgba(0,0,0,.25)); margin: 0 auto; }
+.auth-left .brand-text { display: flex; flex-direction: column; font-weight: 800; letter-spacing: .5px; }
+.auth-left .brand-text span:first-child { font-size: 20px; line-height: 1; }
+.auth-left .brand-text span:last-child { font-size: 18px; opacity: .9; line-height: 1; }
+
+
+.auth-left .illus {
+  height: 100%;
+  margin-top: 10px;
+  border-radius: 12px;
+  display: none;
+}
+
+/* ฝั่งขวา: ฟอร์ม */
+.auth-right { padding: 28px 32px; background: #fff; display: flex; flex-direction: column; }
+
+.tab-switch {
+  display: flex; gap: 10px; margin-bottom: 16px; justify-content: center;
+}
+.tab-switch .tab {
+  border: none;
+  padding: 10px 18px;
+  border-radius: 20px;
+  font-weight: 700;
+  cursor: pointer;
+  background: #ece7ff;
+  color: #4a1a8c;
+}
+.tab-switch .tab.active {
+  background: #6c23b5; color: #fff;
+}
+.tab-switch .tab.ghost {
+  background: #f3f3f8; color: #666;
+}
+
+.auth-form { display: grid; gap: 10px; margin-top: 10px; }
+.auth-form.grid-2 { grid-template-columns: 1fr 1fr; gap: 14px; }
+.auth-form .col.full { grid-column: 1 / -1; }
+
+.auth-form label { font-size: 14px; color: #333; font-weight: 600; margin-top: 6px; }
+
+.input-with-icon {
+  position: relative;
+  display: flex; align-items: center;
+  background: #fafafa; border: 1px solid #e6e6e6; border-radius: 10px; padding: 8px 12px;
+}
+.input-with-icon i { margin-right: 8px; color: #6c23b5; }
+.input-with-icon input { border: none; outline: none; background: transparent; width: 100%; padding: 8px 2px; font-size: 14px; }
+
+.auth-form input[type="text"],
+.auth-form input[type="email"],
+.auth-form input[type="password"],
+.auth-form input[type="date"],
+.auth-form select {
+  width: 100%; padding: 10px 12px; border: 1px solid #e6e6e6; border-radius: 10px; background: #fafafa;
+}
+
+.upload-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 20px;
+  border: 2px dashed #a78bfa;
+  border-radius: 14px;
+  background: #f6f3ff;
+  position: relative;
+  transition: border-color 0.2s;
+}
+.upload-row i {
+  color: #6c23b5;
+  font-size: 32px;
+  background: #ece7ff;
+  border-radius: 10px;
+  padding: 8px;
+}
+
+
+/* ปุ่มหลักสีเหลือง */
+.btn-primary-xl {
+  width: 100%;
+  background: #6c23b5;
+  border: none;
+  color: #171717;
+  font-weight: 800;
+  letter-spacing: .3px;
+  padding: 12px 16px;
+  border-radius: 14px;
+  cursor: pointer;
+  transition: transform .15s ease, box-shadow .15s ease, background .2s;
+}
+.btn-primary-xl:hover { transform: translateY(-1px); box-shadow: 0 8px 20px rgba(255,214,80,.35); background: #4a1a8c;  }
+
+/* ปุ่มรอง (ยกเลิก) */
+.btn-secondary.ghost {
+  width: 100%;
+  background: #f3f3f7;
+  color: #333;
+  border-radius: 12px;
+  border: 1px solid #e5e5ef;
+  padding: 10px 14px;
+  font-weight: 700;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .modal-content.auth-card.large {
+    width: 98vw;
+    max-width: 98vw;
+    min-width: unset;
+    overflow-y: auto;      /* ให้เลื่อนแนวตั้งได้ */
+    overflow-x: auto;      /* ให้เลื่อนแนวนอนได้ */
+    padding: 0;
+  }
+  .auth-wrapper {
+    grid-template-columns: 1fr;
+    min-height: unset;     /* ยกเลิก min-height */
+  }
+  .auth-left {
+    min-height: 180px;
+    padding: 16px;
+  }
+}
 
 /* ================= USER MENU ================= */
 .user-menu {
@@ -163,13 +307,16 @@ body {
   right: 0;
   top: 40px;
   background: #fff;
-  border-radius: 14px;
-  width: 340px;
-  max-height: 400px;
+  color: #333;
+  min-width: 340px;
+  max-width: 400px;
+  border-radius: 18px;
+  box-shadow: 0 8px 32px rgba(74, 26, 140, 0.18);
   overflow-y: auto;
-  box-shadow: 0 12px 28px rgba(0,0,0,0.15);
   z-index: 1000;
-  border: 1px solid #eee;
+  border: 2px solid #ece7ff;
+  padding: 24px 24px 18px 24px;
+  font-family: "Prompt", sans-serif;
 }
 
 .notify-dropdown.active {
@@ -179,50 +326,80 @@ body {
 
 /* Header */
 .notify-dropdown::before {
-  content: "การแจ้งเตือน";
+  content: "🔔 Notifications";
   display: block;
-  padding: 14px 18px;
-  font-size: 15px;
-  font-weight: bold;
-  color: #333;
-  border-bottom: 1px solid #eee;
-  background: linear-gradient(135deg, #fafbff, #f1f3ff);
-  border-radius: 14px 14px 0 0;
+  font-size: 1.7rem;
+  font-weight: 700;
+  color: #222;
+  margin-bottom: 10px;
+  letter-spacing: 1px;
+  text-align: left;
+}
+
+.notify-dropdown hr {
+  border: none;
+  border-top: 2px solid #38115e;
+  margin: 10px 0 18px 0;
 }
 
 /* Noti item base */
 .notify-dropdown .noti-item {
   display: flex;
-  align-items: flex-start;
-  gap: 12px;
-  padding: 14px 16px;
-  border-radius: 10px;
-  margin: 10px;
-  font-size: 14px;
-  color: #333;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  align-items: center;
+  gap: 18px;
+  padding: 18px 18px;
+  border-radius: 16px;
+  margin-bottom: 14px;
+  font-size: 15px;
+  color: #222;
+  box-shadow: 0 2px 8px rgba(74, 26, 140, 0.08);
+  border: 1.5px solid #ece7ff;
+  background: #fafaff;
+  transition: box-shadow 0.2s, transform 0.2s;
+  position: relative;
+}
+
+.notify-dropdown .noti-item:last-child {
+  margin-bottom: 0;
 }
 
 .notify-dropdown .noti-item strong {
   display: block;
-  font-size: 15px;
-  margin-bottom: 4px;
+  font-size: 1.1rem;
+  margin-bottom: 2px;
+  font-weight: 700;
 }
 
 .notify-dropdown .noti-item span {
-  font-size: 13px;
-  color: #222;
+  font-size: 0.95rem;
+  color: #444;
 }
 
 .notify-dropdown .noti-item small {
   display: block;
-  font-size: 11px;
+  font-size: 0.85rem;
   color: #888;
   margin-top: 4px;
 }
 
 .notify-dropdown .noti-item.unread {
   font-weight: bold;
+  border: 2px solid #ffd700;
+  background: #fffbe6;
+}
+
+.notify-dropdown .noti-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.7rem;
+  background: #ece7ff;
+  color: #6c23b5;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(74, 26, 140, 0.08);
 }
 
 /* Hover */
@@ -248,6 +425,11 @@ body {
 }
 
 /* Primary */
+/* Type styling */
+.notify-dropdown .noti-item.primary .noti-icon {
+  background: #d1c4e9;
+  color: #38115e;
+}
 .notify-dropdown .noti-item.primary {
   background: #ede7f6;
   color: #4a148c;
@@ -258,8 +440,8 @@ body {
 }
 
 /* Success */
-.notify-dropdown .noti-item.success {
-  background: #e8f5e9;
+.notify-dropdown .noti-item.success .noti-icon {
+  background: #c8e6c9;
   color: #1b5e20;
 }
 .notify-dropdown .noti-item.success::before {
@@ -268,8 +450,8 @@ body {
 }
 
 /* Error */
-.notify-dropdown .noti-item.error {
-  background: #ffebee;
+.notify-dropdown .noti-item.error .noti-icon {
+  background: #ffcdd2;
   color: #b71c1c;
 }
 .notify-dropdown .noti-item.error::before {
@@ -277,8 +459,8 @@ body {
   font-size: 20px;
 }
 /* Info */
-.notify-dropdown .noti-item.info {
-  background: #e3f2fd;
+.notify-dropdown .noti-item.info .noti-icon {
+  background: #b3e5fc;
   color: #01579b;
 }
 .notify-dropdown .noti-item.info::before {
@@ -288,8 +470,8 @@ body {
 
 
 /* Warning */
-.notify-dropdown .noti-item.warning {
-  background: #fff8e1;
+.notify-dropdown .noti-item.warning .noti-icon {
+  background: #fff9c4;
   color: #e65100;
 }
 .notify-dropdown .noti-item.warning::before {
@@ -435,6 +617,7 @@ body {
   font-weight: bold;
   color: white;
   margin-top:200px;
+  margin-bottom: 0px;
 }
 
 /* LastActed*/
@@ -926,7 +1109,7 @@ footer .social-icons a:hover {
   width: 100%;
   padding: 10px;
   border: none;
-  background: #6c5ce7;
+  background: #6c23b5;
   color: white;
   font-weight: bold;
   border-radius: 8px;
@@ -934,7 +1117,7 @@ footer .social-icons a:hover {
   transition: background 0.3s;
 }
 .modal-content button:hover {
-  background: #4834d4;
+  background: #4a1a8c;
 }
 
 /* Grid Form */
@@ -1209,3 +1392,4 @@ footer .social-icons a:hover {
     transform: translateY(0);
   }
 }
+

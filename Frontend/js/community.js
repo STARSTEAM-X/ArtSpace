@@ -144,6 +144,8 @@ document.getElementById("postForm").addEventListener("submit", async (e) => {
             document.getElementById("postModal").style.display = "none";
             e.target.reset();
             loadPosts(); // รีโหลดโพสต์ใหม่
+
+            localStorage.setItem("refreshProfile", "1");
         } else {
             alert("❌ " + (data.message || "เกิดข้อผิดพลาด"));
         }

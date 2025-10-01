@@ -32,46 +32,132 @@
         <div class="menu-toggle" id="menuToggle">&#9776;</div>
     </nav>
 
-    <!-- 🔹 Login Modal -->
-    <div class="modal" id="loginModal">
-        <div class="modal-content">
-            <span class="close" data-close="loginModal">&times;</span>
-            <h2>Login</h2>
-            <form id="loginForm">
-                <input type="text" name="username" placeholder="Username" required>
-                <input type="password" name="password" placeholder="Password" required>
-                <button type="submit">Login</button>
-            </form>
-            <p>ยังไม่มีบัญชี? <a href="#" id="openRegister">สมัครสมาชิก</a></p>
-        </div>
-    </div>
+     <!-- 🔹 Login Modal -->
+<div class="modal" id="loginModal">
+  <div class="modal-content auth-card large">
+    <span class="close" data-close="loginModal">&times;</span>
 
-    <!-- 🔹 Register Modal -->
-    <div class="modal" id="registerModal">
-        <div class="modal-content">
-            <span class="close" data-close="registerModal">&times;</span>
-            <h2>Register</h2>
-            <form id="registerForm" enctype="multipart/form-data">
-                <input type="text" name="username" placeholder="Username" required>
-                <input type="email" name="email" placeholder="Email" required>
-                <input type="text" name="nickname" placeholder="Nickname" required>
-                <input type="password" name="password" placeholder="Password" required>
-                <input type="text" name="firstName" placeholder="First Name" required>
-                <input type="text" name="lastName" placeholder="Last Name" required>
-                <input type="date" name="dateOfBirth" placeholder="Date of Birth" required>
-                <select name="gender" required>
-                    <option value="">เลือกเพศ</option>
-                    <option value="male">ชาย</option>
-                    <option value="female">หญิง</option>
-                    <option value="other">อื่นๆ</option>
-                </select>
-                <label>Profile Image:</label>
-                <input type="file" name="profileImage" accept="image/*">
-                <button type="submit">Register</button>
-            </form>
-            <p>มีบัญชีแล้ว? <a href="#" id="backToLogin">เข้าสู่ระบบ</a></p>
+    <div class="auth-wrapper">
+      <!-- ซ้าย -->
+      <aside class="auth-left">
+        <div class="brand">
+            <i class="fa-solid fa-palette"></i>
+          <div class="brand-text"><span>ART</span><span>SPACE</span></div>
         </div>
+        <div class="illus"></div>
+      </aside>
+
+      <!-- ขวา -->
+      <section class="auth-right">
+        <div class="tab-switch">
+          <button class="tab active">Log in</button>
+          <button class="tab ghost" id="openRegister">Sign in</button>
+        </div>
+
+        <form id="loginForm" class="auth-form">
+          <label>Username :</label>
+          <div class="input-with-icon">
+            <i class="fa-regular fa-user"></i>
+            <input type="text" name="username" placeholder="Username" required />
+          </div>
+
+          <label>Password :</label>
+          <div class="input-with-icon">
+            <i class="fa-solid fa-lock"></i>
+            <input type="password" name="password" placeholder="Password" required />
+          </div>
+
+          <button type="submit" class="btn-primary-xl">Log in</button>
+        </form>
+      </section>
     </div>
+  </div>
+</div>
+
+<!-- 🔹 Register Modal -->
+<div class="modal" id="registerModal">
+  <div class="modal-content auth-card large">
+    <span class="close" data-close="registerModal">&times;</span>
+
+    <div class="auth-wrapper">
+      <!-- ซ้าย -->
+      <aside class="auth-left">
+       <div class="brand">
+            <i class="fa-solid fa-palette"></i>
+          <div class="brand-text"><span>ART</span><span>SPACE</span></div>
+        </div>
+        <div class="illus"></div>
+      </aside>
+
+      <!-- ขวา -->
+      <section class="auth-right">
+        <div class="tab-switch">
+          <button class="tab ghost" id="backToLogin">Log in</button>
+          <button class="tab active">Sign in</button>
+        </div>
+
+        <form id="registerForm" class="auth-form grid-2" enctype="multipart/form-data">
+          <div class="col">
+            <label>ชื่อ :</label>
+            <input type="text" name="firstName" placeholder="ชื่อ" required />
+          </div>
+          <div class="col">
+            <label>นามสกุล :</label>
+            <input type="text" name="lastName" placeholder="นามสกุล" required />
+          </div>
+
+          <div class="col">
+            <label>ชื่อผู้ใช้ :</label>
+            <input type="text" name="username" placeholder="Username" required />
+          </div>
+          <div class="col">
+            <label>นามปากกา :</label>
+            <input type="text" name="nickname" placeholder="Nickname" required />
+          </div>
+
+          <div class="col">
+            <label>อีเมล :</label>
+            <input type="email" name="email" placeholder="Email" required />
+          </div>
+          <div class="col">
+            <label>รหัสผ่าน :</label>
+            <input type="password" name="password" placeholder="Password" required />
+          </div>
+
+          <div class="col">
+            <label>วันเกิด :</label>
+            <input type="date" name="dateOfBirth" required />
+          </div>
+          <div class="col">
+            <label>เพศ :</label>
+            <select name="gender" required>
+              <option value="">ระบุเพศ</option>
+              <option value="male">ชาย</option>
+              <option value="female">หญิง</option>
+              <option value="other">อื่นๆ</option>
+            </select>
+          </div>
+
+          <div class="col full">
+            <label>อัปโหลดรูปโปรไฟล์ :</label>
+            <div class="upload-row">
+              <i class="fa-regular fa-image"></i>
+              <input type="file" name="profileImage" accept="image/*" />
+            </div>
+          </div>
+
+          <div class="col full">
+            <button type="submit" class="btn-primary-xl">Creates Account</button>
+          </div>
+
+          <div class="col full">
+            <button type="button" class="btn-secondary ghost" data-close="registerModal">Cancel</button>
+          </div>
+        </form>
+      </section>
+    </div>
+  </div>
+</div>
 
     <main class="container">
         <h1>🌐 Community</h1>
