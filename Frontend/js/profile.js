@@ -36,7 +36,7 @@ async function loadProfile() {
         // Gallery
         const galleryList = document.getElementById("galleryList");
         if (!data.galleryList || data.galleryList.length === 0) {
-            galleryList.innerHTML = "<p>ยังไม่มีรูปในแกลเลอรี่</p>";
+            galleryList.innerHTML = "<p>ยังไม่มีรูปในแกลเลอรี่ ❌</p>";
         } else {
             galleryList.innerHTML = data.galleryList.map(img => `
                 <img src="${BASE_URL + img}" alt="gallery">
@@ -46,7 +46,7 @@ async function loadProfile() {
         // Joined
         const joinedList = document.getElementById("joinedList");
         joinedList.innerHTML = data.joinedActivities.length === 0
-            ? "<p>ยังไม่มีกิจกรรมเข้าร่วม</p>"
+            ? "<p>ยังไม่มีกิจกรรมเข้าร่วม ❌</p>"
             : data.joinedActivities.map(a => `
                 <div class="activity-card">
                     <img src="${BASE_URL + a.imageUrl}" alt="">
@@ -58,7 +58,7 @@ async function loadProfile() {
         // Created
         const createdList = document.getElementById("createdList");
         createdList.innerHTML = data.createdActivities.length === 0
-            ? "<p>ยังไม่มีกิจกรรมที่สร้าง</p>"
+            ? "<p>ยังไม่มีกิจกรรมที่สร้าง ❌</p>"
             : data.createdActivities.map(a => `
                 <div class="activity-card">
                     <img src="${BASE_URL + a.imageUrl}" alt="">
