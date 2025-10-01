@@ -1,4 +1,4 @@
-const BASE_URL = "http://localhost:5000";
+const BASE_URL = "http://45.141.27.231:5000";
 
 
 // --------------------Navigation Menu Toggle ----------------------- //
