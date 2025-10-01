@@ -1,0 +1,1527 @@
+{
+	"info": {
+		"_postman_id": "0c99a90e-6b58-41a2-b3ac-efd58e5b80ef",
+		"name": "ArtSpace Copy",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24974947",
+		"_collection_link": "https://winter-robot-215411.postman.co/workspace/My-Workspace~8d890d7a-2daa-4e8f-89d5-49ce1311c470/collection/24974947-0c99a90e-6b58-41a2-b3ac-efd58e5b80ef?action=share&source=collection_link&creator=24974947"
+	},
+	"item": [
+		{
+			"name": "Register [User1]",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "Username",
+							"value": "ssx1",
+							"type": "text"
+						},
+						{
+							"key": "Password",
+							"value": "123456",
+							"type": "text"
+						},
+						{
+							"key": "Email",
+							"value": "ssx1@example.com",
+							"type": "text"
+						},
+						{
+							"key": "Nickname",
+							"value": "STARSTEAM_X 1",
+							"type": "text"
+						},
+						{
+							"key": "FirstName",
+							"value": "ssx",
+							"type": "text"
+						},
+						{
+							"key": "LastName",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "DateOfBirth",
+							"value": "2025-09-16",
+							"type": "text"
+						},
+						{
+							"key": "Gender",
+							"value": "Male",
+							"type": "text"
+						},
+						{
+							"key": "profileImage",
+							"type": "file",
+							"src": "postman-cloud:///1f093210-4cdb-47c0-97b5-ca4d827ddeeb"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://45.141.27.231:5000/api/auth/register",
+					"protocol": "http",
+					"host": [
+						"45",
+						"141",
+						"27",
+						"231"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"auth",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Register [User2]",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "Username",
+							"value": "ssx2",
+							"type": "text"
+						},
+						{
+							"key": "Password",
+							"value": "123456",
+							"type": "text"
+						},
+						{
+							"key": "Nickname",
+							"value": "STARSTEAM_X 2",
+							"type": "text"
+						},
+						{
+							"key": "Email",
+							"value": "ssx2@example.com",
+							"type": "text"
+						},
+						{
+							"key": "FirstName",
+							"value": "ssx",
+							"type": "text"
+						},
+						{
+							"key": "LastName",
+							"value": "2",
+							"type": "text"
+						},
+						{
+							"key": "DateOfBirth",
+							"value": "2025-09-16",
+							"type": "text"
+						},
+						{
+							"key": "Gender",
+							"value": "Female",
+							"type": "text"
+						},
+						{
+							"key": "profileImage",
+							"type": "file",
+							"src": "postman-cloud:///1f093210-4cdb-47c0-97b5-ca4d827ddeeb"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://45.141.27.231:5000/api/auth/register",
+					"protocol": "http",
+					"host": [
+						"45",
+						"141",
+						"27",
+						"231"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"auth",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login [User1]",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"Username\": \"ssx1\",\r\n  \"Password\": \"123456\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://45.141.27.231:5000/api/auth/login",
+					"protocol": "http",
+					"host": [
+						"45",
+						"141",
+						"27",
+						"231"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login [User2]",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"Username\": \"ssx2\",\r\n  \"Password\": \"123456\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://45.141.27.231:5000/api/auth/login",
+					"protocol": "http",
+					"host": [
+						"45",
+						"141",
+						"27",
+						"231"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "me [User1]",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{User1_Token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://45.141.27.231:5000/api/auth/me",
+					"protocol": "http",
+					"host": [
+						"45",
+						"141",
+						"27",
+						"231"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"auth",
+						"me"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "me [User2]",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{User2_Token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://45.141.27.231:5000/api/auth/me",
+					"protocol": "http",
+					"host": [
+						"45",
+						"141",
+						"27",
+						"231"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"auth",
+						"me"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CrateActivity [User1]",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{User1_Token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "ActivityName",
+							"value": "Football Match",
+							"type": "text"
+						},
+						{
+							"key": "ActivityDescription",
+							"value": "Friendly match SSX vs Guest",
+							"type": "text"
+						},
+						{
+							"key": "ActivityDateStart",
+							"value": "2568-10-01",
+							"type": "text"
+						},
+						{
+							"key": "ActivityDateEnd",
+							"value": "2568-10-01",
+							"type": "text"
+						},
+						{
+							"key": "ActivityTimeStart",
+							"value": "18:00",
+							"type": "text"
+						},
+						{
+							"key": "ActivityTimeEnd",
+							"value": "21:00",
+							"type": "text"
+						},
+						{
+							"key": "Location",
+							"value": "Stadium A",
+							"type": "text"
+						},
+						{
+							"key": "AnnounceDateEnd",
+							"value": "2568-09-30",
+							"type": "text"
+						},
+						{
+							"key": "AnnounceTimeEnd",
+							"value": "20:00",
+							"type": "text"
+						},
+						{
+							"key": "ActivityType",
+							"value": "Sport",
+							"type": "text"
+						},
+						{
+							"key": "activityImage",
+							"type": "file",
+							"src": "postman-cloud:///1f093210-4cdb-47c0-97b5-ca4d827ddeeb"
+						},
+						{
+							"key": "MaxParticipants",
+							"value": "20",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://45.141.27.231:5000/api/activity/createactivity",
+					"protocol": "http",
+					"host": [
+						"45",
+						"141",
+						"27",
+						"231"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"activity",
+						"createactivity"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CrateActivity [User2]",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{User2_Token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "ActivityName",
+							"value": "Football Match 2",
+							"type": "text"
+						},
+						{
+							"key": "ActivityDescription",
+							"value": "Friendly match Man U vs Man City 3-0",
+							"type": "text"
+						},
+						{
+							"key": "ActivityDateStart",
+							"value": "2568-10-01",
+							"type": "text"
+						},
+						{
+							"key": "ActivityDateEnd",
+							"value": "2568-10-01",
+							"type": "text"
+						},
+						{
+							"key": "ActivityTimeStart",
+							"value": "18:00",
+							"type": "text"
+						},
+						{
+							"key": "ActivityTimeEnd",
+							"value": "21:00",
+							"type": "text"
+						},
+						{
+							"key": "Location",
+							"value": "Stadium A",
+							"type": "text"
+						},
+						{
+							"key": "AnnounceDateEnd",
+							"value": "2568-09-30",
+							"type": "text"
+						},
+						{
+							"key": "AnnounceTimeEnd",
+							"value": "20:00",
+							"type": "text"
+						},
+						{
+							"key": "ActivityType",
+							"value": "Sport",
+							"type": "text"
+						},
+						{
+							"key": "activityImage",
+							"type": "file",
+							"src": "postman-cloud:///1f093210-4cdb-47c0-97b5-ca4d827ddeeb"
+						},
+						{
+							"key": "MaxParticipants",
+							"value": "10",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://45.141.27.231:5000/api/activity/createactivity",
+					"protocol": "http",
+					"host": [
+						"45",
+						"141",
+						"27",
+						"231"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"activity",
+						"createactivity"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Join [User1 Join2]",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{User1_Token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"activityId\": 2\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://45.141.27.231:5000/api/activity/join",
+					"protocol": "http",
+					"host": [
+						"45",
+						"141",
+						"27",
+						"231"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"activity",
+						"join"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Join [User2 Join1]",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{User2_Token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"activityId\": 1\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://45.141.27.231:5000/api/activity/join",
+					"protocol": "http",
+					"host": [
+						"45",
+						"141",
+						"27",
+						"231"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"activity",
+						"join"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Leave [User2]",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{User2_Token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"activityId\": 1,\r\n  \"username\": \"ssx2\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://45.141.27.231:5000/api/activity/leave",
+					"protocol": "http",
+					"host": [
+						"45",
+						"141",
+						"27",
+						"231"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"activity",
+						"leave"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "confirmjoin1",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{User1_Token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"activityId\": 1,\r\n  \"username\": \"ssx2\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://45.141.27.231:5000/api/activity/confirmjoin",
+					"protocol": "http",
+					"host": [
+						"45",
+						"141",
+						"27",
+						"231"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"activity",
+						"confirmjoin"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "confirmjoin2",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{User2_Token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"activityId\": 2,\r\n  \"username\": \"ssx1\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://45.141.27.231:5000/api/activity/confirmjoin",
+					"protocol": "http",
+					"host": [
+						"45",
+						"141",
+						"27",
+						"231"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"activity",
+						"confirmjoin"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "detail1",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://45.141.27.231:5000/api/activity/detail/1",
+					"protocol": "http",
+					"host": [
+						"45",
+						"141",
+						"27",
+						"231"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"activity",
+						"detail",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "detail2",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://45.141.27.231:5000/api/activity/detail/1",
+					"protocol": "http",
+					"host": [
+						"45",
+						"141",
+						"27",
+						"231"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"activity",
+						"detail",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetActivitys",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://45.141.27.231:5000/api/activity/list",
+					"protocol": "http",
+					"host": [
+						"45",
+						"141",
+						"27",
+						"231"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"activity",
+						"list"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete1",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{User1_Token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://45.141.27.231:5000/api/activity/delete/1",
+					"protocol": "http",
+					"host": [
+						"45",
+						"141",
+						"27",
+						"231"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"activity",
+						"delete",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update2",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{User2_Token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "ActivityName",
+							"value": "Hackathon 2025",
+							"type": "text"
+						},
+						{
+							"key": "ActivityDescription",
+							"value": "Coding challenge for students",
+							"type": "text"
+						},
+						{
+							"key": "ActivityDateStart",
+							"value": "2568-09-17",
+							"type": "text"
+						},
+						{
+							"key": "ActivityDateEnd",
+							"value": "2568-09-20",
+							"type": "text"
+						},
+						{
+							"key": "ActivityTimeStart",
+							"value": "09:00",
+							"type": "text"
+						},
+						{
+							"key": "ActivityTimeEnd",
+							"value": "18:00",
+							"type": "text"
+						},
+						{
+							"key": "Location",
+							"value": "Bangkok",
+							"type": "text"
+						},
+						{
+							"key": "AnnounceDateEnd",
+							"value": "2568-09-30",
+							"type": "text"
+						},
+						{
+							"key": "AnnounceTimeEnd",
+							"value": "23:59",
+							"type": "text"
+						},
+						{
+							"key": "ActivityType",
+							"value": "Tech",
+							"type": "text"
+						},
+						{
+							"key": "ImageUrl",
+							"type": "file",
+							"src": "postman-cloud:///1f093210-4cdb-47c0-97b5-ca4d827ddeeb"
+						},
+						{
+							"key": "MaxParticipants",
+							"value": "100",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://45.141.27.231:5000/api/activity/update/2",
+					"protocol": "http",
+					"host": [
+						"45",
+						"141",
+						"27",
+						"231"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"activity",
+						"update",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetActivitys",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{User2_Token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://45.141.27.231:5000/api/activity/list",
+					"protocol": "http",
+					"host": [
+						"45",
+						"141",
+						"27",
+						"231"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"activity",
+						"list"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "MyNotify [User1]",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{User1_Token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://45.141.27.231:5000/api/notification/my",
+					"protocol": "http",
+					"host": [
+						"45",
+						"141",
+						"27",
+						"231"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"notification",
+						"my"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "MyNotify [User2]",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{User2_Token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://45.141.27.231:5000/api/notification/my",
+					"protocol": "http",
+					"host": [
+						"45",
+						"141",
+						"27",
+						"231"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"notification",
+						"my"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AddRating [1 to 2]",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{User1_Token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"activitiesId\": 1,\r\n  \"username\": \"ssx2\",\r\n  \"score\": 4\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://45.141.27.231:5000/api/rating/add",
+					"protocol": "http",
+					"host": [
+						"45",
+						"141",
+						"27",
+						"231"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"rating",
+						"add"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AddRating [1 to 2] Copy",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{User1_Token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"activitiesId\": 1,\r\n  \"username\": \"ssx2\",\r\n  \"score\": 1\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://45.141.27.231:5000/api/rating/add",
+					"protocol": "http",
+					"host": [
+						"45",
+						"141",
+						"27",
+						"231"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"rating",
+						"add"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AddRating [2 to 1]",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{User2_Token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"activitiesId\": 2,\r\n  \"username\": \"ssx1\",\r\n  \"score\": 1\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://45.141.27.231:5000/api/rating/add",
+					"protocol": "http",
+					"host": [
+						"45",
+						"141",
+						"27",
+						"231"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"rating",
+						"add"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AddRating [2 to 1] Copy",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{User2_Token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"activitiesId\": 2,\r\n  \"username\": \"ssx1\",\r\n  \"score\": 4\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://45.141.27.231:5000/api/rating/add",
+					"protocol": "http",
+					"host": [
+						"45",
+						"141",
+						"27",
+						"231"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"rating",
+						"add"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "MyProfile [User2]",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{User2_Token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://45.141.27.231:5000/api/profile/myprofile",
+					"protocol": "http",
+					"host": [
+						"45",
+						"141",
+						"27",
+						"231"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"profile",
+						"myprofile"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "MyProfile [User1]",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{User1_Token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://45.141.27.231:5000/api/profile/myprofile",
+					"protocol": "http",
+					"host": [
+						"45",
+						"141",
+						"27",
+						"231"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"profile",
+						"myprofile"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "User 1 See ProfileUser2",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{User1_Token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://45.141.27.231:5000/api/profile/ssx2",
+					"protocol": "http",
+					"host": [
+						"45",
+						"141",
+						"27",
+						"231"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"profile",
+						"ssx2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "User 2 See ProfileUser1",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{User2_Token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://45.141.27.231:5000/api/profile/ssx1",
+					"protocol": "http",
+					"host": [
+						"45",
+						"141",
+						"27",
+						"231"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"profile",
+						"ssx1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AddGallery [User1]",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{User1_Token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "galleryImage",
+							"type": "file",
+							"src": "postman-cloud:///1f093210-4cdb-47c0-97b5-ca4d827ddeeb"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://45.141.27.231:5000/api/profile/addGallery",
+					"protocol": "http",
+					"host": [
+						"45",
+						"141",
+						"27",
+						"231"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"profile",
+						"addGallery"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AddGallery [User2]",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{User2_Token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "galleryImage",
+							"type": "file",
+							"src": "postman-cloud:///1f093210-4cdb-47c0-97b5-ca4d827ddeeb"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://45.141.27.231:5000/api/profile/addGallery",
+					"protocol": "http",
+					"host": [
+						"45",
+						"141",
+						"27",
+						"231"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"profile",
+						"addGallery"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "User1 getRating",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{User1_Token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://45.141.27.231:5000/api/rating/average/ssx1",
+					"protocol": "http",
+					"host": [
+						"45",
+						"141",
+						"27",
+						"231"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"rating",
+						"average",
+						"ssx1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ChangePassword [User1]",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{User1_Token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"oldPassword\": \"123456\",\r\n  \"newPassword\": \"654321\",\r\n  \"confirmPassword\": \"654321\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://45.141.27.231:5000/api/auth/changepassword",
+					"protocol": "http",
+					"host": [
+						"45",
+						"141",
+						"27",
+						"231"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"auth",
+						"changepassword"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "resetdb Copy",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://45.141.27.231:5000/api/test/resetdb",
+					"protocol": "http",
+					"host": [
+						"45",
+						"141",
+						"27",
+						"231"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"test",
+						"resetdb"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <title>ARTSPACE</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+    <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="./css/activity.css">
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="logo"><a href="./index.html">ARTSPACE</a></div>
+        <ul class="nav-links">
+            <li><a href="./activity.html">Activities</a></li>
+            <li><a href="./community.html">Community</a></li>
+            <li><a href="./index.html#About">About</a></li>
+        </ul>
+
+        <div class="nav-right">
+            <div class="nav-right">
+            <!-- 🔔 Notify -->
+            <div class="notify" id="notifyBtn">
+                <span class="icon">🔔</span>
+                <span class="badge" id="notifyCount">0</span>
+                <div class="notify-dropdown" id="notifyDropdown">
+                    
+                </div>
+            </div>
+            <div id="userSection"></div>
+        </div>
+
+        <div class="menu-toggle" id="menuToggle">&#9776;</div>
+    </nav>
+
+
+    <!-- 🔹 Login Modal -->
+    <div class="modal" id="loginModal">
+        <div class="modal-content">
+            <span class="close" data-close="loginModal">&times;</span>
+            <h2>Login</h2>
+            <form id="loginForm">
+                <input type="text" name="username" placeholder="Username" required>
+                <input type="password" name="password" placeholder="Password" required>
+                <button type="submit">Login</button>
+            </form>
+            <p>ยังไม่มีบัญชี? <a href="#" id="openRegister">สมัครสมาชิก</a></p>
+        </div>
+    </div>
+
+    <!-- 🔹 Register Modal -->
+    <div class="modal" id="registerModal">
+        <div class="modal-content">
+            <span class="close" data-close="registerModal">&times;</span>
+            <h2>Register</h2>
+            <form id="registerForm" enctype="multipart/form-data">
+                <input type="text" name="username" placeholder="Username" required>
+                <input type="email" name="email" placeholder="Email" required>
+                <input type="text" name="nickname" placeholder="Nickname" required>
+                <input type="password" name="password" placeholder="Password" required>
+                <input type="text" name="firstName" placeholder="First Name" required>
+                <input type="text" name="lastName" placeholder="Last Name" required>
+                <input type="date" name="dateOfBirth" placeholder="Date of Birth" required>
+                <select name="gender" required>
+                    <option value="">เลือกเพศ</option>
+                    <option value="male">ชาย</option>
+                    <option value="female">หญิง</option>
+                    <option value="other">อื่นๆ</option>
+                </select>
+                <label>Profile Image:</label>
+                <input type="file" name="profileImage" accept="image/*">
+                <button type="submit">Register</button>
+            </form>
+            <p>มีบัญชีแล้ว? <a href="#" id="backToLogin">เข้าสู่ระบบ</a></p>
+        </div>
+    </div>
+
+    <!-- 🔹 section Index -->
+    <section class="hero content-section">
+            <div class="color-sentinel" data-color="dark"></div>
+            <div class="container">
+                <h1 style="color:#ffd700">ชวนเพื่อน มาสร้างงานศิลปะไปด้วยกัน</h1>
+                <p style="color: white;">“ร่วมกิจกรรม วาดภาพ ถ่ายรูป เขียนหนังสือ และเล่นดนตรี กับเพื่อนที่รักศิลปะเหมือนคุณ”</p>
+                <a href="Activity.html" class="start-btn">Start Now</a>
+
+            </div>
+        </section>
+
+    <!-- 🔹 section Activity  -->
+    <section class="activity-cards content-section">
+            <div class="color-sentinel" data-color="white"></div>
+            <div class="container">
+                <div class="activity-cards-container">
+                    <div class="activity-card">
+                        <div class="card-icon">
+                            <i class="fas fa-search"></i>
+                        </div>
+                            <h3>
+                                <span class="highlight">ค้นหากิจกรรมศิลปะ</span><br>
+                                <span class="normal">และเข้าร่วมกับเพื่อนใหม่</span>
+                            </h3>
+                        <a href="Activity.html" class="card-btn">Join Activity</a>
+                    </div>
+                    <div class="activity-card">
+                        <div class="card-icon">
+                            <i class="fas fa-bullhorn"></i>
+                        </div>
+                            <h3>
+                                <span class="highlight">เริ่มต้นกิจกรรมของคุณ</span><br>
+                                <span class="normal">แล้วเชิญเพื่อนมาร่วมสร้างสรรค์</span>
+                            </h3>
+                        <a href="#" id="openCreateBtn" class="card-btn">Create Activity</a>
+                    </div>
+                </div>
+            </div>
+            <div class="activities-lasted">
+                    <h2 id="lastact" style="color: white;" >Lasted Activities</h2>
+                </div>
+        </section>
+
+    <!-- 🔹 section Lasted Activity  -->
+     <section class="activities-lasted content-section" id="Lasted">
+        <div id="activitiesContainer" class="activities"></div>
+            <div class="modal" id="activityModal">
+                <div class="modal-content">
+                    <span class="close" id="modalClose">&times;</span>
+                <div id="modalBody"></div>
+            </div>
+        </div>
+        <div style="text-align: center;">
+                    <a href="Activity.html" class="view-all-btn">View all</a>
+                </div>
+            <div class="category-icons-container">
+                <div class="category-item">
+                    <div class="category-icon">
+                        <img src="img/below.png" alt="Visual Arts">
+                    </div>
+                </div>
+            </div>
+    </section>
+    
+        <section class="tips-section content-section">
+            <div class="color-sentinel" data-color="white"></div>
+            <div class="color-sentinel" data-color="white"></div>
+            <div class="container">
+                <div class="tips-header">
+                <h2>ค้นพบคำตอบ แบ่งปันแรงบันดาลใจ</h2>
+                </div>
+                <section class="tips-cards-container">
+                    <div class="tips-card">
+                        <!-- ด้านซ้าย -->
+            <div class="left">
+            <i class="fas fa-lightbulb"></i>
+            <h3>Tips & Tricks</h3>
+            </div>
+
+            <!-- ด้านขวา -->
+        <div class="right">
+            <ul>
+            <li><i class="fas fa-paint-brush"></i> เทคนิคเลือกพู่กันสำหรับสีน้ำ</li>
+            <li><i class="fas fa-camera"></i> วิธีถ่ายภาพกลางคืนให้สว่างคมชัด</li>
+            <li><i class="fas fa-edit"></i> เคล็ดลับสร้างแรงบันดาลใจในการเขียน</li>
+            </ul>
+            <a href="community.html" class="view-all-btn">View all</a>
+        </div>
+        </div>
+    </section>
+        <section class="community-section content-section" id="community">
+            <div class="container">
+                <div class="community-header">
+                    <h2>แชร์ผลงาน แลกเปลี่ยนไอเดีย ค้นหาแรง<br>บันดาลใจใหม่ ๆ ได้ที่นี่</h2>
+                </div>
+                <a href="community.html" class="community-btn">Community</a>
+            </div>
+        </section>
+
+        <section class="about-section content-section white-section" id="About">
+  <div class="container">
+    <!-- เรื่องราว -->
+    <div class="about-header">
+      <h2>เกี่ยวกับ ARTSPACE</h2>
+      <p>
+        ARTSPACE ถูกสร้างขึ้นจากความเชื่อว่า <b>ศิลปะคือภาษาสากล</b>  
+        ที่สามารถเชื่อมโยงผู้คนต่างที่มาและวัฒนธรรมเข้าด้วยกัน  
+        ที่นี่คือพื้นที่สำหรับทุกคนที่อยากเรียนรู้ ทดลอง และแบ่งปันความคิดสร้างสรรค์  
+        ไม่ว่าคุณจะเป็นมือใหม่หรือศิลปินมืออาชีพ
+      </p>
+    </div>
+
+    <!-- Mission & Vision -->
+    <div class="mv-section">
+      <div class="mv-card">
+        <i class="fas fa-bullseye"></i>
+        <h3>พันธกิจ (Mission)</h3>
+        <p>สร้างสรรค์พื้นที่ที่ทุกคนสามารถเรียนรู้และเติบโตไปด้วยกัน</p>
+      </div>
+      <div class="mv-card">
+        <i class="fas fa-eye"></i>
+        <h3>วิสัยทัศน์ (Vision)</h3>
+        <p>เป็นศูนย์กลางศิลปะและแรงบันดาลใจที่เปิดกว้างที่สุดในเอเชีย</p>
+      </div>
+    </div>
+
+    <!-- Core Values -->
+    <h3 class="values-title">คุณค่าหลักของเรา</h3>
+    <div class="feature-cards">
+      <div class="feature-card">
+        <i class="fas fa-users"></i>
+        <h3>Community</h3>
+        <p>เชื่อมโยงผู้คนที่มีใจรักศิลปะให้มาพบกัน</p>
+      </div>
+      <div class="feature-card">
+        <i class="fas fa-lightbulb"></i>
+        <h3>Creativity</h3>
+        <p>กระตุ้นความคิดสร้างสรรค์ในทุกกิจกรรม</p>
+      </div>
+      <div class="feature-card">
+        <i class="fas fa-hands-helping"></i>
+        <h3>Collaboration</h3>
+        <p>สนับสนุนการทำงานร่วมกันเพื่อสร้างผลงานที่ยิ่งใหญ่</p>
+      </div>
+      <div class="feature-card">
+        <i class="fas fa-globe"></i>
+        <h3>Diversity</h3>
+        <p>เปิดกว้างให้ทุกเพศ ทุกวัย และทุกวัฒนธรรม</p>
+      </div>
+    </div>
+
+    <!-- Team -->
+    <h3 class="values-title">ทีมงานของเรา</h3>
+    <div class="team-grid">
+      <div class="team-card">
+        <img src="https://media.canva.com/v2/image-resize/format:JPG/height:200/quality:75/uri:ifs%3A%2F%2FM%2Fd4b7d9ec-1765-447f-a5fe-cffaed22afc0/watermark:F/width:150?csig=AAAAAAAAAAAAAAAAAAAAAP0EDeQXpkBAmrgqiNi9Jm5OtV9noeIjherBmn6Ymjqj&exp=1758397348&osig=AAAAAAAAAAAAAAAAAAAAAEBdhl_PIm1jpARkHXq3TwucEYyBGWPX2JmYKZPpVquF&signer=media-rpc&x-canva-quality=thumbnail" alt="Founder">
+        <h3>คุณไข่</h3>
+        <p>ผู้ก่อตั้ง - ศิลปะคือความสุขที่แบ่งปันได้</p>
+      </div>
+      <div class="team-card">
+        <img src="https://media.canva.com/v2/image-resize/format:JPG/height:200/quality:75/uri:ifs%3A%2F%2FM%2Fd4b7d9ec-1765-447f-a5fe-cffaed22afc0/watermark:F/width:150?csig=AAAAAAAAAAAAAAAAAAAAAP0EDeQXpkBAmrgqiNi9Jm5OtV9noeIjherBmn6Ymjqj&exp=1758397348&osig=AAAAAAAAAAAAAAAAAAAAAEBdhl_PIm1jpARkHXq3TwucEYyBGWPX2JmYKZPpVquF&signer=media-rpc&x-canva-quality=thumbnail" alt="Co-Founder">
+        <h3>คุณไข่</h3>
+        <p>ผู้ร่วมก่อตั้ง - พื้นที่ที่เปิดกว้างสำหรับทุกคน</p>
+      </div>
+      <div class="team-card">
+        <img src="https://media.canva.com/v2/image-resize/format:JPG/height:200/quality:75/uri:ifs%3A%2F%2FM%2Fd4b7d9ec-1765-447f-a5fe-cffaed22afc0/watermark:F/width:150?csig=AAAAAAAAAAAAAAAAAAAAAP0EDeQXpkBAmrgqiNi9Jm5OtV9noeIjherBmn6Ymjqj&exp=1758397348&osig=AAAAAAAAAAAAAAAAAAAAAEBdhl_PIm1jpARkHXq3TwucEYyBGWPX2JmYKZPpVquF&signer=media-rpc&x-canva-quality=thumbnail" alt="Creative Designer">
+        <h3>คุณไข่</h3>
+        <p>Creative Designer - เติมเต็มความคิดสร้างสรรค์</p>
+      </div>
+    </div>
+
+</section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 ART SPACE. All Rights Reserved.</p>
+            <div class="social-icons">
+                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+            </div>
+        </div>
+    </footer>
+
+
+    <script src="./js/app.js"></script>
+    <script src="./js/activity.js"></script>
+    <script>
+document.addEventListener("DOMContentLoaded", async () => {
+  // ถ้ายังไม่มี modal ในหน้านี้
+  if (!document.getElementById("createModal")) {
+    try {
+      const res = await fetch("./activity.html");
+      const text = await res.text();
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(text, "text/html");
+
+      // หา modal จาก activity.html
+      const modal = doc.querySelector("#createModal");
+      if (modal) {
+        document.body.appendChild(modal); // ใส่ modal ลงใน index.html
+      }
+    } catch (err) {
+      console.error("โหลด modal ไม่ได้:", err);
+    }
+  }
+});
+</script>
+</body>
+
+</html>
