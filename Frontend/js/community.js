@@ -171,10 +171,10 @@ document.querySelectorAll('.search-bar .category-item').forEach(item => {
     // ✅ ใช้สีจาก map
     const typeColors = {
         "": "#6c757d",        // เทา สำหรับ "All Categories"
-      Photo: "#9b5de5",
-      Painting: "#f15bb5",
-      Music: "#00bbf9",
-      Writing: "#00f5d4"
+      Photo: "#9d26ed",
+      Painting: "#5174ff",
+      Music: "#f158be",
+      Writing: "#dd23dd"
     };
     // เก็บค่าสีที่เลือกไว้ใน CSS variable
     btn.style.setProperty("--selected-bg", typeColors[value] || "#7209b7");
@@ -198,12 +198,20 @@ document.querySelectorAll('#postForm .category-item').forEach(item => {
 
     hiddenInput.value = value;
 
-    // ✅ ใช้ innerHTML เช่นกัน
+    // คงไอคอน + ชื่อไว้เหมือนเดิม
     btn.innerHTML = this.innerHTML;
-    btn.classList.add("selected");
+    btn.classList.add('selected');
 
-    btn.style.background = window.getComputedStyle(this).backgroundColor;
-    btn.style.color = window.getComputedStyle(this).color;
+    // ใช้สีเดียวกับ filter ด้านบน
+    const typeColors = {
+        "": "#6c757d",           // (ถ้ามี “All”)
+        Photo: "#9b5de5",
+        Painting: "#f15bb5",     // <<< สีที่ถามถึง
+        Music: "#00bbf9",
+        Writing: "#00f5d4"
+    };
+    btn.style.setProperty('--selected-bg', typeColors[value] || '#7209b7');
+    btn.style.color = '#fff';
 
     dropdown.classList.remove('show');
   });
