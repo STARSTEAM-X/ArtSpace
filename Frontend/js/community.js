@@ -106,6 +106,11 @@ document.getElementById("clearBtn").addEventListener("click", () => {
 
 // new post modal
 document.getElementById("newPostBtn").addEventListener("click", () => {
+  const token = localStorage.getItem("token");
+  if (!token) {
+    alert("กรุณาเข้าสู่ระบบก่อนสร้างโพสต์");
+    return; // ❌ หยุด ไม่เปิด modal
+  }
   document.getElementById("postModal").style.display = "flex";
 });
 document.getElementById("closePostModal").addEventListener("click", () => {
@@ -171,7 +176,7 @@ document.querySelectorAll('.search-bar .category-item').forEach(item => {
     // ✅ ใช้สีจาก map
     const typeColors = {
         "": "#6c757d",        // เทา สำหรับ "All Categories"
-      Photo: "#9d26ed",
+      Photo: "#9d26ed ",
       Painting: "#5174ff",
       Music: "#f158be",
       Writing: "#dd23dd"
@@ -204,11 +209,11 @@ document.querySelectorAll('#postForm .category-item').forEach(item => {
 
     // ใช้สีเดียวกับ filter ด้านบน
     const typeColors = {
-        "": "#6c757d",           // (ถ้ามี “All”)
-        Photo: "#9b5de5",
-        Painting: "#f15bb5",     // <<< สีที่ถามถึง
-        Music: "#00bbf9",
-        Writing: "#00f5d4"
+          "": "#6c757d",        // เทา สำหรับ "All Categories"
+      Photo: "#9d26ed ",
+      Painting: "#5174ff",
+      Music: "#f158be",
+      Writing: "#dd23dd"
     };
     btn.style.setProperty('--selected-bg', typeColors[value] || '#7209b7');
     btn.style.color = '#fff';

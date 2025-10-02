@@ -495,19 +495,19 @@ body::before {
 }
 
 .post-type.Photo {
-  background: linear-gradient(135deg, #2196f3 0%, #1976d2 100%);
+  background: color= #9d26ed ;
 }
 
 .post-type.Painting {
-  background: linear-gradient(135deg, #e91e63 0%, #c2185b 100%);
+  background: color= #5174ff ;
 }
 
 .post-type.Music {
-  background: linear-gradient(135deg, #4caf50 0%, #388e3c 100%);
+  background: color= "#f158be",
 }
 
 .post-type.Writing {
-  background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%);
+  background: color= #dd23dd"
 }
 
 .post-title {
@@ -800,4 +800,3 @@ body::before {
     padding: 30px 20px;
   }
 }
-
