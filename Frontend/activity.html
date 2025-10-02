@@ -7,6 +7,9 @@
     <link rel="stylesheet" href="./css/style.css">
     <link rel="stylesheet" href="./css/activity.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- ใส่ใน <head> -->
+    <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
 </head>
 
 <body>
@@ -22,7 +25,7 @@
         <div class="nav-right">
             <!-- 🔔 Notify -->
             <div class="notify" id="notifyBtn">
-                <span class="icon">🔔</span>
+                <span class="icon"><img src="/ArtSpace/Frontend/img/icon_noti.png" width="30px" height="30px"></span>
                 <span class="badge" id="notifyCount">0</span>
                 <div class="notify-dropdown" id="notifyDropdown"></div>
             </div>
@@ -80,15 +83,19 @@
         <h2 class="hero-title">“หาเพื่อนใหม่ที่รักศิลปะเหมือนคุณ แล้วสร้างความทรงจำไปด้วยกัน”</h2>
 
         <div class="hero-actions">
-            <button id="btnFind" class="btn-lg btn-primary">
-                <span class="icon">🔎</span> Find Activity
-            </button>
-
+            <div class="cta">
+                <img src="/ArtSpace/Frontend/img/act.png" class="btn-ico" alt="">
+                <button id="btnFind" class="btnFind btn-primary">
+                    <span class="icon"><img src="/ArtSpace/Frontend/img/search.png"></span> Find Activity
+                </button>
+            </div>
             <span class="or-text">OR</span>
-
-            <button id="btnCreate" class="btn-lg btn-secondary">
-                <span class="icon">➕</span> Create Activity
-            </button>
+            <div class="cta">
+                <img src="/ArtSpace/Frontend/img/act1.png" class="btn-ico" alt="">
+                <button id="btnCreate" class="btnCreate btn-primary">
+                    <span class="icon"><img src="/ArtSpace/Frontend/img/add.png"></span> Create Activity
+                </button>
+            </div>
         </div>
     </section>
 
@@ -136,9 +143,11 @@
     <!-- ===== Modal: Create Activity ===== -->
     <div class="modal" id="createModal">
         <div class="modal-content large">
+            
+            <img class="backgroup-create" src="/ArtSpace/Frontend/img/create_act.png">
             <span class="close" id="createClose">&times;</span>
-            <h2>สร้างกิจกรรม</h2>
-
+            <h2>Create Activity Form</h2>
+            
             <form id="createActivityForm" enctype="multipart/form-data" class="form-grid">
                 <label>
                     ชื่อกิจกรรม
@@ -155,13 +164,12 @@
                     <input type="date" name="ActivityDateStart" required>
                 </label>
                 <label>
-                    วันที่สิ้นสุด
-                    <input type="date" name="ActivityDateEnd" required>
-                </label>
-
-                <label>
                     เวลาเริ่ม
                     <input type="time" name="ActivityTimeStart" required>
+                </label>
+                <label>
+                    วันที่สิ้นสุด
+                    <input type="date" name="ActivityDateEnd" required>
                 </label>
                 <label>
                     เวลาสิ้นสุด
@@ -174,16 +182,16 @@
                 </label>
 
                 <label>
-                    ปิดรับประกาศ (วัน)
+                    วันปิดรับประกาศ
                     <input type="date" name="AnnounceDateEnd">
                 </label>
                 <label>
-                    ปิดรับประกาศ (เวลา)
+                    เวลาปิดรับประกาศ
                     <input type="time" name="AnnounceTimeEnd">
                 </label>
 
                 <label>
-                    ประเภทกิจกรรม
+                    กรุณาเลือกหมวด
                     <select name="ActivityType" required>
                         <option value="Visual Arts">Visual Arts</option>
                         <option value="Photography">Photography</option>

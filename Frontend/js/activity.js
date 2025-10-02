@@ -25,10 +25,23 @@ async function loadActivities() {
         container.innerHTML = `<p style="color:red;">ไม่สามารถโหลดกิจกรรมได้</p>`;
     }
 }
-
+function getactivityTypeIcon(activityType) {
+    const iconMap = {
+        'Visual Arts': '/ArtSpace/Frontend/img/VisualArts.png',
+        'Photography': '/ArtSpace/Frontend/img/photo.png',
+        'Writing': '/ArtSpace/Frontend/img/writ.png',
+        'Music': '/ArtSpace/Frontend/img/music.png'
+    };
+    return iconMap[activityType] || '/ArtSpace/Frontend/img/logo.png';
+}
 function renderActivities(list) {
     if (!list || list.length === 0) {
-        container.innerHTML = `<p>ไม่มีกิจกรรม</p>`;
+        container.innerHTML = `
+            <div class="empty">
+                <img class="empty-ill" src="/ArtSpace/Frontend/img/notfound.png" alt="">
+                <p>ขออภัยไม่มีกิจกรรมที่คุณค้นหาในตอนนี้</p>
+            </div>
+        `;
         return;
     }
 
@@ -36,21 +49,25 @@ function renderActivities(list) {
         .slice()            // ทำ copy ป้องกันแก้ list ต้นฉบับ
         .reverse()          // พลิก array ให้ item สุดท้ายขึ้นก่อน
         .map(act => `
-        <div class="card">
-          <span class="tag ${mapTagClass(act.activityType)}">${act.activityType}</span>
-          <h3>${act.activityName}</h3>
-          <img src="${act.imageUrl ? BASE_URL + act.imageUrl : "https://via.placeholder.com/300x150"}" alt="activity">
-          <p><i class="fa fa-map-marker"></i> ${act.location}</p>
-          <p><i class="fa fa-calendar"></i> ${formatDate(act.activityDateStart)} - ${formatDate(act.activityDateEnd)}</p>
-          <p><i class="fa fa-clock"></i> ${act.activityTimeStart} - ${act.activityTimeEnd}</p>
-          <div class="status ${act.currentParticipants < act.maxParticipants ? "success" : "danger"}">
-            ${act.currentParticipants}/${act.maxParticipants}
-          </div>
-          <div class="actions">
-            <button class="detail" onclick="viewDetail(${act.id})">More Detail</button>
-            <button class="join" onclick="joinActivity(${act.id})">Join Now</button>
-          </div>
-        </div>
+            <div class="card-body">
+                <span class="pill-head tag${mapTagClass(act.activityType)}"><img src="${getactivityTypeIcon(act.activityType)}" alt="" width="16" height="auto"> ${act.activityType}</span>
+                <div class="title-head">${act.activityName}</div>
+                <img class="cover" src="${act.imageUrl ? BASE_URL + act.imageUrl : "https://via.placeholder.com/300x150"}" alt="">
+                <div class="info-stack">
+                    <div class="info-row"><img src="/ArtSpace/Frontend/img/position.png" class="info-row-image" width="auto" height="20" alt=""><div class="info-chip">${act.location}</div></div>
+                    <div class="info-row"><img src="/ArtSpace/Frontend/img/calendar.png" class="info-row-image" width="auto" height="20" alt=""><div class="info-chip">${formatDate(act.activityDateStart)} - ${formatDate(act.activityDateEnd)}</div></div>
+                    <div class="info-row"><img src="/ArtSpace/Frontend/img/time.png" class="info-row-image" width="auto" height="20" alt=""><div class="info-chip">${act.activityTimeStart} - ${act.activityTimeEnd}</div></div>
+                </div>
+                <div class="count-badge status ${act.currentParticipants < act.maxParticipants ? "success" : "danger"}"><img class="image-count-badge" src="/ArtSpace/Frontend/img/account.png" width="18" height="18" alt=""> ${act.currentParticipants}/${act.maxParticipants}</div>     
+                <div class="org">
+                    <img class="btn-img" src="${act.orgAvatar}" alt="" onclick="viewProfile(${act.id})">
+                    <div>ไอดีผู้จัดกิจกรรม<br>${act.createdByUserName} · ${act.rating} </div>
+                </div>
+                <div class="actions-cardAct">
+                    <button class="btn btn-small btn-ghost detail" onclick="viewDetail(${act.id})" >More Detail</button>
+                    <button class="btn btn-small btn-dark btn-join join" onclick="joinActivity(${act.id})">Join Now</button>
+                </div>
+            </div>
       `).join("");
 }
 
@@ -91,18 +108,61 @@ async function viewDetail(id) {
         const act = await res.json();
 
         modalBody.innerHTML = `
-      <h2>${act.activityName}</h2>
-      <img src="${act.imageUrl ? BASE_URL + act.imageUrl : "https://via.placeholder.com/500x250"}" alt="activity">
-      <p><strong>รายละเอียด:</strong> ${act.activityDescription || "-"}</p>
-      <p><i class="fa fa-map-marker"></i> ${act.location}</p>
-      <p><i class="fa fa-calendar"></i> ${formatDate(act.activityDateStart)} - ${formatDate(act.activityDateEnd)}</p>
-      <p><i class="fa fa-clock"></i> ${act.activityTimeStart} - ${act.activityTimeEnd}</p>
-      <p><strong>ผู้เข้าร่วม:</strong> ${act.cerrentParticipants}/${act.maxParticipants}</p>
-      <p><strong>ผู้สร้าง:</strong> ${act.createdByUserName}</p>
-      <div style="margin-top:15px; text-align:right;">
-        <button class="join" onclick="joinActivity(${act.id})">Join Now</button>
-      </div>
-    `;
+            <h2 class="category">${act.activityType}</h2>
+            <img src="${act.imageUrl ? BASE_URL + act.imageUrl : "https://via.placeholder.com/500x250"}" alt="Activity" class="activity-image">
+        
+            <div class="info-box">
+                <span class="info-label">ชื่อกิจกรรม :</span>
+                <span class="info-value">${act.activityName}</span>
+            </div>
+
+            <div class="info-box">
+                <span class="info-label">รายละเอียด :</span>
+                <span class="info-value">${act.activityDescription || "-"}</span>
+            </div>
+
+            <div class="info-box">
+                <span class="info-label">วันที่เริ่มจัดกิจกรรม :</span>
+                <div class="datetime-row">
+                    <input type="date" class="date-input" value="${formatDate(act.activityDateStart)}" readonly>
+                    <input type="time" class="time-input" value="${act.activityTimeStart}" readonly>
+                </div>
+            </div>
+
+            <div class="info-box">
+                <span class="info-label">วันที่สิ้นสุดกิจกรรม :</span>
+                <div class="datetime-row">
+                    <input type="date" class="date-input" value="${formatDate(act.activityDateEnd)}" readonly>
+                    <input type="time" class="time-input" value="${act.activityTimeEnd}" readonly>
+                </div>
+            </div>
+
+            <div class="info-box">
+                <span class="info-label">สถานที่ :</span>
+                <span class="info-value">${act.location}</span>
+            </div>
+
+            <div class="info-box participant">
+                <span class="info-label">จำนวนที่รับ :</span>
+                <div class="datetime-row">
+                    <input type="number" class="capacity-input chip" value="${act.maxParticipants}" readonly>
+                    <span class="capacity-note note-right">เข้าร่วมแล้ว ${act.currentParticipants || "ไม่มี"} คน</span>
+                </div>
+            </div>
+
+            <div class="info-box">
+                <span class="info-label">วันหมดอายุของประกาศ :</span>
+                <div class="datetime-row">
+                    <input type="date" class="date-input" value="${act.deadline} " readonly>
+                    <input type="time" class="time-input" value="${act.deadlineTime}" readonly>
+                </div>
+            </div>
+            <div class="info-box organizer-row">
+                <span class="info-label">ผู้จัด :</span>
+                <span class="info-value organizer-name">${act.createdByUserName} · ${act.rating} </span>
+            </div>
+            <button class="join" onclick="joinActivity(${act.id})">Join Now</button>
+            `;
         modal.style.display = "flex";
     } catch (err) {
         console.error(err);
