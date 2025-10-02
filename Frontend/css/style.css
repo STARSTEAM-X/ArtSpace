@@ -1300,6 +1300,9 @@ footer .social-icons a:hover {
 }
 
 @media (max-width: 768px) {
+  .content-section .container {
+    padding: 0 16px;
+  }
   .nav-links {
     display: none;
     position: absolute;
@@ -1328,6 +1331,13 @@ footer .social-icons a:hover {
   .search-bar {
     flex-direction: column;
     border-radius: 20px;
+  }
+  .tips-section .container {
+    padding: 0 16px;   /* เพิ่ม padding ซ้าย/ขวา */
+  }
+  .tips-card {
+    margin: 10px 0;   /* ให้เว้นระยะขอบ */
+    width: 100%;      /* ใช้เต็มความกว้างที่เหลือ */
   }
 }
 

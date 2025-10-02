@@ -311,9 +311,12 @@ body::before {
   background: #ddd;
   color: #333;
 }
+/* ปุ่ม Category หลังจากเลือกแล้ว */
 .category-btn.selected {
-  color: #fff;
+  color: #fff !important;
   font-weight: 700;
+  background: var(--selected-bg, #7209b7); /* เก็บสีที่เลือกใน CSS variable */
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
 }
 /* Show on hover */
 .category-dropdown:hover{

@@ -2,6 +2,7 @@
 // Icon map สำหรับแต่ละประเภท
 // -----------------------------
 const typeIcons = {
+
   Photo: "fa-solid fa-camera",
   Painting: "fa-solid fa-paintbrush",
   Music: "fa-solid fa-music",
@@ -175,7 +176,9 @@ document.querySelectorAll('.search-bar .category-item').forEach(item => {
       Music: "#00bbf9",
       Writing: "#00f5d4"
     };
-    btn.style.background = typeColors[value] || "#7209b7";
+    // เก็บค่าสีที่เลือกไว้ใน CSS variable
+    btn.style.setProperty("--selected-bg", typeColors[value] || "#7209b7");
+    btn.classList.add("selected");
     btn.style.color = "#fff";
 
     dropdown.classList.remove('show');
