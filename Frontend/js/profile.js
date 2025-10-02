@@ -87,7 +87,7 @@ async function loadProfile() {
                         <h4>${a.activityName}</h4>
                         <img src="${BASE_URL + a.imageUrl}" alt="${a.activityName}">
                         <p>${activityDate.toLocaleDateString('th-TH', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
-                        <button class="review-btn">Review</button>
+                        <button class="review-btn">Manage</button>
                     </div>
                 `;
             }).join("");
