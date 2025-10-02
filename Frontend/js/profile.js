@@ -43,34 +43,59 @@ async function loadProfile() {
             `).join("");
         }
 
+        console.log(data)
         // Joined
         const joinedList = document.getElementById("joinedList");
         joinedList.innerHTML = data.joinedActivities.length === 0
             ? "<p>ยังไม่มีกิจกรรมเข้าร่วม ❌</p>"
-            : data.joinedActivities.map(a => `
-                <div class="activity-card">
-                    <img src="${BASE_URL + a.imageUrl}" alt="">
-                    <h4>${a.activityName}</h4>
-                    <p>${new Date(a.activityDateStart).toLocaleDateString()}</p>
-                </div>
-            `).join("");
+            : data.joinedActivities.map(a => {
+                const activityDate = new Date(a.activityDateStart);
+                const today = new Date();
+                const isPast = activityDate < today;
+                const statusBadge = isPast 
+                    ? '<span class="badge done">Done</span>' 
+                    : '<span class="badge upcoming">Upcoming</span>';
+
+                return `
+                    <div class="activity-card">
+                        <span class="category-badge"> ${a.activityType }</span>
+                        ${statusBadge}
+                        <h4>${a.activityName}</h4>
+                        <img src="${BASE_URL + a.imageUrl}" alt="${a.activityName}">
+                        <p>${activityDate.toLocaleDateString('th-TH', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
+                        <button class="review-btn">Review</button>
+                    </div>
+                `;
+            }).join("");
 
         // Created
         const createdList = document.getElementById("createdList");
         createdList.innerHTML = data.createdActivities.length === 0
             ? "<p>ยังไม่มีกิจกรรมที่สร้าง ❌</p>"
-            : data.createdActivities.map(a => `
-                <div class="activity-card">
-                    <img src="${BASE_URL + a.imageUrl}" alt="">
-                    <h4>${a.activityName}</h4>
-                    <p>${new Date(a.activityDateStart).toLocaleDateString()}</p>
-                </div>
-            `).join("");
+            : data.createdActivities.map(a => {
+                const activityDate = new Date(a.activityDateStart);
+                const today = new Date();
+                const isPast = activityDate < today;
+                const statusBadge = isPast 
+                    ? '<span class="badge done">Done</span>' 
+                    : '<span class="badge upcoming">Upcoming</span>';
+                
+                return `
+                    <div class="activity-card">
+                        <span class="category-badge"> ${a.activityType }</span>
+                        ${statusBadge}
+                        <h4>${a.activityName}</h4>
+                        <img src="${BASE_URL + a.imageUrl}" alt="${a.activityName}">
+                        <p>${activityDate.toLocaleDateString('th-TH', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
+                        <button class="review-btn">Review</button>
+                    </div>
+                `;
+            }).join("");
 
         // Posted
         const postedList = document.getElementById("postedList");
         postedList.innerHTML = data.postedActivities.length === 0
-            ? "<p>ยังไม่มีโพสต์</p>"
+            ? "<p>ยังไม่มีโพสต์ ❌</p>"
             : data.postedActivities.map(p => `<p>📌 ${p.title}</p>`).join("");
 
     } catch (err) {
@@ -207,6 +232,7 @@ const galleryPreview = document.getElementById("galleryPreview");
 const newGalleryFiles = document.getElementById("newGalleryFiles");
 
 let currentGallery = [];
+let newFilesToUpload = [];
 
 document.getElementById("editGalleryBtn").addEventListener("click", () => {
     openEditGallery();
@@ -218,6 +244,7 @@ document.getElementById("cancelGallery").onclick = () => editGalleryModal.style.
 function openEditGallery() {
     editGalleryModal.style.display = "flex";
     galleryPreview.innerHTML = "";
+    newFilesToUpload = []; 
 
     fetch(`${BASE_URL}/api/profile/myprofile`, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
@@ -254,9 +281,9 @@ document.getElementById("saveGallery").addEventListener("click", async () => {
     formData.append("keepGallery", JSON.stringify(currentGallery));
 
     // ✅ เพิ่มไฟล์ใหม่ทั้งหมด
-    for (let file of newGalleryFiles.files) {
+    newFilesToUpload.forEach(file => {
         formData.append("files", file);
-    }
+    });
 
     try {
         const res = await fetch(`${BASE_URL}/api/profile/updateGallery`, {
@@ -279,27 +306,75 @@ document.getElementById("saveGallery").addEventListener("click", async () => {
 });
 
 
-
 // Preview ไฟล์ใหม่ที่เลือก
 newGalleryFiles.addEventListener("change", () => {
     const files = Array.from(newGalleryFiles.files);
+    
     files.forEach(file => {
+        // ✅ 1. เก็บไฟล์ลง array
+        newFilesToUpload.push(file);
+        
         const reader = new FileReader();
         reader.onload = () => {
             const div = document.createElement("div");
             div.classList.add("img-box");
             div.innerHTML = `
                 <img src="${reader.result}" alt="">
-                <button class="remove-btn">&times;</button>
+                <button class="remove-btn" data-filename="${file.name}">&times;</button>
             `;
 
-            // ❌ ปุ่ม remove (ลบออกจาก newGalleryFiles preview เท่านั้น)
+            // ✅ 2. ลบทั้ง preview และไฟล์จริงใน array
             div.querySelector(".remove-btn").addEventListener("click", () => {
+                const filename = div.querySelector(".remove-btn").getAttribute("data-filename");
+                newFilesToUpload = newFilesToUpload.filter(f => f.name !== filename);
                 div.remove();
             });
 
             galleryPreview.appendChild(div);
         };
         reader.readAsDataURL(file);
+    });
+    
+    // ✅ 3. รีเซ็ต input เพื่อให้เลือกไฟล์ซ้ำได้
+    newGalleryFiles.value = "";
+});
+
+
+
+// ----------------  Navigation Arrows ---------------- //
+function setupScrollArrows(wrapperId, listId) {
+    const wrapper = document.getElementById(wrapperId);
+    if (!wrapper) return;
+    
+    const list = wrapper.querySelector(`#${listId}`);
+    const leftArrow = wrapper.querySelector('.left-arrow');
+    const rightArrow = wrapper.querySelector('.right-arrow');
+    
+    if (!list || !leftArrow || !rightArrow) return;
+    
+    // เลื่อนไปทางซ้าย
+    leftArrow.addEventListener('click', () => {
+        list.scrollBy({
+            left: -300,
+            behavior: 'smooth'
+        });
+    });
+    
+    // เลื่อนไปทางขวา
+    rightArrow.addEventListener('click', () => {
+        list.scrollBy({
+            left: 300,
+            behavior: 'smooth'
+        });
+    });
+}
+
+// เรียกใช้หลังจากโหลดข้อมูลเสร็จ
+document.addEventListener("DOMContentLoaded", () => {
+    loadProfile().then(() => {
+        // Setup navigation arrows สำหรับแต่ละ section
+        setupScrollArrows('galleryWrapper', 'galleryList');
+        setupScrollArrows('joinedWrapper', 'joinedList');
+        setupScrollArrows('createdWrapper', 'createdList');
     });
 });
