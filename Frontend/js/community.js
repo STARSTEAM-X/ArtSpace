@@ -62,21 +62,77 @@ async function loadPosts() {
   }
 }
 
-// เปิด modal แสดงรายละเอียด
+// เปิด modal แสดงรายละเอียด (ดีไซน์การ์ดแบบภาพตัวอย่าง)
 function openPostModal(post) {
   const modal = document.getElementById("viewPostModal");
   const content = document.getElementById("viewPostContent");
 
+  // แผนที่ "type" ไปเป็นป้ายบนขวา
+  const typeLabelMap = {
+    Photo: "Photography",
+    Painting: "Visual Arts",
+    Music: "Music",
+    Writing: "Writing"
+  };
+  const typeLabel = typeLabelMap[post.type] || post.type || "Community";
+
+  // ที่มารูป: ใช้รูปจาก backend ถ้ามี ไม่งั้นไม่แสดง
+  const imgHTML = post.image
+    ? `<div class="hero"><img src="${BASE_URL + post.image}" alt="${post.title}"></div>`
+    : "";
+
+  // ดาวเรต: ถ้ามี post.rating (1–5) ให้โชว์ดาว ไม่งั้นซ่อนไว้
+  const rating = Number(post.rating || 0);
+  const stars = rating
+    ? `<span class="rating">${"★".repeat(rating)}${"☆".repeat(5-rating)}</span>`
+    : "";
+
   content.innerHTML = `
-    <h2>${post.title}</h2>
-    <div class="view-post-meta">โพสต์โดย <b>${post.username}</b> • ${new Date(
-      post.createdAt
-    ).toLocaleString()}</div>
-    <p>${post.message}</p>
-    ${post.discription ? `<p><i>${post.discription}</i></p>` : ""}
-    ${post.image ? `<img src="${BASE_URL + post.image}" alt="post-img">` : ""}
-    <span class="post-type ${post.type}">${post.type}</span>
+    <div class="detail-card">
+      <div class="detail-header">
+        <div class="type-badge ${post.type || ""}">
+          <i class="${(typeIcons[post.type] || "fa-regular fa-file")}"></i> ${typeLabel}
+        </div>
+        <div class="title">${post.title || "-"}</div>
+      </div>
+
+      <div class="detail-body">
+        ${imgHTML}
+        <div class="text">
+          ${post.message ? `<p>${post.message}</p>` : ""}
+          ${post.discription ? `<p>${post.discription}</p>` : ""}
+        </div>
+
+        <div class="detail-footer">
+          <div class="author">
+            <img class="avatar" src="${post.avatar ? (BASE_URL + post.avatar) : 'https://i.pravatar.cc/80'}" alt="${post.username}">
+            <div>
+              <div class="name">ผู้เขียน : ${post.username}</div>
+              ${stars}
+            </div>
+          </div>
+
+          ${
+            // แสดงปุ่มแก้ไขเฉพาะกรณีเจ้าของโพสต์ (ถ้ามี token/username เท่ากัน)
+            (localStorage.getItem("username") && localStorage.getItem("username") === post.username)
+            ? `<button class="edit-btn" id="editPostBtn">Edit</button>`
+            : ``
+          }
+        </div>
+        <div class="view-post-meta">เผยแพร่เมื่อ ${new Date(post.createdAt).toLocaleString()}</div>
+      </div>
+    </div>
   `;
+
+  // event ปุ่มแก้ไข (ถ้ามี)
+  const editBtn = document.getElementById("editPostBtn");
+  if (editBtn) {
+    editBtn.addEventListener("click", () => {
+      // ไปหน้า edit ที่คุณมีอยู่ หรือจะเปิด modal แก้ไขก็ได้
+      // ตัวอย่าง: location.href = `/community-edit.html?id=${post.id}`;
+      alert("ตัวอย่าง: ไปหน้าแก้ไขโพสต์ id=" + post.id);
+    });
+  }
 
   modal.style.display = "flex";
 }

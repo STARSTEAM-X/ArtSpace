@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>ARTSPACE</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="./css/style.css">
+    <style>
+       :root{
+    --bg:#2b0f4a;         /* ม่วงพื้นหลัง */
+    --card:#ffffff;       /* กล่อง */
+    --chip:#eee;          /* การ์ดสมาชิก */
+    --line:#e9e9e9;       /* เส้นคั่น */
+    --border:#c9c4cf;     /* เส้นขอบกล่อง */
+    --text:#111;
+    --muted:#555;
+  }
+
+      .about.content-section{
+        text-align:center;              
+        background-image:url(img/about.png);
+        background-size:cover;
+        background-position:center;
+        min-height:100vh;
+        padding:64px 16px 80px;
+        display:flex;
+        flex-direction:column;
+        align-items:center;
+
+      }
+
+      .about .container{ max-width:900px; }
+
+      .about-title{
+        font-size:64px;
+        line-height:1;
+        margin:0 0 20px;
+        margin-bottom: 40px;
+        color:#ffd700;                                                                                        
+        font-weight:800;
+      }
+
+      .about-subtitle{
+        margin:0 0 28px;
+        font-size:28px;
+        margin-bottom: 40px;
+        color:#ffffff;
+      }
+
+      .detailabout{
+        width:min(1100px,92vw);
+        background:#f6f6f6;
+        border-radius:22px;
+        border:2px solid #6d5a86;
+        box-shadow:0 12px 28px rgba(0,0,0,.35), inset 0 0 0 1px #ffffff;
+        padding:26px 28px;
+        text-align:left;
+        margin-top: 10px;
+      }
+
+      .detailabout .block{ padding:18px 16px; }
+      .detailabout .block + .block{
+        border-top:1px solid #e4e4e4;       
+        margin-top:12px;  
+      }
+      .detailabout p{
+        margin:0;
+        font-size:18px;
+        line-height:1.7;
+        color:#222;
+      }
+
+      @media (max-width:640px){
+        .about-title{ font-size:44px; }
+        .about-subtitle{ font-size:20px; }
+        .detailabout{ padding:18px; }
+        .detailabout p{ font-size:16px; }
+      }
+
+      .members-section{
+        min-height:80vh;
+        background: url(img/aboutmember.png) center/cover no-repeat;
+        padding:48px 16px 96px;
+        display:flex;
+        align-items:flex-start;
+        justify-content:center;
+      }
+
+  /* กล่องด้านใน */
+      .members-card{
+        width:min(1200px, 92vw);
+        background-color: white;
+        border:2px solid var(--border);
+        border-radius:28px;
+        box-shadow:0 4px 0 rgba(0,0,0,.06);
+        padding:36px clamp(16px,4vw,56px) 48px;
+        margin-top: 50px;
+      }
+
+  /* หัวข้อ + เส้นคั่น */
+  .members-title{
+        margin:0;
+        text-align:center;
+        color: black;
+        letter-spacing:.5px;
+        font-size:clamp(36px, 6vw, 64px);
+        line-height:1.05;
+       }
+  .members-divider{
+    margin:22px auto 26px;
+    width:min(88%, 980px);
+    height:2px;
+    background:var(--line);
+    border:0;
+  }
+
+  /* ตะแกรงการ์ดสมาชิก */
+  .members-grid{
+    list-style:none;
+    padding:0;
+    margin:0;
+    display:grid;
+    grid-template-columns:repeat(3, minmax(260px, 1fr));
+    gap:34px 80px;             /* row-gap / col-gap */
+    justify-items:center;      /* ให้อยู่กลางคอลัมน์ */
+  }
+img{
+  max-width: 100%;
+  height: auto;
+  display: block;       /* กันช่องว่างใต้รูปเวลาเป็น inline */
+}
+  /* การ์ดทรงวงรี */
+  .member-chip{
+    width:100%;
+    max-width:520px;
+    display:flex;
+    align-items:center;
+    gap:16px;
+    padding:16px 22px;
+    background:var(--chip);
+    border-radius:9999px;
+    box-shadow:0 2px 0 rgba(0,0,0,.03);
+    color:var(--text);
+  }
+  .member-chip .avatar{
+    width:72px;
+    height:72px;
+    border-radius:50%;
+    object-fit:cover;
+    flex:0 0 auto;
+    border:6px solid #f4f4f4;      /* วงกรอบอ่อน ๆ ตามภาพ */
+    box-shadow:inset 0 0 0 2px #ddd;
+  }
+  .member-chip .name{
+    font-weight:800;
+    font-size:clamp(18px, 2.2vw, 26px);
+    line-height:1.2;
+    margin-bottom:2px;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+  .member-chip .id{
+    color:var(--muted);
+    font-size:clamp(14px, 1.6vw, 18px);
+  }
+
+  /* ทำให้แถวล่าง “มี 2 ใบ” อยู่กึ่งกลางใกล้แบบในภาพ */
+  .members-grid > li:nth-last-child(2),
+  .members-grid > li:nth-last-child(1){
+    justify-self:center;
+  }
+
+  /* Responsive */
+  @media (max-width: 1024px){
+    .members-grid{ grid-template-columns:repeat(2, minmax(260px, 1fr)); }
+  }
+  @media (max-width: 640px){
+    .members-card{ padding:28px 16px 34px; }
+    .members-grid{ grid-template-columns:1fr; gap:18px; }
+    .member-chip{ padding:14px 16px; }
+    .member-chip .avatar{ width:64px; height:64px; border-width:5px; }
+  }
+    </style>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="logo"><a href="./index.html" >ARTSPACE</a></div>
+        <ul class="nav-links">
+            <li><a href="./activity.html">Activities</a></li>
+            <li><a href="./community.html">Community</a></li>
+            <li><a href="./about.html">About</a></li>
+        </ul>
+
+        <div class="nav-right">
+          <div id="userSection"></div>
+            <!-- 🔔 Notify -->
+            <div class="notify" id="notifyBtn">
+                <span class="icon">🔔</span>
+                <span class="badge" id="notifyCount">0</span>
+                <div class="notify-dropdown" id="notifyDropdown">
+                </div>
+            </div>
+          </div>
+
+
+        <div class="menu-toggle" id="menuToggle">&#9776;</div>
+    </nav>
+
+
+   <!-- 🔹 Login Modal -->
+<div class="modal" id="loginModal">
+  <div class="modal-content auth-card large">
+    <span class="close" data-close="loginModal">&times;</span>
+
+    <div class="auth-wrapper">
+      <!-- ซ้าย -->
+      <aside class="auth-left">
+        <div class="brand">
+            <i class="fa-solid fa-palette"></i>
+          <div class="brand-text"><span>ART</span><span>SPACE</span></div>
+        </div>
+        <div class="illus"></div>
+      </aside>
+
+      <!-- ขวา -->
+      <section class="auth-right">
+        <div class="tab-switch">
+          <button class="tab active">Log in</button>
+          <button class="tab ghost" id="openRegister">Sign in</button>
+        </div>
+
+        <form id="loginForm" class="auth-form">
+          <label>Username :</label>
+          <div class="input-with-icon">
+            <i class="fa-regular fa-user"></i>
+            <input type="text" name="username" placeholder="Username" required />
+          </div>
+
+          <label>Password :</label>
+          <div class="input-with-icon">
+            <i class="fa-solid fa-lock"></i>
+            <input type="password" name="password" placeholder="Password" required />
+          </div>
+
+          <button type="submit" class="btn-primary-xl">Log in</button>
+        </form>
+      </section>
+    </div>
+  </div>
+</div>
+
+<!-- 🔹 Register Modal -->
+<div class="modal" id="registerModal">
+  <div class="modal-content auth-card large">
+    <span class="close" data-close="registerModal">&times;</span>
+
+    <div class="auth-wrapper">
+      <!-- ซ้าย -->
+      <aside class="auth-left">
+       <div class="brand">
+            <i class="fa-solid fa-palette"></i>
+          <div class="brand-text"><span>ART</span><span>SPACE</span></div>
+        </div>
+        <div class="illus"></div>
+      </aside>
+
+      <!-- ขวา -->
+      <section class="auth-right">
+        <div class="tab-switch">
+          <button class="tab ghost" id="backToLogin">Log in</button>
+          <button class="tab active">Sign in</button>
+        </div>
+
+        <form id="registerForm" class="auth-form grid-2" enctype="multipart/form-data">
+          <div class="col">
+            <label>ชื่อ :</label>
+            <input type="text" name="firstName" placeholder="ชื่อ" required />
+          </div>
+          <div class="col">
+            <label>นามสกุล :</label>
+            <input type="text" name="lastName" placeholder="นามสกุล" required />
+          </div>
+
+          <div class="col">
+            <label>ชื่อผู้ใช้ :</label>
+            <input type="text" name="username" placeholder="Username" required />
+          </div>
+          <div class="col">
+            <label>นามปากกา :</label>
+            <input type="text" name="nickname" placeholder="Nickname" required />
+          </div>
+
+          <div class="col">
+            <label>อีเมล :</label>
+            <input type="email" name="email" placeholder="Email" required />
+          </div>
+          <div class="col">
+            <label>รหัสผ่าน :</label>
+            <input type="password" name="password" placeholder="Password" required />
+          </div>
+
+          <div class="col">
+            <label>วันเกิด :</label>
+            <input type="date" name="dateOfBirth" required />
+          </div>
+          <div class="col">
+            <label>เพศ :</label>
+            <select name="gender" required>
+              <option value="">ระบุเพศ</option>
+              <option value="male">ชาย</option>
+              <option value="female">หญิง</option>
+              <option value="other">อื่นๆ</option>
+            </select>
+          </div>
+
+          <div class="col full">
+            <label>อัปโหลดรูปโปรไฟล์ :</label>
+            <div class="upload-row">
+              <i class="fa-regular fa-image"></i>
+              <input type="file" name="profileImage" accept="image/*" />
+            </div>
+          </div>
+
+          <div class="col full">
+            <button type="submit" class="btn-primary-xl">Creates Account</button>
+          </div>
+
+          <div class="col full">
+            <button type="button" class="btn-secondary ghost" data-close="registerModal">Cancel</button>
+          </div>
+        </form>
+      </section>
+    </div>
+  </div>
+</div>
+
+        <!-- ===== About Section (แทนที่บล็อกเดิมทั้งหมด) ===== -->
+<section class="about content-section">
+  <div class="color-sentinel" data-color="dark"></div>
+
+  <div class="container">
+    <h1 class="about-title">About</h1>
+    <p class="about-subtitle">พื้นที่รวมตัวของคนรักศิลปะ หาเพื่อนทำกิจกรรม แชร์แรงบันดาลใจ</p>
+  </div>
+
+  <div class="detailabout">
+    <div class="block">
+      <p>
+        เว็บไซต์ ArtSpace เป็นส่วนหนึ่งของรายวิชา Web Application Development Project<br>
+        ภาคเรียนที่ 1 ปีการศึกษา 2568<br>
+        อาจารย์ผู้สอน: อาจารย์วัจนพงศ์ เกษมศิริ
+      </p>
+    </div>
+
+    <div class="block">
+      <p>
+        โปรเจกต์นี้ถูกพัฒนาโดยนักศึกษาในทีมทั้งหมด 5 คน<br>
+        แนวคิดหลักคือการสร้างพื้นที่ออนไลน์สำหรับคนรักศิลปะ ที่สามารถ
+        หากิจกรรม / เข้าร่วม / แชร์แรงบันดาลใจได้ในที่เดียว
+      </p>
+    </div>
+
+    <div class="block">
+      <p>
+        ArtSpace เป็นเว็บไซต์สำหรับคนรักศิลปะ ไม่ว่าจะเป็นการวาดภาพ ถ่ายรูป ปั้น เล่นดนตรี
+        หรือเขียนงานสร้างสรรค์ ที่คุณสามารถสร้างกิจกรรม ค้นหากิจกรรมใหม่ ๆ
+        และเข้าร่วม community ที่แบ่งปันทริค เทคนิค และคำถามเกี่ยวกับศิลปะได้
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="members-section" id="members">
+  <div class="members-card">
+    <h2 class="members-title">Member</h2>
+    <div class="members-divider"></div>
+
+    <ul class="members-grid">
+      <li class="member-chip">
+        <img class="avatar" src="img/nattanon.jpg" alt="Nattanon Nanna">
+        <div>
+          <div class="name">Nattanon Nanna</div>
+          <div class="id">67015041</div>
+        </div>
+      </li>
+
+      <li class="member-chip">
+        <img class="avatar" src="img/thunyaret.jpg" alt="Thunyaret Sriwichai">
+        <div>
+          <div class="name">Thunyaret Sriwichai</div>
+          <div class="id">67015063</div>
+        </div>
+      </li>
+
+      <li class="member-chip">
+        <img class="avatar" src="img/piyathida.png" alt="Piyathida Sura">
+        <div>
+          <div class="name">Piyathida Sura</div>
+          <div class="id">67015088</div>
+        </div>
+      </li>
+
+      <li class="member-chip">
+        <img class="avatar" src="img/punyapat.jpg" alt="Punyapat Ruangsutthi">
+        <div>
+          <div class="name">Punyapat Ruangsutthi</div>
+          <div class="id">67015090</div>
+        </div>
+      </li>
+
+      <li class="member-chip">
+        <img class="avatar" src="img/supitcha.jpg" alt="Supitcha Imthongbai">
+        <div>
+          <div class="name">Supitcha Imthongbai</div>
+          <div class="id">67015188</div>
+        </div>
+      </li>
+    </ul>
+  </div>
+</section>
+
+
+
+<script src="./js/app.js"></script>
+</body>
+</html>

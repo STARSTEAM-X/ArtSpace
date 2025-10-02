@@ -1,3 +1,285 @@
+/* =========================
+   Base & Variables
+   ========================= */
+:root{
+  --bg-purple:#2b0f4a;
+  --card:#ffffff;
+  --muted:#666;
+  --text:#111;
+  --line:#e9e9e9;
+  --border:#c9c4cf;
+
+  --container-w:1100px;
+  --container-pad: clamp(12px, 4vw, 24px);
+}
+
+html,body{ height:100%; }
+*,*::before,*::after{ box-sizing: border-box; }
+
+body{
+  margin:0;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans Thai", "Noto Sans", Arial, sans-serif;
+  color:var(--text);
+  -webkit-text-size-adjust:100%;
+  background:#fff;
+  line-height:1.6;
+}
+
+/* รูปทั่วไปย่อ–ขยายปลอดภัย */
+img{
+  max-width:100%;
+  height:auto;
+  display:block; /* กันช่องว่างใต้รูป */
+}
+
+/* คอนเทนเนอร์กลางหน้า */
+.container, .page, .members-card, .detailabout{
+  width: min(var(--container-w), 92vw);
+  margin-left:auto;
+  margin-right:auto;
+}
+
+/* section ทั่วไป */
+.content-section{
+  padding: clamp(24px, 6vw, 64px) var(--container-pad);
+}
+
+/* ไตเติลใหญ่แบบยืดหยุ่น */
+.section-title{
+  margin:0 0 12px;
+  text-align:center;
+  font-weight:900;
+  letter-spacing:.3px;
+  font-size: clamp(28px, 6vw, 64px);
+  line-height:1.1;
+}
+
+/* เส้นคั่นกลาง */
+.hr{
+  width:min(88%, 980px);
+  height:2px;
+  background:var(--line);
+  margin:22px auto 26px;
+  border:0;
+}
+
+/* =========================
+   Header / Hero (ถ้ามี)
+   ========================= */
+.hero{
+  background: var(--bg-purple);
+  color:#fff;
+  text-align:center;
+  padding: clamp(64px, 12vw, 160px) 0;
+}
+.hero .title{
+  font-size: clamp(36px, 8vw, 80px);
+  font-weight: 900;
+  margin:0 0 10px;
+}
+.hero .subtitle{
+  font-size: clamp(16px, 3.5vw, 24px);
+  opacity:.95;
+  margin:0;
+}
+
+/* =========================
+   About Section
+   ========================= */
+.about.content-section{
+  text-align:center;
+  background: var(--bg-purple);
+  background-size:cover;
+  background-position:center;
+  color:#fff;
+  padding: clamp(48px, 8vw, 96px) var(--container-pad) clamp(64px, 10vw, 120px);
+}
+
+.about-title{
+  font-size: clamp(36px, 7vw, 88px);
+  line-height:1.05;
+  margin:0 0 12px;
+  color:#c6ff3d;           /* เขียวนีออน */
+  font-weight:800;
+}
+.about-subtitle{
+  margin:0 0 28px;
+  font-size: clamp(18px, 3.5vw, 28px);
+  font-weight:800;
+  color:#ffffff;
+}
+
+/* กล่องรายละเอียด */
+.detailabout{
+  background:#f6f6f6;
+  border-radius:22px;
+  border:2px solid #6d5a86;
+  box-shadow:0 12px 28px rgba(0,0,0,.35), inset 0 0 0 1px #ffffff;
+  padding:26px 28px;
+  text-align:left;
+  color:#222;
+}
+.detailabout .block{ padding:18px 16px; }
+.detailabout .block + .block{
+  border-top:1px solid #e4e4e4; /* เส้นคั่นใต้บล็อกแรกอัตโนมัติ */
+  margin-top:12px;
+}
+.detailabout p{ margin:0; font-size: clamp(16px, 2.2vw, 18px); }
+
+/* =========================
+   Members Section
+   ========================= */
+.members-section{
+  min-height: 80vh;
+  background: var(--bg-purple); /* ใส่รูปก็ได้: url(img/aboutmember.png) center/cover no-repeat */
+  color:#000;
+  padding: clamp(48px, 8vw, 96px) var(--container-pad) clamp(96px, 12vw, 160px);
+  display:flex;
+  align-items:flex-start;
+  justify-content:center;
+}
+
+.members-card{
+  background: var(--card);
+  border:2px solid var(--border);
+  border-radius:28px;
+  box-shadow:0 4px 0 rgba(0,0,0,.06);
+  padding:36px clamp(16px, 4vw, 56px) 48px;
+}
+
+.members-title{
+  margin:0;
+  text-align:center;
+  font-weight:900;
+  letter-spacing:.5px;
+  font-size: clamp(40px, 6vw, 88px);
+  line-height:1.05;
+  color: var(--text);
+}
+.members-divider{
+  margin:22px auto 26px;
+  width:min(88%, 980px);
+  height:2px;
+  background:var(--line);
+  border:0;
+}
+
+/* ตะแกรงการ์ดสมาชิก 3→2→1 คอลัมน์ */
+.members-grid{
+  list-style:none;
+  padding:0;
+  margin:0;
+  display:grid;
+  grid-template-columns: repeat(3, minmax(260px, 1fr));
+  gap:34px 42px;             /* row-gap / col-gap */
+  justify-items:center;
+}
+
+.member-chip{
+  width:100%;
+  max-width:520px;
+  display:flex;
+  align-items:center;
+  gap:16px;
+  padding:16px 22px;
+  background:#eee;
+  border-radius:9999px;
+  box-shadow:0 2px 0 rgba(0,0,0,.03);
+  color:var(--text);
+}
+.member-chip .avatar{
+  width:72px;
+  height:72px;
+  border-radius:50%;
+  object-fit:cover;
+  flex:0 0 auto;
+  border:6px solid #f4f4f4;      /* วงกรอบอ่อน ๆ */
+  box-shadow:inset 0 0 0 2px #ddd;
+}
+.member-chip .name{
+  font-weight:800;
+  font-size: clamp(18px, 2.2vw, 26px);
+  line-height:1.2;
+  margin-bottom:2px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;         /* กันชื่อยาวล้น */
+}
+.member-chip .id{
+  color:var(--muted);
+  font-size: clamp(14px, 1.6vw, 18px);
+}
+
+/* ให้ 2 ใบล่างกลางแถว (ถ้ามี 5 คน) */
+.members-grid > li:nth-last-child(2),
+.members-grid > li:nth-last-child(1){
+  justify-self:center;
+}
+
+/* =========================
+   Activities / Cards (ตัวอย่าง)
+   ========================= */
+.activities-lasted.content-section{
+  min-height: min(100vh, 1024px);     /* เดิมมัก fix 1024px → ให้ยืดหยุ่น */
+}
+.activity-cards-container{
+  margin-top: clamp(80px, 12vw, 250px); /* เดิม 250px ตายตัว → ยืดหยุ่น */
+}
+
+/* =========================
+   Utilities
+   ========================= */
+.center{ text-align:center; }
+.muted{ color:var(--muted); }
+.wrap{ word-wrap:break-word; }
+
+/* =========================
+   Responsive Breakpoints
+   ========================= */
+
+/* <= 1024px : 3 → 2 คอลัมน์, ลดระยะห่าง */
+@media (max-width: 1024px){
+  .members-grid{
+    grid-template-columns: repeat(2, minmax(240px, 1fr));
+  }
+}
+
+/* <= 768px : ลดขนาดหัวข้อ, padding section */
+@media (max-width: 768px){
+  .section-title,
+  .members-title,
+  .about-title{
+    font-size: clamp(28px, 8vw, 64px);
+    line-height:1.1;
+  }
+  .content-section{
+    padding: clamp(24px, 6vw, 48px) var(--container-pad);
+  }
+  .hero{ padding: clamp(40px, 12vw, 120px) 0; }
+
+  /* ตัวอย่างหัวข้อของแต่ละส่วน */
+  #lastact{ font-size: clamp(28px, 5vw, 48px); }
+  .tips-header h2{ font-size: clamp(22px, 3.6vw, 32px); }
+  .community-header h2{ font-size: clamp(24px, 4.2vw, 36px); }
+}
+
+/* <= 640px : 2 → 1 คอลัมน์, ลด gap/padding */
+@media (max-width: 640px){
+  .members-card{ padding:28px 16px 34px; }
+  .members-grid{ grid-template-columns: 1fr; gap:18px; }
+  .member-chip{ padding:14px 16px; }
+  .member-chip .avatar{ width:64px; height:64px; border-width:5px; }
+  .detailabout{ padding:18px; }
+  .detailabout p{ font-size:16px; }
+}
+
+/* <= 480px : จอเล็กมาก ปรับละเอียด */
+@media (max-width: 480px){
+  .member-chip{ padding:12px 14px; }
+  .member-chip .avatar{ width:60px; height:60px; }
+  .about-subtitle{ font-size: clamp(16px, 4vw, 20px); }
+}
+
 body {
   font-family: "Prompt", sans-serif;
   background: #f8f8f8;
@@ -776,21 +1058,28 @@ body {
 .tips-list .fa-paint-brush { background: #4a1a8c; }
 
 /* Community*/
-.community-section.content-section {
-    text-align: center;
-    background-image: url('../img/index5.png'); 
-    background-repeat: no-repeat;
-    background-size: cover;        
-    background-position: center;   
-    min-height: 100vh;             /* ✅ เต็มความสูงหน้าจอ */
-    width: 100%;                   /* ✅ เต็มความกว้าง */
-    margin: 0;
-    padding: 100px 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding-top: 40px;   /* ลดจาก 100px เหลือ 40px */
-    padding-bottom: 40px; /* ลดจาก 100px เหลือ 40px */
+/* Community (full-bleed background) */
+.community-section{
+  position: relative;
+  /* ทำพื้นหลังให้คลุมเต็มจอ */
+  background: url("../img/index5.png") center/cover no-repeat;
+  min-height: 100vh;
+
+  /* ดันขอบซ้าย/ขวาให้กว้างเท่าหน้าจอ แม้อยู่ใน layout ที่มีความกว้างจำกัด */
+  margin-left:  calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+
+  /* เว้นพื้นที่บน/ล่างตามต้องการ */
+  padding: 40px 0 40px;   /* ไม่ต้องประกาศ padding ซ้ำ */
+  display: block;         /* เผื่อเคยถูกเปลี่ยนเป็น flex ที่ wrapper */
+}
+
+/* กล่องเนื้อหาภายใน (ความกว้างจำกัด) */
+.community-section .container{
+  width: min(1100px, 92vw);
+  margin: 0 auto;
+  padding: 0 20px;        /* ระยะห่างซ้ายขวา */
+  text-align: center;
 }
 .community-header h2 {
     font-size: 36px;
@@ -812,198 +1101,6 @@ body {
     max-width: 800px;
     margin: 0 auto;
     position: relative;
-}
-
-/* About Section*/
-.about-section {
-    padding: 80px 20px;
-    text-align: center;
-}
-.about-section h2 {
-    font-size: 2.5rem;
-    margin-bottom: 20px;
-    color: #333;
-}
-.about-section p {
-    font-size: 1.1rem;
-    color: #555;
-    max-width: 800px;
-    margin: 0 auto 40px auto;
-    line-height: 1.8;
-}
-.feature-cards {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    justify-content: center;
-}
-
-.feature-card {
-    background: #fafafa;
-    border-radius: 12px;
-    padding: 30px 20px;
-    flex: 1 1 250px;
-    max-width: 300px;
-    transition: transform .3s, box-shadow .3s;
-}
-
-.feature-card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-}
-
-.feature-card i {
-    font-size: 2.5rem;
-    color: #8b5cf6;
-    margin-bottom: 15px;
-}
-
-.feature-card h3 {
-    margin-bottom: 10px;
-    color: #222;
-}
-
-.about-header {
-    text-align: center;
-    margin-bottom: 40px;
-}
-
-.about-header h2 {
-    font-size: 2.5rem;
-    margin-bottom: 15px;
-    color: #333;
-}
-
-.about-header p {
-    font-size: 1.1rem;
-    color: #555;
-    line-height: 1.8;
-    max-width: 800px;
-    margin: 0 auto;
-}
-
-.mv-section {
-    display: flex;
-    gap: 20px;
-    justify-content: center;
-    margin-bottom: 40px;
-}
-
-.mv-card {
-    flex: 1;
-    background: #fafafa;
-    padding: 30px 20px;
-    border-radius: 12px;
-    text-align: center;
-    max-width: 350px;
-    transition: transform .3s, box-shadow .3s;
-}
-
-.mv-card:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-}
-
-.mv-card i {
-    font-size: 2rem;
-    color: #8b5cf6;
-    margin-bottom: 10px;
-}
-
-.values-title {
-    text-align: center;
-    margin: 50px 0 30px;
-    font-size: 1.8rem;
-    color: #333;
-}
-
-.team-grid {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 30px;
-    justify-content: center;
-}
-
-.team-card {
-    background: #fff;
-    border-radius: 12px;
-    padding: 20px;
-    max-width: 220px;
-    text-align: center;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-    transition: transform .3s, box-shadow .3s;
-}
-
-.team-card:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 8px 16px rgba(0,0,0,0.15);
-}
-
-.team-card img {
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    margin-bottom: 15px;
-    object-fit: cover;
-}
-
-.team-card h3 {
-    margin-bottom: 5px;
-    color: #222;
-}
-
-.team-card p {
-    font-size: 0.95rem;
-    color: #666;
-}
-
-.cta-about {
-    text-align: center;
-    margin-top: 60px;
-}
-
-.cta-about h3 {
-    margin-bottom: 20px;
-    font-size: 1.6rem;
-}
-
-/* Footer*/
-footer {
-    width: 100vw;
-    margin-left: calc(-50vw + 50%);
-    margin-right: calc(-50vw + 50%);
-    background: #38115e;
-    color: #fff;
-    padding: 40px 0;
-    text-align: center;
-    margin-top: auto; /* ให้ footer อยู่ล่างสุด */
-}
-
-footer p {
-    margin: 0;
-}
-
-footer .social-icons a {
-    color: #ccc;
-    margin: 0 10px;
-    font-size: 1.2rem;
-    transition: color .3s;
-}
-
-footer .social-icons a:hover {
-    color: #ffd700;
-}
-
-/* Fade In Effect */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-8px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }
 
 /* ================= MODAL ================= */
@@ -1350,5 +1447,134 @@ footer .social-icons a:hover {
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+/* ===== Tips & Tricks (responsive) ===== */
+
+/* การ์ดรวม */
+.tips-cards-container{
+  display: grid;
+  place-items: center;
+}
+
+.tips-card{
+  width: min(1000px, 94vw);
+  display: grid;
+  grid-template-columns: 2fr 1fr;   /* ซ้ายใหญ่ ขวารายการ */
+  gap: 24px;
+  background:#fff;
+  border-radius: 20px;
+  box-shadow: 0 8px 24px rgba(0,0,0,.08);
+  padding: 20px;
+}
+
+/* ฝั่งซ้าย (แผงสีม่วง + ไอคอน + หัวข้อ) */
+.tips-card .left{
+  background:#2b0f4a;
+  color:#fff;
+  border-radius:16px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+
+  /* แทนการ fix height: ให้ยืดหยุ่นตามจอ */
+  min-height: clamp(180px, 35vw, 420px);
+}
+
+.tips-card .left i{
+  font-size: clamp(28px, 6vw, 48px);
+  margin-bottom: 12px;
+}
+.tips-card .left h3{
+  margin:0;
+  font-weight:800;
+  font-size: clamp(18px, 3.6vw, 24px);
+}
+
+/* ฝั่งขวา (รายการ) */
+.tips-card .right ul{
+  list-style:none;
+  margin:0 0 12px;
+  padding:0;
+}
+.tips-card .right li{
+  display:flex;
+  align-items:flex-start;
+  gap:10px;
+  padding:12px 0;
+  border-bottom:1px solid #eee;
+  font-size: clamp(14px, 3.2vw, 16px);
+}
+.tips-card .right li i{
+  color:#7a2cf3;
+  font-size: 18px;
+  margin-top:3px;
+}
+.view-all-btn{
+  display:inline-block;
+  padding:10px 16px;
+  border-radius:999px;
+  background:#ffcf14;
+  color:#111;
+  font-weight:700;
+  text-decoration:none;
+}
+
+/* ===== Breakpoints ===== */
+
+/* แท็บเล็ตลงมา: 2 → 1 คอลัมน์, แผงซ้ายเป็นอัตราส่วนกว้าง */
+@media (max-width: 768px){
+  .tips-card{
+    grid-template-columns: 1fr;
+    gap: 16px;
+    padding: 16px;
+  }
+  .tips-card .left{
+    /* เมื่อเป็นคอลัมน์เดียว ให้ไม่สูงเกินจอ */
+    min-height: unset;
+    aspect-ratio: 16 / 9;     /* คุมสัดส่วนให้เตี้ยลง ไม่กลายเป็นเสา */
+  }
+}
+
+/* จอเล็กมาก (รวม iPhone 14 Pro Max 430px) */
+@media (max-width: 480px){
+  .tips-card{ padding: 14px; }
+  .tips-card .left{ aspect-ratio: 4 / 3; }  /* เตี้ยลงอีกนิดบนจอแคบ */
+  .tips-card .right li{ padding:10px 0; }
+}
+/* ทำกรอบม่วง (ฝั่งซ้าย) ให้กว้างขึ้นบนจอใหญ่ */
+@media (min-width: 1024px){
+  .tips-card{
+    /* เดิมอาจเป็น 2fr 1fr → เพิ่มสัดส่วนซ้ายให้มากขึ้น */
+    grid-template-columns: 3fr 2fr;   /* อัตรา 60% : 40% */
+    column-gap: 32px;
+    width: min(1200px, 94vw);         /* เผื่ออยากให้การ์ดทั้งใบบานขึ้นนิด */
+  }
+
+  /* เผื่อบางที่มี max-width หรือ padding ทำให้ดูแคบไป */
+  .tips-card .left{
+    padding: clamp(20px, 3vw, 36px);
+    min-width: 420px;                 /* กันไม่ให้เล็กเกินบนเดสก์ท็อป */
+  }
+}
+
+/* จอกลางลงมาให้พอดี ไม่กว้างเกิน */
+@media (max-width: 1023.98px){
+  .tips-card{
+    grid-template-columns: 1.5fr 1fr; /* ~60/40 → ลดลงเล็กน้อย */
+  }
+}
+
+/* มือถือ: คอลัมน์เดียวเหมือนเดิม */
+@media (max-width: 768px){
+  .tips-card{
+    grid-template-columns: 1fr;
+    width: min(1000px, 94vw);
+  }
+  .tips-card .left{
+    min-width: 0;
+    aspect-ratio: 16 / 9;            /* กันสูงเป็นแท่ง */
   }
 }
