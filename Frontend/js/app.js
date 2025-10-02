@@ -182,29 +182,34 @@ let notiWorker = null;
    Render Notification UI
 ============================ */
 function renderNotifications(notis) {
-    // ✅ badge อัปเดตเสมอ
     const unreadCount = notis.filter(n => !n.isRead).length;
     notifyCount.textContent = unreadCount;
 
-    // ❌ return ตรงนี้ทิ้ง
-    // if (!notifyDropdown.classList.contains("active")) return;
-
-    // ✅ render list แค่ตอนเปิด
     if (notifyDropdown.classList.contains("active")) {
         if (notis.length === 0) {
             notifyDropdown.innerHTML = `<div class="empty">ไม่มีการแจ้งเตือน</div>`;
             return;
         }
 
-        notifyDropdown.innerHTML = notis.map(n => `
-            <div class="noti-item ${n.isRead ? "" : "unread"} ${n.type}" data-id="${n.id}">
-                <strong>${n.title}</strong>
-                <span>${n.message}</span>
-                <small>${new Date(n.createdAt).toLocaleString()}</small>
-            </div>
-        `).join("");
+        notifyDropdown.innerHTML = notis.map(n => {
+            let iconClass = "fa-info-circle"; // default
+            if (n.type === "success") iconClass = "fa-check-circle";
+            else if (n.type === "error") iconClass = "fa-times-circle";
+            else if (n.type === "warning") iconClass = "fa-exclamation-triangle";
+            else if (n.type === "start") iconClass = "fa-flag";
 
-        // bind event mark as read
+            return `
+                <div class="noti-item ${n.isRead ? "" : "unread"} ${n.type}" data-id="${n.id}">
+                    <div class="icon"><i class="fas ${iconClass}"></i></div>
+                    <div class="text">
+                        <h3>${n.title}</h3>
+                        <p>${n.message}</p>
+                        <small>${new Date(n.createdAt).toLocaleString()}</small>
+                    </div>
+                </div>
+            `;
+        }).join("");
+
         notifyDropdown.querySelectorAll(".noti-item").forEach(item => {
             item.onclick = async () => {
                 const id = item.dataset.id;
@@ -213,7 +218,6 @@ function renderNotifications(notis) {
         });
     }
 }
-
 
 /* ============================
    Mark as Read API

@@ -20,14 +20,15 @@
         </ul>
 
         <div class="nav-right">
+          <div id="userSection"></div>
             <!-- 🔔 Notify -->
             <div class="notify" id="notifyBtn">
                 <span class="icon">🔔</span>
                 <span class="badge" id="notifyCount">0</span>
-                <div class="notify-dropdown" id="notifyDropdown"></div>
+                <div class="notify-dropdown" id="notifyDropdown">
+                </div>
             </div>
-            <div id="userSection"></div>
-        </div>
+          </div>
 
         <div class="menu-toggle" id="menuToggle">&#9776;</div>
     </nav>
@@ -160,55 +161,82 @@
 </div>
 
     <main class="container">
-        <h1>🌐 Community</h1>
+  <h1>Community</h1>
 
-        <!-- Search -->
-        <div class="search-bar">
-            <input type="text" id="searchInput" placeholder="ค้นหา...">
-            <select id="filterType">
-                <option value="">ทั้งหมด</option>
-                <option value="Photo">📷 Photo</option>
-                <option value="Painting">🎨 Painting</option>
-                <option value="Music">🎵 Music</option>
-                <option value="Writing">🎵 Writing</option>
-            </select>
-            <button id="clearBtn">Clear</button>
-            <button id="newPostBtn">➕ New Post</button>
-        </div>
+  <div class="community-box">
+    <!-- Search -->
+    <div class="search-bar">
+      <input type="text" id="searchInput" placeholder="ค้นหา...">
 
-        <!-- Posts -->
-        <div id="postList" class="post-list"></div>
-    </main>
-
-    <!-- Modal สร้างโพสต์ -->
-    <div class="modal" id="postModal">
-        <div class="modal-content">
-            <span class="close" id="closePostModal">&times;</span>
-            <h2>สร้างโพสต์ใหม่</h2>
-            <form id="postForm" enctype="multipart/form-data">
-                <input type="text" name="title" placeholder="Title" required>
-                <textarea name="message" placeholder="Message"></textarea>
-                <input type="text" name="discription" placeholder="Description">
-                <select name="type" required>
-                    <option value="Photo">📷 Photo</option>
-                    <option value="Painting">🎨 Painting</option>
-                    <option value="Music">🎵 Music</option>
-                </select>
-                <input type="file" name="image" accept="image/*">
-                <button type="submit">Post</button>
-            </form>
-        </div>
+      <!-- Category Filter -->
+<div class="category-dropdown">
+  <button type="button" class="category-btn">📂 Category</button>
+  <div class="category-menu">
+    <div class="category-item" data-value="">
+      <i class="fa-solid fa-layer-group"></i> All
     </div>
-    <!--Modal อ่านโพสต์-->
-    <div class="modal" id="viewPostModal">
-        <div class="modal-content view-post-modal">
-            <span class="close" id="closeViewPost">&times;</span>
-            <div id="viewPostContent"></div>
-        </div>
+    <div class="category-item" data-value="Photo">
+      <i class="fa-solid fa-camera"></i> Photography
     </div>
-    <script src="./js/app.js"></script>
-    <script src="./js/community.js"></script>
+    <div class="category-item" data-value="Painting">
+      <i class="fa-solid fa-paintbrush"></i> Visual Arts
+    </div>
+    <div class="category-item" data-value="Music">
+      <i class="fa-solid fa-music"></i> Music
+    </div>
+    <div class="category-item" data-value="Writing">
+      <i class="fa-solid fa-pen-nib"></i> Writing
+    </div>
+  </div>
+</div>
+<input type="hidden" id="filterType" />
 
+      <button id="newPostBtn">➕ New Post</button>
+      <button id="clearBtn">Clear</button>
+    </div>
+
+    <!-- Posts -->
+    <div id="postList" class="post-list"></div>
+  </div>
+</main>
+
+<!-- Modal สร้างโพสต์ -->
+<div class="modal" id="postModal">
+  <div class="modal-content">
+    <span class="close" id="closePostModal">&times;</span>
+    <h2>สร้างโพสต์ใหม่</h2>
+    <form id="postForm" enctype="multipart/form-data">
+      <input type="text" name="title" placeholder="Title" required>
+      <textarea name="message" placeholder="Message"></textarea>
+      <input type="text" name="discription" placeholder="Description">
+
+      <!-- ใช้ custom dropdown แทน select -->
+      <!-- Category ใน Post Modal -->
+<input type="hidden" name="type" id="postCategory" required>
+<div class="category-dropdown">
+  <button type="button" class="category-btn">📂 Category</button>
+  <div class="category-menu">
+    <div class="category-item" data-value="Photo"><i class="fa-solid fa-camera"></i> Photo</div>
+    <div class="category-item" data-value="Painting"><i class="fa-solid fa-paintbrush"></i> Painting</div>
+    <div class="category-item" data-value="Music"><i class="fa-solid fa-music"></i> Music</div>
+    <div class="category-item" data-value="Writing"><i class="fa-solid fa-pen-nib"></i> Writing</div>
+  </div>
+</div>
+      <input type="file" name="image" accept="image/*">
+      <button type="submit">Post</button>
+    </form>
+  </div>
+</div>
+
+<!-- Modal อ่านโพสต์ -->
+<div class="modal" id="viewPostModal">
+  <div class="modal-content view-post-modal">
+    <span class="close" id="closeViewPost">&times;</span>
+    <div id="viewPostContent"></div>
+  </div>
+</div>
+
+<script src="./js/app.js"></script>
+<script src="./js/community.js"></script>
 </body>
-
 </html>

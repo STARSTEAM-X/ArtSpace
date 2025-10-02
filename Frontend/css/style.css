@@ -5,30 +5,200 @@ body {
   overflow-x: hidden;
 }
 
+/* ================= NOTIFICATION ================= */
+/* ========== Notification CSS Modern with Type Colors ========== */
+/* ========== Notify Main ========== */
+.notify {
+  position: relative;
+  cursor: pointer;
+  margin-right: 20px;
+}
+
+.notify .icon {
+  font-size: 22px;
+  color: #444;
+  transition: transform 0.2s ease;
+}
+
+.notify:hover .icon {
+  transform: scale(1.1);
+}
+
+.notify .badge {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background: linear-gradient(135deg, #ff1744, #d50000);
+  color: white;
+  font-size: 11px;
+  padding: 3px 7px;
+  border-radius: 20px;
+  font-weight: bold;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+}
+
+/* ========== Dropdown ========== */
+.notify-dropdown {
+  display: none;
+  position: absolute;
+  right: 0;
+  top: 40px;
+  width: 360px;
+  max-height: 400px;
+  overflow-y: auto;
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+  border: 1px solid #eee;
+  z-index: 999;
+}
+
+.notify-dropdown.active {
+  display: block;
+  animation: fadeIn 0.25s ease;
+}
+
+/* Header ของ dropdown */
+.notify-dropdown::before {
+  content: "การแจ้งเตือน";
+  display: block;
+  padding: 12px 16px;
+  font-size: 15px;
+  font-weight: bold;
+  color: #333;
+  border-bottom: 1px solid #eee;
+  background: linear-gradient(135deg, #f8f9ff, #f1f3ff);
+  border-radius: 14px 14px 0 0;
+}
+
+/* ========== Noti Item ========== */
+/* ================= ปรับ noti-item ให้เป็นการ์ด ================= */
+.noti-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin: 10px;
+  padding: 14px 16px;
+  border-radius: 14px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+  border: 1px solid #eee;
+  background: #fff;  /* ✅ พื้นหลังการ์ดเป็นขาว */
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.noti-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+}
+
+/* ไอคอนวงกลม */
+.noti-item .icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  color: #fff;
+}
+
+/* สีพื้นหลังแต่ละประเภท */
+.noti-item.success { background: #4caf50; }   /* เขียว */
+.noti-item.error { background: #f44336; }     /* แดง */
+.noti-item.info { background: #2196f3; }      /* น้ำเงิน */
+.noti-item.warning { background: #ff9800; }   /* ส้ม/เหลือง */
+.noti-item.start { background: #9c27b0; }     /* ม่วง */
+
+.noti-item.success .icon { background: #2e7d32; }
+.noti-item.error .icon { background: #d32f2f; }
+.noti-item.info .icon { background: #0288d1; }
+.noti-item.warning .icon { background: #fbc02d; color: #333; }
+.noti-item.start .icon { background: #7b1fa2; }
+/* ข้อความ */
+.noti-item .text {
+  flex: 1;
+}
+.noti-item .text h3 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 700;
+  color: #000;
+}
+.noti-item .text p {
+  margin: 4px 0;
+  font-size: 13px;
+  color: #333;
+}
+.noti-item small {
+  display: block;
+  font-size: 12px;
+  color: #888;
+}
+
+/* สีพื้นหลังแยกตาม type */
+
+.noti-item.start .icon { background: #7b1fa2; }
+
+
+.noti-item.success .icon { background: #2e7d32; }
+
+
+.noti-item.error .icon { background: #d32f2f; }
+
+
+.noti-item.info .icon { background: #0288d1; }
+
+
+.noti-item.warning .icon { background: #fbc02d; color: #333; }
+
+/* ========== State ว่าง ========== */
+.notify-dropdown .empty {
+  text-align: center;
+  color: #777;
+  padding: 20px;
+  font-style: italic;
+  font-size: 13px;
+}
+
+/* เอฟเฟกต์ Fade In */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* 🔹 ปรับ layout nav-right */
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
 /* ================= NAVBAR ================= */
 .navbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: linear-gradient(90deg, #5e17eb, #5e17eb);
-  padding: 14px 40px;
+  background: url("../img/head.png");
+  padding: 22px 60px;
   color: white;
-  position: sticky;
-  top: 0;
   z-index: 1000;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 6px 24px rgba(108,35,181,0.15);
+  min-height: 72px;
 }
 
 .logo a {
-  font-size: 24px;
-  font-weight: 800;
+  font-size: 32px;
+  font-weight: 900;
   color: #fff;
   text-decoration: none;
-  letter-spacing: 1px;
-  transition: color 0.3s;
+  letter-spacing: 2px;
+  transition: color 0.3s, text-shadow 0.3s;
+  text-shadow: 0 2px 12px rgba(108,35,181,0.18);
 }
 .logo a:hover {
-  color: black;
+  color: #ffd700;
+  text-shadow: 0 2px 18px rgba(255,215,0,0.25);
 }
 
 .nav-links {
@@ -37,30 +207,32 @@ body {
   gap: 28px;
 }
 .nav-links a {
-  color: white;
+  color: #fff;
   text-decoration: none;
-  font-weight: 500;
-  padding: 6px 10px;
-  border-radius: 6px;
-  transition: all 0.3s ease;
+  font-weight: 600;
+  padding: 10px 18px;
+  border-radius: 18px;
+  font-size: 17px;
+  transition: all 0.3s cubic-bezier(.4,2,.3,1), box-shadow 0.2s;
   position: relative;
+  background: rgba(255,255,255,0.04);
 }
+
 .nav-links a::after {
   content: "";
   position: absolute;
-  bottom: -4px;
-  left: 0;
-  width: 0;
-  height: 2px;
-  background: black;
-  transition: width 0.3s;
+  display: none;
 }
 .nav-links a:hover::after {
   width: 100%;
 }
+
 .nav-links a:hover {
-  color: black;
+  color: #ffffff;
+  background: #6c23b5;
+  box-shadow: 0 4px 16px rgba(108,35,181,0.13);
 }
+
 
 .nav-right {
   display: flex;
@@ -269,228 +441,6 @@ body {
   display: block;
 }
 
-/* ================= NOTIFICATION ================= */
-/* Modern Notification Dropdown */
-.notify {
-  position: relative;
-  cursor: pointer;
-  margin-right: 20px;
-}
-
-.notify .icon {
-  font-size: 22px;
-  color: #444;
-  transition: transform 0.2s ease;
-}
-
-.notify:hover .icon {
-  transform: scale(1.1);
-}
-
-.notify .badge {
-  position: absolute;
-  top: -6px;
-  right: -6px;
-  background: linear-gradient(135deg, #ff1744, #d50000);
-  color: white;
-  font-size: 11px;
-  padding: 3px 7px;
-  border-radius: 20px;
-  font-weight: bold;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
-}
-
-/* Dropdown */
-.notify-dropdown {
-  display: none;
-  position: absolute;
-  right: 0;
-  top: 40px;
-  background: #fff;
-  color: #333;
-  min-width: 340px;
-  max-width: 400px;
-  border-radius: 18px;
-  box-shadow: 0 8px 32px rgba(74, 26, 140, 0.18);
-  overflow-y: auto;
-  z-index: 1000;
-  border: 2px solid #ece7ff;
-  padding: 24px 24px 18px 24px;
-  font-family: "Prompt", sans-serif;
-}
-
-.notify-dropdown.active {
-  display: block;
-  animation: fadeIn 0.3s ease;
-}
-
-/* Header */
-.notify-dropdown::before {
-  content: "🔔 Notifications";
-  display: block;
-  font-size: 1.7rem;
-  font-weight: 700;
-  color: #222;
-  margin-bottom: 10px;
-  letter-spacing: 1px;
-  text-align: left;
-}
-
-.notify-dropdown hr {
-  border: none;
-  border-top: 2px solid #38115e;
-  margin: 10px 0 18px 0;
-}
-
-/* Noti item base */
-.notify-dropdown .noti-item {
-  display: flex;
-  align-items: center;
-  gap: 18px;
-  padding: 18px 18px;
-  border-radius: 16px;
-  margin-bottom: 14px;
-  font-size: 15px;
-  color: #222;
-  box-shadow: 0 2px 8px rgba(74, 26, 140, 0.08);
-  border: 1.5px solid #ece7ff;
-  background: #fafaff;
-  transition: box-shadow 0.2s, transform 0.2s;
-  position: relative;
-}
-
-.notify-dropdown .noti-item:last-child {
-  margin-bottom: 0;
-}
-
-.notify-dropdown .noti-item strong {
-  display: block;
-  font-size: 1.1rem;
-  margin-bottom: 2px;
-  font-weight: 700;
-}
-
-.notify-dropdown .noti-item span {
-  font-size: 0.95rem;
-  color: #444;
-}
-
-.notify-dropdown .noti-item small {
-  display: block;
-  font-size: 0.85rem;
-  color: #888;
-  margin-top: 4px;
-}
-
-.notify-dropdown .noti-item.unread {
-  font-weight: bold;
-  border: 2px solid #ffd700;
-  background: #fffbe6;
-}
-
-.notify-dropdown .noti-icon {
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.7rem;
-  background: #ece7ff;
-  color: #6c23b5;
-  flex-shrink: 0;
-  box-shadow: 0 2px 8px rgba(74, 26, 140, 0.08);
-}
-
-/* Hover */
-.notify-dropdown .noti-item:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-}
-
-/* ===== 🎨 Type styling with icon ===== */
-.notify-dropdown .noti-item::before {
-  content: "";
-  position: absolute;
-  left: 18px;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 34px;
-  height: 34px;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 18px;
-}
-
-/* Primary */
-/* Type styling */
-.notify-dropdown .noti-item.primary .noti-icon {
-  background: #d1c4e9;
-  color: #38115e;
-}
-.notify-dropdown .noti-item.primary {
-  background: #ede7f6;
-  color: #4a148c;
-}
-.notify-dropdown .noti-item.primary::before {
-  content: "⏰";
-  font-size: 20px;
-}
-
-/* Success */
-.notify-dropdown .noti-item.success .noti-icon {
-  background: #c8e6c9;
-  color: #1b5e20;
-}
-.notify-dropdown .noti-item.success::before {
-  content: "✔";
-  font-size: 20px;
-}
-
-/* Error */
-.notify-dropdown .noti-item.error .noti-icon {
-  background: #ffcdd2;
-  color: #b71c1c;
-}
-.notify-dropdown .noti-item.error::before {
-  content: "✖";
-  font-size: 20px;
-}
-/* Info */
-.notify-dropdown .noti-item.info .noti-icon {
-  background: #b3e5fc;
-  color: #01579b;
-}
-.notify-dropdown .noti-item.info::before {
-  content: "💬";
-  font-size: 20px;
-}
-
-
-/* Warning */
-.notify-dropdown .noti-item.warning .noti-icon {
-  background: #fff9c4;
-  color: #e65100;
-}
-.notify-dropdown .noti-item.warning::before {
-  content: "⚠";
-  font-size: 20px;
-}
-/* Empty */
-.notify-dropdown .empty {
-  text-align: center;
-  color: #777;
-  padding: 25px;
-  font-style: italic;
-  font-size: 13px;
-}
-/* Effect */
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(-6px); }
-  to { opacity: 1; transform: translateY(0); }
-}
 
 
 /* Index */

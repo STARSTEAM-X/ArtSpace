@@ -19,14 +19,15 @@
         </ul>
 
         <div class="nav-right">
+          <div id="userSection"></div>
             <!-- 🔔 Notify -->
             <div class="notify" id="notifyBtn">
                 <span class="icon">🔔</span>
                 <span class="badge" id="notifyCount">0</span>
-                <div class="notify-dropdown" id="notifyDropdown"></div>
+                <div class="notify-dropdown" id="notifyDropdown">
+                </div>
             </div>
-            <div id="userSection"></div>
-        </div>
+          </div>
 
         <div class="menu-toggle" id="menuToggle">&#9776;</div>
     </nav>
@@ -217,28 +218,41 @@
         <!-- Gallery Section -->
         <section class="section">
             <div class="section-header">
-                <h2>🖼 Gallery</h2>
+                <h2>Gallery</h2>
                 <button class="btn-edit small" id="editGalleryBtn">Edit</button>
             </div>
-            <div id="galleryList" class="gallery-list"></div>
+            <div class="gallery-wrapper"> 
+                <button class="nav-arrow left-arrow" id="galleryLeftArrow">&#10094;</button>
+                <div id="galleryList" class="gallery-list"></div>
+                <button class="nav-arrow right-arrow" id="galleryRightArrow">&#10095;</button>
+            </div>
+
         </section>
 
 
         <!-- กิจกรรมที่เข้าร่วม -->
         <section class="section">
-            <h2>📑 Joined</h2>
-            <div id="joinedList" class="activity-list"></div>
+            <h2>Joined</h2>
+            <div class="gallery-wrapper"> 
+                <button class="nav-arrow left-arrow" id="galleryLeftArrow">&#10094;</button>
+                <div id="joinedList" class="activity-list"></div>
+                <button class="nav-arrow right-arrow" id="galleryRightArrow">&#10095;</button>
+            </div>
         </section>
 
         <!-- กิจกรรมที่สร้าง -->
         <section class="section">
-            <h2>➕ Created</h2>
-            <div id="createdList" class="activity-list"></div>
+            <h2>Created</h2>
+            <div class="gallery-wrapper"> 
+                <button class="nav-arrow left-arrow" id="galleryLeftArrow">&#10094;</button>
+                <div id="createdList" class="activity-list"></div>
+                <button class="nav-arrow right-arrow" id="galleryRightArrow">&#10095;</button>
+            </div>
         </section>
 
         <!-- บทความที่โพสต์ -->
         <section class="section">
-            <h2>👥 Posted</h2>
+            <h2>Posted</h2>
             <div id="postedList" class="post-list"></div>
         </section>
     </div>

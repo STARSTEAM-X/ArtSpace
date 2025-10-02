@@ -287,3 +287,15 @@ function formatDate(dateStr) {
 document.addEventListener("DOMContentLoaded", loadActivities);
 modalClose?.addEventListener("click", () => { if (modal) modal.style.display = "none"; });
 window.addEventListener("click", e => { if (e.target === modal) modal.style.display = "none"; });
+
+document.addEventListener("DOMContentLoaded", () => {
+  const params = new URLSearchParams(window.location.search);
+  if (params.get("create") === "true") {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      alert("กรุณาเข้าสู่ระบบก่อนสร้างกิจกรรม");
+      return;
+    }
+    document.getElementById("createModal").style.display = "flex";
+  }
+});
