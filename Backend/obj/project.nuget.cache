@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "RrtZjrOLfyQ=",
+  "dgSpecHash": "Yyf0FKDxc1k=",
   "success": true,
-  "projectFilePath": "E:\\Work\\Github\\ArtSpaceNew\\Backend\\Backend.csproj",
+  "projectFilePath": "E:\\Work\\Github\\ArtSpaceNew2\\ArtSpace\\Backend\\Backend.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\nnzam\\.nuget\\packages\\bcrypt.net-next\\4.0.3\\bcrypt.net-next.4.0.3.nupkg.sha512",
     "C:\\Users\\nnzam\\.nuget\\packages\\bouncycastle.cryptography\\2.5.1\\bouncycastle.cryptography.2.5.1.nupkg.sha512",

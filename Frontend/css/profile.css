@@ -394,6 +394,10 @@
   cursor: pointer;
   font-weight: bold;
   font-size: 14px;
+  width: auto;      
+  min-width: 80px;    
+  text-align: center;  
+  display: inline-block;
 }
 
 .gallery-modal {
@@ -700,7 +704,263 @@
   cursor: pointer;
   font-weight: bold;
 }
+.profile-card button,
+.section-header .btn-edit,
+.form-actions button,
+.review-btn {
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    cursor: pointer; 
+}
 
+
+.profile-card button:hover,
+.section-header .btn-edit:hover,
+.form-actions button:hover,
+.review-btn:hover {
+    transform: translateY(-2px); 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+}
+
+/* เพิ่มให้ปุ่ม 'Save' หรือปุ่มหลักมีเงาที่ชัดเจนขึ้นเล็กน้อย */
+.form-actions .btn.save:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 123, 255, 0.3); 
+}
+
+
+
+/* เพิ่ม transition และ cursor: pointer ให้กับ activity-card */
+.activity-card {
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out; 
+    cursor: pointer; 
+}
+
+.activity-card:hover {
+    transform: translateY(-5px); 
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15); 
+    z-index: 10;
+    position: relative;
+}
+/* ========================================= */
+/* Responsive Design (Media Query)     */
+/* ========================================= */
+
+@media (max-width: 768px) {
+    /* Profile Container */
+    .profile-container {
+        padding: 0 15px; /* เพิ่ม padding ด้านข้าง */
+    }
+    
+    /* Profile Card: เปลี่ยนจากแนวนอนเป็นแนวตั้ง */
+    .profile-card {
+        flex-direction: column;
+        align-items: center;
+        padding: 20px 15px;
+        margin-top: 15px;
+    }
+    
+    /* Profile Left: รูปโปรไฟล์และคะแนน */
+    .profile-left {
+        flex: none; /* ยกเลิก flex-basis */
+        margin-bottom: 20px;
+    }
+
+    .profile-left img {
+        width: 120px;
+        height: 120px;
+        transform: none; /* ยกเลิก scale */
+        margin-top: 0;
+    }
+    
+    /* Profile Right: ข้อมูลผู้ใช้ */
+    .profile-right {
+        margin-left: 0; /* ยกเลิก margin ซ้าย */
+        text-align: center; /* จัดให้ข้อความอยู่กึ่งกลาง */
+        width: 100%;
+    }
+
+    .profile-right h2 {
+        font-size: 24px; /* ลดขนาดชื่อ */
+        justify-content: center; /* จัดชื่อให้อยู่กึ่งกลาง */
+    }
+    
+    #nickname::before {
+        width: 35px; /* ลดขนาด icon */
+        height: 35px;
+        background-size: 20px 20px;
+        margin-right: 10px;
+    }
+
+    /* Profile Header & Actions */
+    .profile-header {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .profile-actions {
+        margin-top: 10px;
+        margin-bottom: 10px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px; /* เพิ่มระยะห่างระหว่างปุ่ม */
+        width: 100%; /* ให้ปุ่มเต็มความกว้าง */
+    }
+
+    .btn-edit, .btn-gray {
+        width: 100%;
+        box-sizing: border-box;
+        padding: 10px; /* เพิ่ม padding ให้กดง่ายขึ้น */
+        margin: 0; /* ลบ margin เดิม */
+    }
+    
+    /* Bio และข้อมูลรายละเอียด */
+    .bio {
+        text-align: left;
+        padding: 0 10px;
+        font-size: 14px;
+    }
+    
+    .profile-right p {
+        text-align: left;
+        padding: 0 10px;
+        font-size: 14px;
+    }
+    
+    /* Stats: เปลี่ยนเป็น 1 คอลัมน์ */
+    .stats {
+        grid-template-columns: 1fr;
+        gap: 10px;
+        margin-bottom: 20px;
+    }
+    .stat-box {
+        padding: 20px;
+    }
+    .stat-box h3 {
+        font-size: 40px;
+    }
+
+    /* Sections */
+    .section {
+        padding: 15px 10px 30px 10px;
+    }
+    .section h2 {
+        font-size: 32px;
+        margin-left: 10px;
+    }
+    .section h2::before {
+        width: 30px;
+        height: 30px;
+        margin-right: 8px;
+    }
+
+    
+    
+    .nav-arrow {
+        width: 30px;
+        height: 30px;
+        font-size: 18px;
+        padding: 5px;
+    }
+
+    /* Activity Card */
+    .activity-list {
+        justify-content: flex-start; /* ให้เริ่มจากซ้ายเสมอ */
+    }
+    .activity-card {
+        width: 200px;
+        padding: 12px 15px 15px 15px;
+        border-radius: 30px;
+    }
+    .activity-card img {
+        width: 150px;
+        height: 100px;
+    }
+    
+    .activity-card .badge,
+    .activity-card .category-badge {
+        font-size: 10px;
+        padding: 4px 10px;
+    }
+
+    .activity-card .badge {
+        right: 25px;
+    }
+    .activity-card .category-badge {
+        left: 25px;
+    }
+    
+    /* Base Modal Card */
+    .password-modal,
+    .edit-profile-modal,
+    .gallery-modal {
+      width: 80%;          
+      max-width: 500px;    
+      height: auto;        
+      max-height: 90vh;    
+      margin: auto;
+      padding: 20px;
+      border-radius: 20px;
+      overflow-y: auto;   
+      box-sizing: border-box;
+    }
+    
+    .form-actions {
+        flex-direction: column;
+        gap: 10px;
+        justify-content: space-between;
+    }
+    .btn.cancel, .btn.save {
+        padding: 10px 20px;
+        border-radius: 25px;
+        flex-grow: 1; /* ให้ปุ่มขยายเต็มพื้นที่ */
+    }
+}
+
+@media (max-width: 400px) {
+  .password-modal,
+  .edit-profile-modal,
+  .gallery-modal {
+    width: 95%;         /* กว้างเต็มที่แต่เหลือขอบนิดนึง */
+    margin: 10px auto;  /* มี margin ด้านบนล่าง */
+    max-height: 90vh;   /* กันล้นจอ */
+    overflow-y: auto;   /* เปิด scroll ได้ */
+    padding: 12px;
+    border-radius: 14px;
+  }
+
+  .edit-profile-modal h2,
+  .password-modal h2,
+  .gallery-modal h2 {
+    font-size: 16px;
+    margin-bottom: 8px;
+  }
+
+  /* ลดขนาด input / textarea */
+  .edit-profile-modal input,
+  .edit-profile-modal textarea,
+  .password-modal input {
+    font-size: 13px;
+    padding: 8px;
+  }
+
+  /* ปรับรูปโปรไฟล์เล็กลง */
+  .profile-img-upload img {
+    width: 80px;
+    height: 80px;
+  }
+
+  /* ปุ่ม → เต็มจอ เรียงแนวตั้ง */
+  .form-actions {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .form-actions .btn {
+    width: 100%;
+    padding: 10px;
+    font-size: 13px;
+  }
+}
 
 
 
