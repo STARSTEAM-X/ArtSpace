@@ -12,28 +12,37 @@ async function loadProfile() {
             headers: { Authorization: `Bearer ${token}` }
         });
         if (!res.ok) throw new Error("โหลดข้อมูลล้มเหลว");
-
         const data = await res.json();
 
-        // ข้อมูลผู้ใช้
-        document.getElementById("profileImg").src = BASE_URL + data.profileImg;
-        document.getElementById("nickname").textContent = data.nickname;
+        // ✅ โหลดโพสต์ของ user จาก Community API
+        const res_post = await fetch(`${BASE_URL}/api/community/user/${data.username}`);
+        if (!res_post.ok) throw new Error("โหลดโพสต์ล้มเหลว");
+        const posts = await res_post.json();
+
+        // ----------------- ข้อมูลผู้ใช้ -----------------
+        document.getElementById("profileImg").src = data.profileImg
+            ? BASE_URL + data.profileImg
+            : "./img/profile.png";   // fallback
+
+        document.getElementById("nickname").textContent = data.nickname || data.username;
         document.getElementById("bio").textContent = data.bio || '"ยังไม่มี Bio"';
         document.getElementById("username").textContent = data.username;
         document.getElementById("email").textContent = data.email;
         document.getElementById("fullname").textContent = `${data.firstName} ${data.lastName}`;
-        document.getElementById("dob").textContent = new Date(data.dateOfBirth).toLocaleDateString();
-        document.getElementById("avgScore").textContent = data.averageScore.toFixed(1);
+        document.getElementById("dob").textContent = data.dateOfBirth
+            ? new Date(data.dateOfBirth).toLocaleDateString()
+            : "-";
+        document.getElementById("avgScore").textContent = data.averageScore?.toFixed(1) ?? "0.0";
 
         // Stars
-        document.getElementById("stars").textContent = "⭐".repeat(Math.round(data.averageScore));
+        document.getElementById("stars").textContent = "⭐".repeat(Math.round(data.averageScore || 0));
 
         // Counters
-        document.getElementById("joinedCount").textContent = data.joinedActivities.length;
-        document.getElementById("createdCount").textContent = data.createdActivities.length;
-        document.getElementById("postedCount").textContent = data.postedActivities.length;
+        document.getElementById("joinedCount").textContent = data.joinedActivities?.length || 0;
+        document.getElementById("createdCount").textContent = data.createdActivities?.length || 0;
+        document.getElementById("postedCount").textContent = posts.length; // ✅ ใช้ posts จาก API
 
-        // Gallery
+        // ----------------- Gallery -----------------
         const galleryList = document.getElementById("galleryList");
         if (!data.galleryList || data.galleryList.length === 0) {
             galleryList.innerHTML = "<p>ยังไม่มีรูปในแกลเลอรี่ ❌</p>";
@@ -43,67 +52,79 @@ async function loadProfile() {
             `).join("");
         }
 
-        console.log(data)
-        // Joined
+        // ----------------- Joined Activities -----------------
         const joinedList = document.getElementById("joinedList");
-        joinedList.innerHTML = data.joinedActivities.length === 0
+        joinedList.innerHTML = data.joinedActivities?.length === 0
             ? "<p>ยังไม่มีกิจกรรมเข้าร่วม ❌</p>"
             : data.joinedActivities.map(a => {
                 const activityDate = new Date(a.activityDateStart);
                 const today = new Date();
                 const isPast = activityDate < today;
-                const statusBadge = isPast 
-                    ? '<span class="badge done">Done</span>' 
+                const statusBadge = isPast
+                    ? '<span class="badge done">Done</span>'
                     : '<span class="badge upcoming">Upcoming</span>';
 
                 return `
                     <div class="activity-card">
-                        <span class="category-badge"> ${a.activityType }</span>
+                        <span class="category-badge"> ${a.activityType}</span>
                         ${statusBadge}
                         <h4>${a.activityName}</h4>
-                        <img src="${BASE_URL + a.imageUrl}" alt="${a.activityName}">
+                        <img src="${a.imageUrl ? BASE_URL + a.imageUrl : './img/noimage.png'}" alt="${a.activityName}">
                         <p>${activityDate.toLocaleDateString('th-TH', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
                         <button class="review-btn">Review</button>
                     </div>
                 `;
             }).join("");
 
-        // Created
+        // ----------------- Created Activities -----------------
         const createdList = document.getElementById("createdList");
-        createdList.innerHTML = data.createdActivities.length === 0
+        createdList.innerHTML = data.createdActivities?.length === 0
             ? "<p>ยังไม่มีกิจกรรมที่สร้าง ❌</p>"
             : data.createdActivities.map(a => {
                 const activityDate = new Date(a.activityDateStart);
                 const today = new Date();
                 const isPast = activityDate < today;
-                const statusBadge = isPast 
-                    ? '<span class="badge done">Done</span>' 
+                const statusBadge = isPast
+                    ? '<span class="badge done">Done</span>'
                     : '<span class="badge upcoming">Upcoming</span>';
-                
+
                 return `
                     <div class="activity-card">
-                        <span class="category-badge"> ${a.activityType }</span>
+                        <span class="category-badge"> ${a.activityType}</span>
                         ${statusBadge}
                         <h4>${a.activityName}</h4>
-                        <img src="${BASE_URL + a.imageUrl}" alt="${a.activityName}">
+                        <img src="${a.imageUrl ? BASE_URL + a.imageUrl : './img/noimage.png'}" alt="${a.activityName}">
                         <p>${activityDate.toLocaleDateString('th-TH', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
                         <button class="review-btn">Manage</button>
                     </div>
                 `;
             }).join("");
 
-        // Posted
+        // ----------------- Posted (จาก Community API) -----------------
         const postedList = document.getElementById("postedList");
-        postedList.innerHTML = data.postedActivities.length === 0
+        postedList.innerHTML = posts.length === 0
             ? "<p>ยังไม่มีโพสต์ ❌</p>"
-            : data.postedActivities.map(p => `<p>📌 ${p.title}</p>`).join("");
+            : posts.map(p => {
+                const createdAt = new Date(p.createdAt);
+                return `
+                    <div class="post-card">
+                        <h4>${p.title}</h4>
+                        ${p.image ? `<img src="${BASE_URL + p.image}" alt="${p.title}">` : ""}
+                        <p>${p.message}</p>
+                        <small>🕒 ${createdAt.toLocaleDateString('th-TH', {
+                    day: 'numeric',
+                    month: 'long',
+                    year: 'numeric'
+                })}</small>
+                    </div>
+                `;
+            }).join("");
 
     } catch (err) {
         console.error(err);
         alert("Error loading profile");
     }
 }
-
 document.addEventListener("DOMContentLoaded", loadProfile);
 
 
