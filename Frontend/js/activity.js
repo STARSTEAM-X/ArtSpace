@@ -27,18 +27,27 @@ async function loadActivities() {
 }
 function getactivityTypeIcon(activityType) {
     const iconMap = {
-        'Visual Arts': '/ArtSpace/Frontend/img/VisualArts.png',
-        'Photography': '/ArtSpace/Frontend/img/photo.png',
-        'Writing': '/ArtSpace/Frontend/img/writ.png',
-        'Music': '/ArtSpace/Frontend/img/music.png'
+        'Visual Arts': '/img/VisualArts.png',
+        'Photography': '/img/photo.png',
+        'Writing': '/img/writ.png',
+        'Music': '/img/music.png'
     };
-    return iconMap[activityType] || '/ArtSpace/Frontend/img/logo.png';
+    return iconMap[activityType] || '/img/logo.png';
+}
+function mapTagClass(type) {
+    switch (type) {
+        case "Visual Arts": return "visual";
+        case "Music": return "music";
+        case "Photography": return "photo";
+        case "Writing": return "writing";
+        default: return "other";
+    }
 }
 function renderActivities(list) {
     if (!list || list.length === 0) {
         container.innerHTML = `
             <div class="empty">
-                <img class="empty-ill" src="/ArtSpace/Frontend/img/notfound.png" alt="">
+                <img class="empty-ill" src="/img/notfound.png" alt="">
                 <p>ขออภัยไม่มีกิจกรรมที่คุณค้นหาในตอนนี้</p>
             </div>
         `;
@@ -50,18 +59,30 @@ function renderActivities(list) {
         .reverse()          // พลิก array ให้ item สุดท้ายขึ้นก่อน
         .map(act => `
             <div class="card-body">
-                <span class="pill-head tag${mapTagClass(act.activityType)}"><img src="${getactivityTypeIcon(act.activityType)}" alt="" width="16" height="auto"> ${act.activityType}</span>
-                <div class="title-head">${act.activityName}</div>
+                <span class="pill-head ${mapTagClass(act.activityType)}">
+                    <img src="${getactivityTypeIcon(act.activityType)}" alt="" width="16">
+                    ${act.activityType}
+                </span>
+
+                <div class="title-head ${mapTagClass(act.activityType)}">
+                    ${act.activityName}
+                </div>
                 <img class="cover" src="${act.imageUrl ? BASE_URL + act.imageUrl : "https://via.placeholder.com/300x150"}" alt="">
                 <div class="info-stack">
-                    <div class="info-row"><img src="/ArtSpace/Frontend/img/position.png" class="info-row-image" width="auto" height="20" alt=""><div class="info-chip">${act.location}</div></div>
-                    <div class="info-row"><img src="/ArtSpace/Frontend/img/calendar.png" class="info-row-image" width="auto" height="20" alt=""><div class="info-chip">${formatDate(act.activityDateStart)} - ${formatDate(act.activityDateEnd)}</div></div>
-                    <div class="info-row"><img src="/ArtSpace/Frontend/img/time.png" class="info-row-image" width="auto" height="20" alt=""><div class="info-chip">${act.activityTimeStart} - ${act.activityTimeEnd}</div></div>
+                    <div class="info-row"><img src="/img/position.png" class="info-row-image" width="auto" height="20" alt=""><div class="info-chip">${act.location}</div></div>
+                    <div class="info-row"><img src="/img/calendar.png" class="info-row-image" width="auto" height="20" alt=""><div class="info-chip">${formatDate(act.activityDateStart)} - ${formatDate(act.activityDateEnd)}</div></div>
+                    <div class="info-row"><img src="/img/time.png" class="info-row-image" width="auto" height="20" alt=""><div class="info-chip">${act.activityTimeStart} - ${act.activityTimeEnd}</div></div>
                 </div>
-                <div class="count-badge status ${act.currentParticipants < act.maxParticipants ? "success" : "danger"}"><img class="image-count-badge" src="/ArtSpace/Frontend/img/account.png" width="18" height="18" alt=""> ${act.currentParticipants}/${act.maxParticipants}</div>     
+                <div class="count-badge status ${act.currentParticipants < act.maxParticipants ? "success" : "danger"}"><img class="image-count-badge" src="/img/account.png" width="18" height="18" alt=""> ${act.currentParticipants}/${act.maxParticipants}</div>     
                 <div class="org">
                     <img class="btn-img" src="${BASE_URL + act.createdBy.profileImg}" alt="" onclick="viewProfile(${act.id})">
-                    <div>ไอดีผู้จัดกิจกรรม<br>${act.createdBy.nickname} · ${act.createdBy.averageScore} </div>
+                    <div>
+                        ${act.createdBy.nickname} 
+                        <div>
+                            ${act.createdBy.averageScore}
+                            <div class="rating" data-score="${act.createdBy.averageScore}"></div>
+                        </div> 
+                    </div>
                 </div>
                 <div class="actions-cardAct">
                     <button class="btn btn-small btn-ghost detail" onclick="viewDetail(${act.id})" >More Detail</button>
@@ -69,6 +90,7 @@ function renderActivities(list) {
                 </div>
             </div>
       `).join("");
+    renderStars();
 }
 
 
@@ -97,78 +119,242 @@ function applyFilters() {
         list.sort((a, b) => new Date(a.activityDateStart) - new Date(b.activityDateStart));
     }
 
+    // เรทติ้ง
+    if (sortBy === "rating") {
+        const score = x => Number(x?.createdBy?.averageScore) || 0;
+        list.sort((a,b) => score(a) - score(b));
+    }
+
     renderActivities(list);
 }
 
 // ====== MODAL DETAIL ======
+function getCurrentUserId() {
+    try {
+        // ตรวจสอบจาก localStorage หลายรูปแบบ
+        const userStr = localStorage.getItem("user");
+        if (userStr) {
+            const user = JSON.parse(userStr);
+            // ลองหาจากหลาย field ที่เป็นไปได้
+            return String(user.id || user.userId || user.uid || user._id || "");
+        }
+        // ถ้าไม่มี user object ลองหาจาก userId โดยตรง
+        return String(localStorage.getItem("userId") || "");
+    } catch (err) {
+        console.error("Error getting user ID:", err);
+        return "";
+    }
+}
+
+// ====== ปรับปรุงฟังก์ชัน viewDetail ======
 async function viewDetail(id) {
     try {
         const res = await fetch(`${BASE_URL}/api/activity/detail/${id}`);
         if (!res.ok) throw new Error("โหลดรายละเอียดกิจกรรมล้มเหลว");
         const act = await res.json();
 
-        modalBody.innerHTML = `
-            <h2 class="category">${act.activityType}</h2>
-            <img src="${act.imageUrl ? BASE_URL + act.imageUrl : "https://via.placeholder.com/500x250"}" alt="Activity" class="activity-image">
+        // Debug: แสดงข้อมูลเพื่อตรวจสอบ
+        console.log("Activity detail:", act);
+        console.log("Current user ID:", getCurrentUserId());
+        console.log("Activity owner:", act.createdBy);
+
+        // ดึง ID ของผู้ใช้ปัจจุบัน
+        const currentUserId = getCurrentUserId();
         
-            <div class="info-box">
-                <span class="info-label">ชื่อกิจกรรม :</span>
-                <span class="info-value">${act.activityName}</span>
-            </div>
+        // ดึง ID ของเจ้าของกิจกรรม (ลองหลายรูปแบบ)
+        let ownerId = "";
+        if (act.createdBy) {
+            ownerId = String(
+                act.createdBy.id || 
+                act.createdBy.userId || 
+                act.createdBy._id || 
+                act.createdBy.uid || 
+                ""
+            );
+        }
 
-            <div class="info-box">
-                <span class="info-label">รายละเอียด :</span>
-                <span class="info-value">${act.activityDescription || "-"}</span>
-            </div>
+        // ตรวจสอบว่าเป็นเจ้าของกิจกรรมหรือไม่
+        const isOwner = currentUserId && ownerId && currentUserId === ownerId;
+        
+        // ตรวจสอบว่าเข้าร่วมกิจกรรมแล้วหรือไม่
+        const isJoined = act.isJoined || false;
 
-            <div class="info-box">
-                <span class="info-label">วันที่เริ่มจัดกิจกรรม :</span>
-                <div class="datetime-row">
-                    <input type="date" class="date-input" value="${formatDate(act.activityDateStart)}" readonly>
-                    <input type="time" class="time-input" value="${act.activityTimeStart}" readonly>
+        console.log("Is owner:", isOwner);
+        console.log("Is joined:", isJoined);
+
+        // กำหนด class สำหรับ badge ผู้เข้าร่วม
+        const participantClass = isJoined ? "participants-joined" : "participants-not-joined";
+
+        // สร้างปุ่ม action ตามสถานะ
+        let actionHtml = "";
+        
+        if (isOwner) {
+            // เจ้าของกิจกรรม → ปุ่ม Manage Activity
+            actionHtml = `
+                <button class="btn-manage-activity" onclick="openManageActivity(${act.id})">
+                    Manage Activity
+                </button>`;
+        } else if (isJoined) {
+            // เข้าร่วมแล้ว → ปุ่ม Leave Activity
+            actionHtml = `
+                <button class="btn-leave-activity" onclick="confirmLeaveActivity(${act.id})">
+                    Leave Activity
+                </button>`;
+        } else {
+                actionHtml = `
+                    <button class="btn-join-activity" onclick="joinActivity(${act.id})">
+                        Join Now
+                    </button>`;
+            }
+        modalBody.innerHTML = `
+        <div class="type-more">
+                <span class="pill-category-modal ${mapTagClass(act.activityType)}">
+                    <img src="${getactivityTypeIcon(act.activityType)}" alt="" width="16">
+                    ${act.activityType}
+                </span>
+            </div>
+            <div class="activity-modal-detail">
+                <div class="modal-header-section">
+                    <h2 class="modal-activity-title ${mapTagClass(act.activityType)}">${act.activityName}</h2>
+                </div>
+
+                <div class="modal-content-wrapper">
+                    <div class="modal-left-side">
+                        <img src="${act.imageUrl ? BASE_URL + act.imageUrl : "https://via.placeholder.com/500x250"}" 
+                             alt="Activity" class="modal-activity-image">
+                        
+                        <p class="organizer-label">ผู้จัดกิจกรรม :</p>
+                        <div class="organizer-info">
+                            <img class="btn-img" src="${BASE_URL + act.createdBy.profileImg}" alt="" 
+                                 onclick="viewProfile(${act.createdBy.id || act.createdBy.userId})">
+                            <div>
+                                ${act.createdBy.nickname}
+                                <div>
+                                    ${act.createdBy.averageScore}
+                                    <div class="rating" data-score="${act.createdBy.averageScore}"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="modal-right-side">
+                        <div class="modal-description">
+                            <p>${act.activityDescription || "-"}</p>
+                        </div>
+                        
+                        <div class="participants-wrapper">
+                            <div class="participants-badge ${participantClass}">
+                                <img src="/img/account.png" alt="participants" width="24" height="24">
+                                <span class="participants-count">${act.currentParticipants}/${act.maxParticipants}</span>
+                            </div>
+                            ${isJoined ? '<span class="joined-indicator">✓ คุณเข้าร่วมกิจกรรมนี้แล้ว</span>' : ''}
+                        </div>
+                        
+                        <div class="modal-info-grid">
+                            <div class="modal-info-item">
+                                <img src="/img/position.png" alt="location" width="20" height="20">
+                                <span class="info-label-text">สถานที่ :</span>
+                                <span class="info-value-text">${act.location}</span>
+                            </div>
+                            
+                            <div class="modal-info-item">
+                                <img src="/img/calendar.png" alt="date" width="20" height="20">
+                                <span class="info-label-text">เริ่ม :</span>
+                                <span class="info-value-text">${formatDate(act.activityDateStart)}</span>
+                            </div>
+                            
+                            <div class="modal-info-item">
+                                <img src="/img/time.png" alt="time" width="20" height="20">
+                                <span class="info-label-text">เวลา :</span>
+                                <span class="info-value-text">${act.activityTimeStart} - ${act.activityTimeEnd}</span>
+                            </div>
+                            
+                            <div class="modal-info-item">
+                                <img src="/img/time.png" alt="time" width="20" height="20">
+                                <span class="info-label-text">ปิดรับประกาศ :</span>
+                                <span class="info-value-text">${formatDate(act.announceDateEnd)} - ${act.announceTimeEnd}</span>
+                            </div>
+                        </div>
+                        
+                        <div class="modal-action-button">
+                            ${actionHtml}
+                        </div>
+                    </div>
                 </div>
             </div>
-
-            <div class="info-box">
-                <span class="info-label">วันที่สิ้นสุดกิจกรรม :</span>
-                <div class="datetime-row">
-                    <input type="date" class="date-input" value="${formatDate(act.activityDateEnd)}" readonly>
-                    <input type="time" class="time-input" value="${act.activityTimeEnd}" readonly>
-                </div>
-            </div>
-
-            <div class="info-box">
-                <span class="info-label">สถานที่ :</span>
-                <span class="info-value">${act.location}</span>
-            </div>
-
-            <div class="info-box participant">
-                <span class="info-label">จำนวนที่รับ :</span>
-                <div class="datetime-row">
-                    <input type="number" class="capacity-input chip" value="${act.maxParticipants}" readonly>
-                    <span class="capacity-note note-right">เข้าร่วมแล้ว ${act.currentParticipants || "ไม่มี"} คน</span>
-                </div>
-            </div>
-
-            <div class="info-box">
-                <span class="info-label">วันหมดอายุของประกาศ :</span>
-                <div class="datetime-row">
-                    <input type="date" class="date-input" value="${act.deadline} " readonly>
-                    <input type="time" class="time-input" value="${act.deadlineTime}" readonly>
-                </div>
-            </div>
-            <div class="info-box organizer-row">
-                <span class="info-label">ผู้จัด :</span>
-                <span class="info-value organizer-name">${act.createdByUserName} · ${act.rating} </span>
-            </div>
-            <button class="join" onclick="joinActivity(${act.id})">Join Now</button>
-            `;
+        `;
         modal.style.display = "flex";
+        renderStars();
     } catch (err) {
         console.error(err);
         alert("ไม่สามารถโหลดรายละเอียดได้");
     }
 }
+
+function renderStars() {
+  document.querySelectorAll(".rating").forEach(rating => {
+    const score = parseFloat(rating.dataset.score) || 0;
+    const fullStars = Math.floor(score);         // ดาวเต็ม
+    const halfStar = score % 1 >= 0.5;           // ครึ่งดาว
+    const emptyStars = 5 - fullStars - (halfStar ? 1 : 0);
+
+    let starsHtml = "";
+
+    // ⭐ ดาวเต็ม
+    for (let i = 0; i < fullStars; i++) {
+      starsHtml += `<img src="img/star.png" alt="★">`;
+    }
+    // 🌗 ครึ่งดาว
+    if (halfStar) {
+      starsHtml += `<img src="img/star-half.png" alt="☆">`;
+    }
+    // ☆ ดาวว่าง
+    for (let i = 0; i < emptyStars; i++) {
+      starsHtml += `<img src="img/star-gray.png" alt="☆">`;
+    }
+
+    rating.innerHTML = starsHtml;
+  });
+}
+
+
+// ฟังก์ชันยืนยันก่อน Leave Activity
+function confirmLeaveActivity(id) {
+    if (alert("คุณแน่ใจหรือไม่ที่จะออกจากกิจกรรมนี้?")) {
+        leaveActivity(id);
+    }
+}
+
+// ====== LEAVE ACTIVITY ======
+async function leaveActivity(id) {
+    const token = localStorage.getItem("token");
+    if (!token) {
+        alert("กรุณาเข้าสู่ระบบก่อนออกจากกิจกรรม");
+        return;
+    }
+    try {
+        const res = await fetch(`${BASE_URL}/api/activity/leave`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            },
+            body: JSON.stringify({ activityId: id })
+        });
+        const data = await res.json();
+        if (res.ok) {
+            alert("ออกจากกิจกรรมสำเร็จ");
+            modal.style.display = "none"; // ปิด modal
+            await loadActivities(); // รีโหลดข้อมูล
+        } else {
+            alert("ไม่สามารถออกจากกิจกรรม: " + (data.message || "unknown"));
+        }
+    } catch (err) {
+        console.error(err);
+        alert("เกิดข้อผิดพลาด");
+    }
+}
+
 
 // ====== JOIN ======
 async function joinActivity(id) {
@@ -221,7 +407,7 @@ document.querySelectorAll(".dropdown .dropdown-content .tag").forEach(item => {
         // toggle: กดซ้ำ = ล้างตัวกรอง
         if (selectedCategory === cat) {
             selectedCategory = "";
-            categoryBtn.textContent = "หมวดหมู่ ▾";
+            categoryBtn.textContent = "▾ หมวดหมู่";
         } else {
             selectedCategory = cat;
             categoryBtn.textContent = cat;
@@ -232,19 +418,21 @@ document.querySelectorAll(".dropdown .dropdown-content .tag").forEach(item => {
 
 // เลือก "เรียงลำดับ"
 (() => {
-    const sortDropdown = sortBtn.parentElement;
-    sortDropdown.querySelectorAll(".dropdown-content button:not(.tag)").forEach(item => {
-        item.addEventListener("click", e => {
-            sortDropdown.classList.remove("open");
+  const sortDropdown = sortBtn.parentElement;
+  sortDropdown.querySelectorAll(".dropdown-content button").forEach(btn => {
+    btn.addEventListener("click", () => {
+      sortDropdown.classList.remove("open");
 
-            const label = item.innerText.trim();
-            sortBtn.textContent = label;
+      const label = btn.innerText.trim();
+      sortBtn.textContent = "▾ " + label;
 
-            sortBy = label.includes("ผู้เข้าร่วม") ? "participants" : "date";
-            applyFilters();
-        });
+      // เก็บค่าจาก data-sort
+      sortBy = btn.dataset.sort;  // "rating" | "participants" | "date"
+      applyFilters();
     });
+  });
 })();
+
 
 // ปิด dropdown เมื่อคลิกนอก
 window.addEventListener("click", () => {
@@ -256,15 +444,6 @@ btnSearch.addEventListener("click", applyFilters);
 searchInput.addEventListener("keydown", e => { if (e.key === "Enter") applyFilters(); });
 
 // ====== HELPERS ======
-function mapTagClass(type) {
-    switch (type) {
-        case "Visual Arts": return "visual";
-        case "Music": return "music";
-        case "Photography": return "photo";
-        case "Writing": return "writing";
-        default: return "other";
-    }
-}
 function formatDate(dateStr) {
     const d = new Date(dateStr);
     return d.toLocaleDateString("th-TH", { year: "numeric", month: "short", day: "numeric" });
@@ -283,6 +462,7 @@ const btnCreate = document.getElementById("btnCreate");
 const searchBar = document.querySelector(".search-bar");
 const createModal = document.getElementById("createModal");
 const createClose = document.getElementById("createClose");
+const cancleact = document.getElementById("cancle-act");
 
 // Find Activity → scroll ไป Search Bar
 btnFind?.addEventListener("click", () => {
@@ -296,6 +476,9 @@ btnCreate?.addEventListener("click", () => {
 
 // ปิด modal สร้างกิจกรรม
 createClose?.addEventListener("click", () => {
+    createModal.style.display = "none";
+});
+cancleact?.addEventListener("click", () => {
     createModal.style.display = "none";
 });
 window.addEventListener("click", e => {
@@ -339,5 +522,4 @@ createForm?.addEventListener("submit", async (e) => {
         console.error("Error creating activity:", err);
         alert("เกิดข้อผิดพลาด ไม่สามารถสร้างกิจกรรมได้");
     }
-    // khgkdslhgs
 });

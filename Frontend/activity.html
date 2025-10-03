@@ -26,7 +26,7 @@
         <div class="nav-right">
             <!-- 🔔 Notify -->
             <div class="notify" id="notifyBtn">
-                <span class="icon"><img src="/ArtSpace/Frontend/img/icon_noti.png" width="30px" height="30px"></span>
+                <span class="icon"><img src="/img/icon_noti.png" width="30px" height="30px"></span>
                 <span class="badge" id="notifyCount">0</span>
                 <div class="notify-dropdown" id="notifyDropdown"></div>
             </div>
@@ -85,16 +85,16 @@
 
         <div class="hero-actions">
             <div class="cta">
-                <img src="/ArtSpace/Frontend/img/act.png" class="btn-ico" alt="">
+                <img src="/img/act.png" class="btn-ico" alt="">
                 <button id="btnFind" class="btnFind btn-primary">
-                    <span class="icon"><img src="/ArtSpace/Frontend/img/search.png"></span> Find Activity
+                    <span class="icon"><img src="/img/search.png"></span> Find Activity
                 </button>
             </div>
             <span class="or-text">OR</span>
             <div class="cta">
-                <img src="/ArtSpace/Frontend/img/act1.png" class="btn-ico" alt="">
+                <img src="/img/act1.png" class="btn-ico" alt="">
                 <button id="btnCreate" class="btnCreate btn-primary">
-                    <span class="icon"><img src="/ArtSpace/Frontend/img/add.png"></span> Create Activity
+                    <span class="icon"><img src="/img/add.png"></span> Create Activity
                 </button>
             </div>
         </div>
@@ -109,21 +109,21 @@
 
         <!-- Category dropdown -->
         <div class="dropdown">
-            <button class="dropbtn" id="categoryBtn">หมวดหมู่ ▾</button>
+            <button class="dropbtn" id="categoryBtn">▾ หมวดหมู่ </button>
             <div class="dropdown-content">
-                <button class="tag visual"><i class="fa fa-paint-brush"></i> Visual Arts</button>
-                <button class="tag photo"><i class="fa fa-camera"></i> Photography</button>
-                <button class="tag writing"><i class="fa fa-pen"></i> Writing</button>
-                <button class="tag music"><i class="fa fa-music"></i> Music</button>
+                <button class="tag visual"><img src="/img/VisualArts.png"> Visual Arts</button>
+                <button class="tag photo"><img src="/img/photo.png"> Photography</button>
+                <button class="tag writing"><img src="/img/writ.png"> Writing</button>
+                <button class="tag music"><img src="/img/music.png"> Music</button>
             </div>
         </div>
 
         <!-- Sort dropdown -->
         <div class="dropdown">
-            <button class="dropbtn" id="sortBtn">เรียงลำดับ ▾</button>
+            <button class="dropbtn" id="sortBtn">▾ เรียงลำดับ </button>
             <div class="dropdown-content">
-                <button><i class="fa fa-star"></i> เรียงผู้เข้าร่วมกิจกรรม</button>
-                <button><i class="fa fa-calendar"></i> วันที่กิจกรรม</button>
+                <div class="sort"><button data-sort="rating"><img src="/img/sort-rating.png">เรตติ้งผู้จัดกิจกรรม</button></div>
+                <div class="sort"><button data-sort="date"><img src="/img/sort-date.png">วันที่กิจกรรม</button></div>
             </div>
         </div>
 
@@ -145,9 +145,9 @@
     <div class="modal" id="createModal">
         <div class="modal-content large" id="model">
             <div class="image-container">
-                <img class="backgroup-create" src="/ArtSpace/Frontend/img/create_act.png"
+                <img class="backgroup-create" src="/img/create_act.png"
                     alt="create activity illustration">
-                <img class="overlay-img" src="/ArtSpace/Frontend/img/logo.png" alt="ArtSpace">
+                <img class="overlay-img" src="/img/logo.png" alt="ArtSpace">
             </div>
             <span class="close" id="createClose">&times;</span>
 
@@ -168,7 +168,7 @@
                         วันที่เริ่ม :
                         <div class="input-with-icon">
                             <input type="date" name="ActivityDateStart">
-                            <img src="/ArtSpace/Frontend/img/calendar.png" alt="calendar icon">
+                            <img src="/img/calendar.png" alt="calendar icon">
                         </div>
                     </label>
 
@@ -176,7 +176,7 @@
                         เวลาเริ่ม :
                         <div class="input-with-icon">
                             <input type="time" name="ActivityTimeStart">
-                            <img src="/ArtSpace/Frontend/img/time.png" alt="clock icon">
+                            <img src="/img/time.png" alt="clock icon">
                         </div>
                     </label>
                 </div>
@@ -186,14 +186,14 @@
                         วันที่สิ้นสุด :
                         <div class="input-with-icon">
                             <input type="date" name="ActivityDateEnd">
-                            <img src="/ArtSpace/Frontend/img/calendar.png" alt="calendar icon">
+                            <img src="/img/calendar.png" alt="calendar icon">
                         </div>
                     </label>
                     <label class="dateandtimeblock">
                         เวลาสิ้นสุด :
                         <div class="input-with-icon">
                             <input type="time" name="ActivityTimeEnd">
-                            <img src="/ArtSpace/Frontend/img/time.png" alt="clock icon">
+                            <img src="/img/time.png" alt="clock icon">
                         </div>
                     </label>
                 </div>
@@ -208,7 +208,7 @@
                     จำนวนสูงสุด :
                     <div class="input-with-icon">
                         <input type="number" name="MaxParticipants" min="1" required><img
-                            src="/ArtSpace/Frontend/img/people.jpg" alt="clock icon">
+                            src="/img/people.png" alt="clock icon">
                     </div>
                 </label>
 
@@ -217,14 +217,14 @@
                         วันปิดรับประกาศ :
                         <div class="input-with-icon">
                             <input type="date" name="AnnounceDateEnd">
-                            <img src="/ArtSpace/Frontend/img/calendar.png" alt="calendar icon">
+                            <img src="/img/calendar.png" alt="calendar icon">
                         </div>
                     </label>
                     <label class="dateandtimeblock">
                         เวลาปิดรับประกาศ :
                         <div class="input-with-icon">
                             <input type="time" name="AnnounceTimeEnd">
-                            <img src="/ArtSpace/Frontend/img/time.png" alt="clock icon">
+                            <img src="/img/time.png" alt="clock icon">
                         </div>
                     </label>
                 </div>
@@ -232,21 +232,21 @@
                     <span>กรุณาเลือกหมวด :</span>
                     <div class="category-select">
                         <button type="button" class="sign visual" data-value="Visual Arts">
-                            <p><img src="/ArtSpace/Frontend/img/VisualArts.png" alt="Visual Arts">Visual Arts</p>
+                            <p><img src="/img/VisualArts.png" alt="Visual Arts">Visual Arts</p>
                         </button>
 
                         <button type="button" class="sign photo" data-value="Photography">
-                            <p><img src="/ArtSpace/Frontend/img/photo.png" alt="Photography">Photography</p>
+                            <p><img src="/img/photo.png" alt="Photography">Photography</p>
 
                         </button>
 
                         <button type="button" class="sign writing" data-value="Writing">
-                            <p><img src="/ArtSpace/Frontend/img/writ.png" alt="Writing">Writing</p>
+                            <p><img src="/img/writ.png" alt="Writing">Writing</p>
 
                         </button>
 
                         <button type="button" class="sign music" data-value="Music">
-                            <p><img src="/ArtSpace/Frontend/img/music.png" alt="Music">Music</p>
+                            <p><img src="/img/music.png" alt="Music">Music</p>
                         </button>
                     </div>
                     <input type="hidden" name="activityType" id="activityType">
@@ -271,7 +271,7 @@
                 <div class="upload-img">
                     <label for="activityImage">รูปกิจกรรม :</label>
                     <div class="upload-btn">
-                        <img src="/ArtSpace/Frontend/img/up.png" alt="upload icon">
+                        <img src="/img/upimg.png" alt="upload icon">
                         <span>อัปโหลดรูปโปรไฟล์</span>
                         <input type="file" id="activityImage" name="activityImage" accept="image/*">
                     </div>
