@@ -34,7 +34,7 @@ async function loadPosts() {
     const postList = document.getElementById("postList");
     if (filtered.length === 0) {
       postList.innerHTML = "<p style='text-align:center;color:#888;'>❌ ไม่พบโพสต์</p>";
-      return;
+      return posts;
     }
 
     postList.innerHTML = filtered.map((p) => `
@@ -52,8 +52,11 @@ async function loadPosts() {
         if (post) openPostModal(post);
       });
     });
+
+    return posts;
   } catch (err) {
     console.error("Error loading posts:", err);
+    return [];
   }
 }
 
@@ -367,4 +370,28 @@ document.querySelectorAll('.category-btn').forEach(btn => {
 // คลิกนอก dropdown ให้ปิด
 document.addEventListener('click', () => {
   document.querySelectorAll('.category-dropdown').forEach(d => d.classList.remove('show'));
+});
+
+
+// ✅ เช็ค URL parameter และเปิด modal
+document.addEventListener("DOMContentLoaded", async () => {
+  const params = new URLSearchParams(window.location.search);
+  const postId = params.get("id");
+
+  if (postId) {
+    // โหลด posts ทั้งหมดก่อน
+    const posts = await loadPosts();
+    
+    // หา post ที่ตรงกับ id
+    const post = posts.find(p => p.id == postId);
+    
+    if (post) {
+      openPostModal(post);
+    } else {
+      console.warn("ไม่พบโพสต์ id:", postId);
+    }
+  } else {
+    // ถ้าไม่มี id ใน URL ก็โหลดปกติ
+    loadPosts();
+  }
 });

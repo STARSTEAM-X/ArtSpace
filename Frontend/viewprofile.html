@@ -12,33 +12,29 @@
 </head>
 
 <body>
-      <!-- Navbar -->
-<nav class="navbar">
-  <div class="logo"><a href="./index.html">ARTSPACE</a></div>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="logo"><a href="./index.html" >ARTSPACE</a></div>
+        <ul class="nav-links">
+            <li><a href="./activity.html">Activities</a></li>
+            <li><a href="./community.html">Community</a></li>
+            <li><a href="./about.html">About</a></li>
+        </ul>
 
-  <!-- เมนูหลัก -->
-  <ul class="nav-links">
-    <li><a href="./activity.html">Activities</a></li>
-    <li><a href="./community.html">Community</a></li>
-    <li><a href="./about.html">About</a></li>
-    <!-- ✅ userSection จะถูกซ่อน/แสดงตามจอ -->
-    <li id="userSection"></li>
-  </ul>
+        <div class="nav-right">
+          <div id="userSection"></div>
+            <!-- 🔔 Notify -->
+            <div class="notify" id="notifyBtn">
+                <span class="icon">🔔</span>
+                <span class="badge" id="notifyCount">0</span>
+                <div class="notify-dropdown" id="notifyDropdown">
+                </div>
+            </div>
+          </div>
 
-  <!-- ขวาสุด -->
-  <div class="nav-right">
-    <!-- 🔔 Notify ติดอยู่นอก hamburger เสมอ -->
-    <div class="notify" id="notifyBtn">
-      <span class="icon">🔔</span>
-      <span class="badge" id="notifyCount">0</span>
-      <div class="notify-dropdown" id="notifyDropdown"></div>
-    </div>
-  </div>
 
-  <!-- ปุ่ม Hamburger -->
-  <div class="menu-toggle" id="menuToggle">&#9776;</div>
-</nav>
-
+        <div class="menu-toggle" id="menuToggle">&#9776;</div>
+    </nav>
 
 
 
@@ -106,8 +102,7 @@
                 <div class="profile-header">
                     <h2 id="nickname">กำลังโหลด...</h2>
                     <div class="profile-actions">
-                        <button class="btn-edit" id="openEditProfile">Edit Profile</button>
-                        <button class="btn-gray">Change your password</button>
+                        
                     </div>
 
                 </div>
@@ -143,7 +138,7 @@
         <section class="section">
             <div class="section-header">
                 <h2>Gallery</h2>
-                <button class="btn-edit small" id="editGalleryBtn">Edit</button>
+                
             </div>
             <div class="gallery-wrapper" id="galleryWrapper"> 
                 <button class="nav-arrow left-arrow" id="galleryLeftArrow">&#10094;</button>
