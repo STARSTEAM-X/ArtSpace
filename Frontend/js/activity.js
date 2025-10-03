@@ -60,8 +60,8 @@ function renderActivities(list) {
                 </div>
                 <div class="count-badge status ${act.currentParticipants < act.maxParticipants ? "success" : "danger"}"><img class="image-count-badge" src="/ArtSpace/Frontend/img/account.png" width="18" height="18" alt=""> ${act.currentParticipants}/${act.maxParticipants}</div>     
                 <div class="org">
-                    <img class="btn-img" src="${act.orgAvatar}" alt="" onclick="viewProfile(${act.id})">
-                    <div>ไอดีผู้จัดกิจกรรม<br>${act.createdByUserName} · ${act.rating} </div>
+                    <img class="btn-img" src="${BASE_URL + act.createdBy.profileImg}" alt="" onclick="viewProfile(${act.id})">
+                    <div>ไอดีผู้จัดกิจกรรม<br>${act.createdBy.nickname} · ${act.createdBy.averageScore} </div>
                 </div>
                 <div class="actions-cardAct">
                     <button class="btn btn-small btn-ghost detail" onclick="viewDetail(${act.id})" >More Detail</button>
