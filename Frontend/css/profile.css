@@ -2,6 +2,7 @@
 .profile-container {
   max-width: 1000px;
   margin: auto;
+  font-family: 'Chakra Petch', sans-serif;
 }
 
 /* Profile Card */
@@ -229,10 +230,10 @@
 .activity-card .badge {
   position: absolute;
   top: 15px;
-  right: 38px;
+  right: 36px;
   padding: 6px 14px;
   border-radius: 20px;
-  font-size: 12px;
+  font-size: 8px;
   font-weight: bold;
   display: flex;
   align-items: center;
@@ -254,12 +255,12 @@
 .activity-card .category-badge {
   position: absolute;
   top: 15px;
-  left: 38px;
+  left: 36px;
   background: rgba(138, 43, 226, 0.95);
   color: white;
   padding: 6px 12px;
   border-radius: 16px;
-  font-size: 11px;
+  font-size: 8px;
   font-weight: 600;
   display: flex;
   align-items: center;
@@ -302,20 +303,43 @@
 }
 
 /* Posts */
+/* Posted Section Card */
 .post-list {
-  background: white;
-  color: black;
-  padding: 15px;
-  border-radius: 12px;
+  background: #fff;              /* การ์ดหลักสีขาว */
+  padding: 25px;
+  border-radius: 16px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.08); /* เงาใส */
 }
-.post-list p {
+
+
+
+/* Item ของโพสต์ */
+.post-item {
   display: flex;
-  gap: 12px;
-  overflow-x: auto;
-  padding-bottom: 8px;
-  justify-content:center;
   align-items: center;
-  min-height: 120px;
+  background: #f9f9f9;
+  color: #333;
+  padding: 12px 18px;
+  border-radius: 30px;
+  margin-bottom: 12px;
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: 500;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.05); /* เงานิ่มๆ */
+  transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+  cursor: pointer;
+}
+
+.post-item:hover {
+  background: #f3f3f3;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(0,0,0,0.12);
+}
+
+.post-icon {
+  font-size: 20px;
+  margin-right: 12px;
+  color: #6a1b9a; /* ไอคอนสีม่วง */
 }
 
 .gallery-list {

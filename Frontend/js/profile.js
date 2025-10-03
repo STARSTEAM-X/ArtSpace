@@ -7,6 +7,27 @@ async function loadProfile() {
         return;
     }
 
+    // **********************************************
+    // ✅ 1. เพิ่มฟังก์ชันช่วยกำหนดไอคอน
+    // **********************************************
+    function getActivityIcon(type) {
+        if (!type) return '🌟'; 
+        
+        switch (type.toLowerCase()) {
+            case 'visual art':
+                return '🎨';
+            case 'photo':
+                return '📷';
+            case 'writing':
+                return '✍️';
+            case 'music':
+                return '🎵';
+            default:
+                return '🌟'; 
+        }
+    }
+
+
     try {
         const res = await fetch(`${BASE_URL}/api/profile/myprofile`, {
             headers: { Authorization: `Bearer ${token}` }
@@ -18,6 +39,8 @@ async function loadProfile() {
         const res_post = await fetch(`${BASE_URL}/api/community/user/${data.username}`);
         if (!res_post.ok) throw new Error("โหลดโพสต์ล้มเหลว");
         const posts = await res_post.json();
+
+        
 
         // ----------------- ข้อมูลผู้ใช้ -----------------
         document.getElementById("profileImg").src = data.profileImg
@@ -101,24 +124,24 @@ async function loadProfile() {
             }).join("");
 
         // ----------------- Posted (จาก Community API) -----------------
-        const postedList = document.getElementById("postedList");
         postedList.innerHTML = posts.length === 0
             ? "<p>ยังไม่มีโพสต์ ❌</p>"
             : posts.map(p => {
-                const createdAt = new Date(p.createdAt);
+                const activityIcon = getActivityIcon(p.type || ''); 
                 return `
-                    <div class="post-card">
-                        <h4>${p.title}</h4>
-                        ${p.image ? `<img src="${BASE_URL + p.image}" alt="${p.title}">` : ""}
-                        <p>${p.message}</p>
-                        <small>🕒 ${createdAt.toLocaleDateString('th-TH', {
-                    day: 'numeric',
-                    month: 'long',
-                    year: 'numeric'
-                })}</small>
+                    <div class="post-item" data-id="${p.id}">
+                        <span class="post-icon">${activityIcon}</span>
+                        <span>${p.title}</span>
                     </div>
                 `;
             }).join("");
+        // redirect ไป community.html พร้อม id
+        document.querySelectorAll(".post-item").forEach(item => {
+            item.addEventListener("click", () => {
+                const id = item.dataset.id;
+                window.location.href = `./community.html?id=${id}`;
+            });
+        });
 
     } catch (err) {
         console.error(err);
@@ -399,3 +422,4 @@ document.addEventListener("DOMContentLoaded", () => {
         setupScrollArrows('createdWrapper', 'createdList');
     });
 });
+
