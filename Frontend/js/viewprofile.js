@@ -1,5 +1,6 @@
 // ------------------ โหลดข้อมูลโปรไฟล์คนอื่น ------------------ //
 async function loadProfile() {
+
     // ✅ ดึง username จาก URL parameter
     const urlParams = new URLSearchParams(window.location.search);
     const username = urlParams.get('user');
