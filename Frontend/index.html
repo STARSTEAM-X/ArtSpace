@@ -11,29 +11,32 @@
 </head>
 
 <body>
-    <!-- Navbar -->
-    <nav class="navbar">
-        <div class="logo"><a href="./index.html" >ARTSPACE</a></div>
-        <ul class="nav-links">
-            <li><a href="./activity.html">Activities</a></li>
-            <li><a href="./community.html">Community</a></li>
-            <li><a href="./about.html">About</a></li>
-        </ul>
+   <!-- Navbar -->
+<nav class="navbar">
+  <div class="logo"><a href="./index.html">ARTSPACE</a></div>
 
-        <div class="nav-right">
-          <div id="userSection"></div>
-            <!-- 🔔 Notify -->
-            <div class="notify" id="notifyBtn">
-                <span class="icon">🔔</span>
-                <span class="badge" id="notifyCount">0</span>
-                <div class="notify-dropdown" id="notifyDropdown">
-                </div>
-            </div>
-          </div>
+  <!-- เมนูหลัก -->
+  <ul class="nav-links">
+    <li><a href="./activity.html">Activities</a></li>
+    <li><a href="./community.html">Community</a></li>
+    <li><a href="./about.html">About</a></li>
+    <!-- ✅ userSection จะถูกซ่อน/แสดงตามจอ -->
+    <li id="userSection"></li>
+  </ul>
 
+  <!-- ขวาสุด -->
+  <div class="nav-right">
+    <!-- 🔔 Notify ติดอยู่นอก hamburger เสมอ -->
+    <div class="notify" id="notifyBtn">
+      <span class="icon">🔔</span>
+      <span class="badge" id="notifyCount">0</span>
+      <div class="notify-dropdown" id="notifyDropdown"></div>
+    </div>
+  </div>
 
-        <div class="menu-toggle" id="menuToggle">&#9776;</div>
-    </nav>
+  <!-- ปุ่ม Hamburger -->
+  <div class="menu-toggle" id="menuToggle">&#9776;</div>
+</nav>
 
 
    <!-- 🔹 Login Modal -->
@@ -180,7 +183,7 @@
             <div class="container">
                 <div class="activity-cards-container">
                     <div class="activity-card">
-                            <img class="card-image" src="img/search_act.png" alt="Join">
+                        <img class="card-image" src="img/search_act.png" alt="search_act">
                             <h3>
                                 <span class="highlight">ค้นหากิจกรรมศิลปะ</span><br>
                                 <span class="normal">และเข้าร่วมกับเพื่อนใหม่</span>
@@ -188,7 +191,7 @@
                         <a href="activity.html" class="card-btn">Join Activity</a>
                     </div>
                     <div class="activity-card">
-                        <img class="card-image" src="img/create_act.png" alt="Join">
+                        <img class="card-image" src="img/create_act.png" alt="create_act">
                             <h3>
                                 <span class="highlight">เริ่มต้นกิจกรรมของคุณ</span><br>
                                 <span class="normal">แล้วเชิญเพื่อนมาร่วมสร้างสรรค์</span>
@@ -204,24 +207,33 @@
 
     <!-- 🔹 section Lasted Activity  -->
      <section class="activities-lasted content-section" id="Lasted">
-        <div id="activitiesContainer" class="activities"></div>
-            <div class="modal" id="activityModal">
-                <div class="modal-content">
-                    <span class="close" id="modalClose">&times;</span>
-                <div id="modalBody"></div>
-            </div>
-        </div>
-        <div style="text-align: center;">
-                    <a href="Activity.html" class="view-all-btn">View all</a>
-                </div>
-            <div class="category-icons-container">
-                <div class="category-item">
-                    <div class="category-icon">
-                        <img src="img/below.png" alt="Visual Arts">
-                    </div>
-                </div>
-            </div>
-    </section>
+  <div class="carousel" id="lastedCarousel">
+    <button class="carousel-btn prev" id="actPrev" aria-label="Previous">‹</button>
+    <div class="carousel-viewport" id="actViewport">
+      <div class="carousel-track" id="activitiesTrack"></div>
+    </div>
+    <button class="carousel-btn next" id="actNext" aria-label="Next">›</button>
+  </div>
+
+  <div class="modal" id="activityModal">
+    <div class="modal-content">
+      <span class="close" id="modalClose">&times;</span>
+      <div id="modalBody"></div>
+    </div>
+  </div>
+
+  <div style="text-align:center;">
+    <a href="Activity.html" class="view-all-btn">View all</a>
+  </div>
+
+  <div class="category-icons-container">
+    <div class="category-item">
+      <div class="category-icon">
+        <img src="img/below.png" alt="Visual Arts">
+      </div>
+    </div>
+  </div>
+</section>
     
         <section class="tips-section content-section">
             <div class="color-sentinel" data-color="white"></div>

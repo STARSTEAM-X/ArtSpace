@@ -11,28 +11,33 @@
 </head>
 
 <body>
-    <!-- Navbar -->
-    <nav class="navbar">
-        <div class="logo"><a href="./index.html">ARTSPACE</a></div>
-        <ul class="nav-links">
-            <li><a href="./activity.html">Activities</a></li>
-            <li><a href="./community.html" class="active">Community</a></li>
-            <li><a href="./about.html">About</a></li>
-        </ul>
+     <!-- Navbar -->
+<nav class="navbar">
+  <div class="logo"><a href="./index.html">ARTSPACE</a></div>
 
-        <div class="nav-right">
-          <div id="userSection"></div>
-            <!-- 🔔 Notify -->
-            <div class="notify" id="notifyBtn">
-                <span class="icon">🔔</span>
-                <span class="badge" id="notifyCount">0</span>
-                <div class="notify-dropdown" id="notifyDropdown">
-                </div>
-            </div>
-          </div>
+  <!-- เมนูหลัก -->
+  <ul class="nav-links">
+    <li><a href="./activity.html">Activities</a></li>
+    <li><a href="./community.html">Community</a></li>
+    <li><a href="./about.html">About</a></li>
+    <!-- ✅ userSection จะถูกซ่อน/แสดงตามจอ -->
+    <li id="userSection"></li>
+  </ul>
 
-        <div class="menu-toggle" id="menuToggle">&#9776;</div>
-    </nav>
+  <!-- ขวาสุด -->
+  <div class="nav-right">
+    <!-- 🔔 Notify ติดอยู่นอก hamburger เสมอ -->
+    <div class="notify" id="notifyBtn">
+      <span class="icon">🔔</span>
+      <span class="badge" id="notifyCount">0</span>
+      <div class="notify-dropdown" id="notifyDropdown"></div>
+    </div>
+  </div>
+
+  <!-- ปุ่ม Hamburger -->
+  <div class="menu-toggle" id="menuToggle">&#9776;</div>
+</nav>
+
 
      <!-- 🔹 Login Modal -->
 <div class="modal" id="loginModal">
@@ -234,6 +239,31 @@
   <div class="modal-content view-post-modal">
     <span class="close" id="closeViewPost">&times;</span>
     <div id="viewPostContent"></div>
+  </div>
+</div>
+
+<!-- Modal แก้ไขโพสต์ -->
+<div class="modal" id="editPostModal">
+  <div class="modal-content">
+    <span class="close" id="closeEditPostModal">&times;</span>
+    <h2>แก้ไขโพสต์</h2>
+    <form id="editPostForm" enctype="multipart/form-data">
+      <input type="hidden" name="id" />
+      <input type="text" name="title" placeholder="Title" required />
+      <textarea name="message" placeholder="Message"></textarea>
+      <input type="text" name="discription" placeholder="Description" />
+      <select name="type" required>
+        <option value="Photo">Photo</option>
+        <option value="Painting">Painting</option>
+        <option value="Music">Music</option>
+        <option value="Writing">Writing</option>
+      </select>
+      <input type="file" name="image" accept="image/*" />
+      <div style="display:flex; gap:8px; margin-top:12px;">
+        <button type="submit">บันทึกการแก้ไข</button>
+        <button type="button" id="cancelEditBtn">ยกเลิก</button>
+      </div>
+    </form>
   </div>
 </div>
 

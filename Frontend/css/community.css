@@ -816,7 +816,7 @@ body::before {
   position: relative;
   background:#2d0a57;
   color:#fff;
-  border-radius:30px;
+  border-radius:40px;
 
   /* ทำให้ตัวอักษรอยู่กึ่งกลางทั้ง 2 แกน */
   display:flex;             /* ← เพิ่ม */
@@ -1317,3 +1317,9 @@ img, video, canvas, iframe { max-width: 100%; height: auto; }
   transform: translateY(-3px);
   box-shadow: 0 10px 28px rgba(255, 215, 0, .45);
 }
+.owner-actions { display:flex; gap:8px; align-items:center; }
+.owner-actions .edit-btn, .owner-actions .delete-btn {
+  padding: 10px 14px; border-radius: 12px; border: 0; cursor: pointer;
+}
+.owner-actions .edit-btn { background:#5174ff; color:#fff; }
+.owner-actions .delete-btn { background:#e11d48; color:#fff; }

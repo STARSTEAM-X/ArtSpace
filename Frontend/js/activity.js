@@ -1,5 +1,7 @@
 // ====== STATE & ELEMENTS ======
-const container = document.getElementById("activitiesContainer");
+const container =
+  document.getElementById("activitiesTrack") || // index.html (carousel)
+  document.getElementById("activitiesContainer"); // หน้าอื่น (grid)
 const modal = document.getElementById("activityModal");
 const modalBody = document.getElementById("modalBody");
 const modalClose = document.getElementById("modalClose");
@@ -69,8 +71,10 @@ function renderActivities(list) {
         </div>
       </div>
     `).join("");
-}
 
+  // ถ้าเป็นหน้า index (มี track + ปุ่ม) -> ตั้งค่าคาราเซล
+  setupLastedCarousel();
+}
 // ====== FILTER / SORT / SEARCH ======
 function applyFilters() {
   let list = [...allActivities];
@@ -281,6 +285,39 @@ function formatDate(dateStr) {
   if (!dateStr) return "-";
   const d = new Date(dateStr);
   return d.toLocaleDateString("th-TH", { year: "numeric", month: "short", day: "numeric" });
+}
+function setupLastedCarousel() {
+  const track = document.getElementById("activitiesTrack");
+  const viewport = document.getElementById("actViewport");
+  const btnPrev = document.getElementById("actPrev");
+  const btnNext = document.getElementById("actNext");
+  if (!track || !viewport || !btnPrev || !btnNext) return;
+
+  const getCardWidth = () => {
+    const card = track.querySelector(".card");
+    if (!card) return 0;
+    const rect = card.getBoundingClientRect();
+    const gap = parseFloat(getComputedStyle(track).columnGap || getComputedStyle(track).gap || "0");
+    return rect.width + gap; // กว้างการ์ด + ช่องว่าง 1 ช่อง
+  };
+
+  const page = () => {
+    // เลื่อนทีละ “หนึ่งการ์ด” (ถ้าอยากเลื่อนทีละ 3 ใบ ให้คูณ 3)
+    return getCardWidth();
+  };
+
+  const updateButtons = () => {
+    btnPrev.disabled = track.scrollLeft <= 0;
+    const maxScroll = track.scrollWidth - track.clientWidth - 2;
+    btnNext.disabled = track.scrollLeft >= maxScroll;
+  };
+
+  btnPrev.onclick = () => track.scrollBy({ left: -page(), behavior: "smooth" });
+  btnNext.onclick = () => track.scrollBy({ left:  page(), behavior: "smooth" });
+
+  track.addEventListener("scroll", updateButtons, { passive: true });
+  window.addEventListener("resize", updateButtons);
+  updateButtons();
 }
 
 // ====== INIT ======

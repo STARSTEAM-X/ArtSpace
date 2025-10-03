@@ -13,7 +13,7 @@
   --container-pad: clamp(12px, 4vw, 24px);
 }
 
-html,body{ height:100%; }
+html,body{ height:100%; overflow-x: clip; }
 *,*::before,*::after{ box-sizing: border-box; }
 
 body{
@@ -92,6 +92,21 @@ img{
 .activity-cards-container{
   margin-top: clamp(80px, 12vw, 250px); /* เดิม 250px ตายตัว → ยืดหยุ่น */
 }
+
+@media (max-width: 1024px) {
+  .activities-lasted .card {
+    flex-basis: calc((100% - var(--gap)) / 2);
+    min-width: calc((100% - var(--gap)) / 2);
+  }
+}
+
+@media (max-width: 600px) {
+  .activities-lasted .card {
+    flex-basis: 100%;
+    min-width: 100%;
+  }
+}
+
 
 /* =========================
    Utilities
@@ -223,7 +238,7 @@ body {
 
 /* Header ของ dropdown */
 .notify-dropdown::before {
-  content: "🔔 Notifications";
+  content: "🔔 Notificataions";
   display: block;
   padding: 12px 16px;
   font-size: 30px;
@@ -268,17 +283,13 @@ body {
 }
 
 /* สีพื้นหลังแต่ละประเภท */
-.noti-item.success { background: #7cda80; }   /* เขียว */
-.noti-item.error { background: #f44336; }     /* แดง */
-.noti-item.info { background: #4bdcd7; }      /* น้ำเงิน */
-.noti-item.warning { background: #ff9800; }   /* ส้ม/เหลือง */
-.noti-item.start { background: #9c27b0; }     /* ม่วง */
+.noti-item.success { background: #7bf47f; }   /* เขียว */
+.noti-item.error { background: #f9564a; }     /* แดง */
+.noti-item.info { background: #21f3e9; }      /* น้ำเงิน */
+.noti-item.warning { background: #eeb45b; }   /* ส้ม/เหลือง */
+.noti-item.start { background: #d85cee; }     /* ม่วง */
 
-.noti-item.success .icon { background: #2e7d32; }
-.noti-item.error .icon { background: #d32f2f; }
-.noti-item.info .icon { background: #0288d1; }
-.noti-item.warning .icon { background: #fbc02d; color: #333; }
-.noti-item.start .icon { background: #7b1fa2; }
+
 /* ข้อความ */
 .noti-item .text {
   flex: 1;
@@ -390,7 +401,7 @@ body {
   margin-left: auto;
   list-style: none;
   display: flex;
-  gap: 60px;
+  gap: 40px;
   align-items: center; 
 }
 .nav-links a {
@@ -424,7 +435,7 @@ body {
 .nav-right {
   display: flex;
   align-items: center;
-  gap: 60px;
+  gap: 20px;
 }
 
 /* ======== AUTH (Login/Sign in) ========= */
@@ -530,7 +541,7 @@ body {
 /* ปุ่มหลักสีเหลือง */
 .btn-primary-xl {
   width: 100%;
-  background: #6c23b5;
+  background: #5e00bd;
   border: none;
   color: #171717;
   font-weight: 800;
@@ -644,14 +655,11 @@ body {
   min-height: 100vh;
 }
 .hero h1 {
-    font-size: 36px;
-    margin-bottom: 15px;
-    color: #fff;
+  font-size: clamp(24px, 6vw, 36px);
+  margin-top: 5px;
 }
 .hero p {
-    font-size: 20px;
-    margin-bottom: 18px;
-    opacity: 0.9;
+  font-size: clamp(14px, 3vw, 20px);
 }
 .start-btn {
     background: #ffd700;
@@ -688,7 +696,7 @@ body {
   justify-content: center;     
   flex-wrap: wrap;             
   margin: 40px 0;
-  margin-top:250px;   /* ✅ เพิ่มระยะห่างด้านบน */
+  margin-top: clamp(40px, 8vw, 120px); 
 }
 /* การ์ดแต่ละใบ */
 .activity-card {
@@ -718,10 +726,10 @@ body {
   font-size: 20px;
 }
 .activity-card .card-icon { display: none; }
-.activity-card .card-image{
-  width: 1200px;      /* ปรับได้ */
+.activity-card .card-image {
+  width: 100%;    /* เดิม 1500px */
+  max-width: 300px;
   height: auto;
-  display: block;
 }
 /* ปุ่ม */
 .card-btn {
@@ -755,7 +763,7 @@ body {
 .activities-lasted.content-section {
     background-image: url('../img/index3.png');
     background-size: cover;
-    width: 100vw;  
+    width: 100%;  
     background-repeat: no-repeat; 
     background-position: top center; 
     min-height: 1024px; 
@@ -891,7 +899,7 @@ body {
 .tips-card:first-child { margin-bottom: 20px; }
 
 .tips-icon {
-    background: rgba(74, 26, 140, 0.9);
+ 
     width: 100px;
     height: 100px;
     background: #fff;
@@ -965,8 +973,8 @@ body {
   min-height: 100vh;
 
   /* ดันขอบซ้าย/ขวาให้กว้างเท่าหน้าจอ แม้อยู่ใน layout ที่มีความกว้างจำกัด */
-  margin-left:  calc(50% - 50vw);
-  margin-right: calc(50% - 50vw);
+  margin-left:  calc(50% - 50dvw);
+  margin-right: calc(50% - 50dvw);
 
   /* เว้นพื้นที่บน/ล่างตามต้องการ */
   padding: 40px 0 40px;   /* ไม่ต้องประกาศ padding ซ้ำ */
@@ -1330,16 +1338,46 @@ body {
 @media (max-width: 768px) {
   .content-section .container, .tips-section .container { padding: 0 16px; }
   .nav-links {
-    display: none; position: absolute; top: 60px; right: 0;
-    background: #2d2d2d; flex-direction: column; gap: 16px;
-    width: 220px; padding: 20px; border-radius: 0 0 12px 12px;
+    display: none; /* ซ่อนเมนูหลัก */
+    position: absolute;
+    top: 60px; right: 0;
+    flex-direction: column;
+    background: #db1d1d;
+    width: 220px;
+    padding: 16px;
+    border-radius: 0 0 10px 10px;
   }
-  .nav-links.show { display: flex; }
-  .menu-toggle { display: block; }
+  .nav-links.show {
+    display: flex;
+  }
+  #userSection {
+    border-top: 1px solid rgba(255,255,255,0.2);
+    margin-top: 10px;
+    padding-top: 10px;
+  }
+
+  /* Notify อยู่นอกเสมอ */
+  .nav-right {
+    margin-left: auto;
+    margin-right: 10px;
+  }
+
+  .menu-toggle {
+    display: block;
+    font-size: 24px;
+    cursor: pointer;
+    margin-left: 10px;
+  }
   .hero-title { font-size: 22px; }
   .form-grid { grid-template-columns: 1fr; }
   .search-bar { flex-direction: column; border-radius: 20px; }
-  .tips-card { margin: 10px 0; width: 100%; }
+  .tips-card {
+    grid-template-columns: 1fr;
+    padding: 16px;
+  }
+  .tips-card .left {
+    aspect-ratio: 16/9;
+  }
 }
 
 @media (max-width: 425px),
@@ -1493,4 +1531,131 @@ body {
     min-width: 0;
     aspect-ratio: 16 / 9;            /* กันสูงเป็นแท่ง */
   }
+}
+/* ==== Lasted Activities Carousel ==== */
+.activities-lasted .carousel {
+  position: relative;
+  max-width: 1000px;
+  margin: 0 auto 24px;
+}
+
+.activities-lasted .carousel-viewport {
+  overflow: hidden;
+  padding: 8px 0;
+}
+
+.activities-lasted .carousel-track {
+  --gap: 16px;
+  display: flex;
+  gap: var(--gap);
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+}
+.activities-lasted .carousel-track::-webkit-scrollbar { display: none; }
+
+/* ให้การ์ดมีความกว้างคงที่เพื่อเลื่อนทีละใบ/หลายใบได้สวย */
+.activities-lasted .card {
+  flex: 0 0 calc((100% - (2 * var(--gap))) / 3);
+  min-width: calc((100% - (2 * var(--gap))) / 3);
+}
+
+/* ปุ่มเลื่อนซ้าย/ขวา */
+.activities-lasted .carousel-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  border: none;
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  background: rgba(0,0,0,.6);
+  color: #fff;
+  font-size: 24px;
+  cursor: pointer;
+  z-index: 2;
+}
+.activities-lasted .carousel-btn.prev { left: -8px; }
+.activities-lasted .carousel-btn.next { right: -8px; }
+.activities-lasted .carousel-btn:disabled { opacity: .35; cursor: default; }
+
+/* จอเล็กให้การ์ดแคบลงนิดนึง */
+@media (max-width: 480px) {
+  .activities-lasted .card {
+    min-width: 260px;
+    flex-basis: 260px;
+  }
+}
+
+
+
+/* เฉพาะส่วน Tips & Tricks */
+.tips-section .left i {             /* หลอดไฟฝั่งซ้าย */
+  color: #FFD400 !important;        /* เหลือง */
+}
+
+.tips-section .right li:nth-child(1) i { color: #ffffff !important; } /* แปรง: ชมพู */
+.tips-section .right li:nth-child(2) i { color: #ffffff !important; } /* กล้อง: ฟ้า */
+.tips-section .right li:nth-child(3) i { color: #ffffff !important; } /* ดินสอ: เหลือง */
+
+/* ถ้าเคยมี filter ย้อมสีไอคอนให้ม่วงอยู่ ให้ล้างออก (ไม่กระทบขนาด) */
+.tips-section .right li i,
+.tips-section .left i { filter: none !important; }
+
+/* ===== Capsule login chip (compact) ===== */
+.login-chip{
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+  isolation: isolate;
+}
+
+/* avatar โผล่ซ้ายเล็ก ๆ */
+.login-chip .avatar{
+  position: absolute;
+  left: -8px;
+  width: 40px;                      /* ขนาดเล็กตามภาพ */
+  height: 40px;
+  border-radius: 50%;
+  border: 3px solid #8aa0ff;        /* วงแหวนฟ้า */
+  background: #5a62ff center/cover no-repeat;
+  display: grid;
+  place-items: center;
+  color: #fff;
+  overflow: hidden;
+}
+.login-chip .avatar.is-icon i{
+  font-size: 16px;
+  opacity: .95;
+}
+
+/* เม็ดแคปซูลบาง ๆ */
+.login-chip .pill{
+  --pad-left: 48px;                 /* เว้นที่ให้อวาตาร์ 36px + ขอบ + overlap */
+  padding: 8px 14px 8px var(--pad-left);
+  background: linear-gradient(90deg,#5866ef 0%,#ff6fc8 100%);
+  color:#fff;
+  font-weight: 600;
+  font-size: 15px;
+  letter-spacing:.1px;
+  white-space: nowrap;
+  line-height: 1;            
+
+}
+
+/* โฮเวอร์ */
+.login-chip:hover .pill{
+  transform: translateY(-1px);
+  box-shadow: 0 10px 22px rgba(88,102,239,.28);
+  filter: saturate(1.05);
+}
+
+/* ให้วางในมุมขวาเนียน ๆ */
+.nav-right .login-chip{ margin-left: 8px; }
+
+/* เวอร์ชันเล็กมาก */
+@media (max-width: 425px){
+  .login-chip .avatar{ width: 32px; height: 32px; border-width: 3px; left:-6px; }
+  .login-chip .pill{ --pad-left: 44px; padding: 7px 12px 7px var(--pad-left); font-size: 14px; }
 }

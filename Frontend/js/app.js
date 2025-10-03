@@ -9,23 +9,31 @@ document.addEventListener("DOMContentLoaded", async () => {
     // ✅ Check token → ดึงข้อมูลจาก /me
     // ถ้าไม่มี token → แสดงปุ่ม Login
     if (!token) {
-        userSection.innerHTML = `<a href="#" class="btn-login" id="openLogin">Login</a>`;
+        userSection.innerHTML = `
+  <a class="login-chip" href="#" id="openLogin">
+    <span class="avatar is-icon" aria-hidden="true"><i class="fa-solid fa-user"></i></span>
+    <span class="pill">Log in / Sign in</span>
+  </a>
+`;
     } else {
         try {
             const res = await fetch(`${BASE_URL}/api/auth/me`, {
+                
                 headers: { "Authorization": `Bearer ${token}` }
             });
             if (!res.ok) throw new Error("Token invalid");
             const user = await res.json();
-
+            if (user && (user.username || user.name)) {
+                localStorage.setItem("username", user.username || user.name);
+            }
             const profileImgUrl = user.profileImg ? BASE_URL + user.profileImg : "./img/profile.png";
 
             userSection.innerHTML = `
   <div class="user-menu" id="userMenu">
-    <div class="user-info" id="userToggle">
-      <img src="${profileImgUrl}" alt="Profile">
-      <span>${user.nickname}</span>
-    </div>
+    <a class="login-chip" href="#" id="userToggle">
+      <span class="avatar" style="background-image:url('${profileImgUrl}')"></span>
+      <span class="pill" id="navDisplayName">${user.nickname}</span>
+    </a>
     <div class="user-dropdown" id="userDropdown">
       <a href="./myprofile.html">👤 My Profile</a>
       <a href="#" id="logoutBtn">🚪 Logout</a>
@@ -51,12 +59,14 @@ document.addEventListener("DOMContentLoaded", async () => {
             // logout
             document.getElementById("logoutBtn").addEventListener("click", () => {
                 localStorage.removeItem("token");
+                localStorage.removeItem("username");
                 location.href = "./index.html";
                 location.reload();
             });
         } catch (err) {
             console.error("Auth error:", err);
             localStorage.removeItem("token");
+            localStorage.removeItem("username");
             userSection.innerHTML = `<a href="#" class="btn-login" id="openLogin">Login</a>`;
         }
     }
@@ -322,6 +332,17 @@ document.addEventListener("click", (e) => {
         notifyDropdown.classList.remove("active");
     }
 });
+
+// --------------------Hamburger Toggle----------------------- //
+document.addEventListener("DOMContentLoaded", () => {
+    const menuToggle = document.getElementById("menuToggle");
+    const navLinks = document.querySelector(".nav-links");
+
+    menuToggle.addEventListener("click", () => {
+        navLinks.classList.toggle("show");
+    });
+});
+
 
 /* ============================
    Init

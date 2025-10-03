@@ -2,7 +2,6 @@
 // Icon map สำหรับแต่ละประเภท
 // -----------------------------
 const typeIcons = {
-
   Photo: "fa-solid fa-camera",
   Painting: "fa-solid fa-paintbrush",
   Music: "fa-solid fa-music",
@@ -18,16 +17,14 @@ async function loadPosts() {
     const res = await fetch(`${BASE_URL}/api/community`);
     const posts = await res.json();
 
-    // console.log(posts)
-
     // filter
-    let filtered = posts.filter((p) => {
+    const filtered = posts.filter((p) => {
       const matchSearch =
         !search ||
-        p.title.toLowerCase().includes(search) ||
+        (p.title && p.title.toLowerCase().includes(search)) ||
         (p.message && p.message.toLowerCase().includes(search)) ||
         (p.discription && p.discription.toLowerCase().includes(search)) ||
-        p.username.toLowerCase().includes(search);
+        (p.username && p.username.toLowerCase().includes(search));
 
       const matchFilter = !filter || p.type === filter;
       return matchSearch && matchFilter;
@@ -40,22 +37,18 @@ async function loadPosts() {
       return;
     }
 
-    postList.innerHTML = filtered
-      .map(
-        (p) => `
-        <div class="post-card simple" data-id="${p.id}">
-          <i class="${typeIcons[p.type] || "fa-regular fa-file"} post-icon"></i>
-          <span class="post-title">${p.title}</span>
-        </div>
-      `
-      )
-      .join("");
+    postList.innerHTML = filtered.map((p) => `
+      <div class="post-card simple" data-id="${p.id}">
+        <i class="${typeIcons[p.type] || "fa-regular fa-file"} post-icon"></i>
+        <span class="post-title">${p.title || "-"}</span>
+      </div>
+    `).join("");
 
     // ✅ event เปิด modal
     document.querySelectorAll(".post-card").forEach((card) => {
       card.addEventListener("click", () => {
         const id = card.getAttribute("data-id");
-        const post = filtered.find((p) => p.id == id);
+        const post = filtered.find((p) => String(p.id) === String(id));
         if (post) openPostModal(post);
       });
     });
@@ -64,43 +57,39 @@ async function loadPosts() {
   }
 }
 
-// เปิด modal แสดงรายละเอียด (ดีไซน์การ์ดแบบภาพตัวอย่าง)
+// เปิด modal แสดงรายละเอียด
 function openPostModal(post) {
   const modal = document.getElementById("viewPostModal");
   const content = document.getElementById("viewPostContent");
 
-  console.log(post)
-  console.log(post.user.nickname)
+  // รองรับ avatar ทั้ง post.avatar และ post.user.profileImg (หรือ ProfileImg)
+  const rawAvatar = post.avatar || post.profileImg || (post.user && (post.user.profileImg || post.user.ProfileImg));
+  const avatarSrc = rawAvatar
+    ? (String(rawAvatar).startsWith("http") ? rawAvatar : (BASE_URL + rawAvatar))
+    : "https://i.pravatar.cc/80";
 
-  // แผนที่ "type" ไปเป็นป้ายบนขวา
-  const typeLabelMap = {
-    Photo: "Photography",
-    Painting: "Visual Arts",
-    Music: "Music",
-    Writing: "Writing"
-  };
+  // ป้ายประเภท
+  const typeLabelMap = { Photo: "Photography", Painting: "Visual Arts", Music: "Music", Writing: "Writing" };
   const typeLabel = typeLabelMap[post.type] || post.type || "Community";
 
-  // ที่มารูป: ใช้รูปจาก backend ถ้ามี ไม่งั้นไม่แสดง
+  // รูปผลงาน (รองรับ URL เต็มหรือ path สัมพัทธ์)
   const imgHTML = post.image
-    ? `<div class="hero"><img src="${BASE_URL + post.image}" alt="${post.title}"></div>`
+    ? `<div class="hero"><img src="${String(post.image).startsWith('http') ? post.image : (BASE_URL + post.image)}" alt="${post.title || ''}"></div>`
     : "";
 
-  // ดาวเรต: ถ้ามี post.rating (1–5) ให้โชว์ดาว ไม่งั้นซ่อนไว้
+  // ดาวเรต (ถ้ามี)
   const rating = Number(post.rating || 0);
-  const stars = rating
-    ? `<span class="rating">${"★".repeat(rating)}${"☆".repeat(5 - rating)}</span>`
-    : "";
+  const stars = rating ? `<span class="rating">${"★".repeat(rating)}${"☆".repeat(5 - rating)}</span>` : "";
 
   content.innerHTML = `
-         <div class="detail-type">
-    <div class="type-badge ${post.type || ""}">
-      <i class="${(typeIcons[post.type] || "fa-regular fa-file")}"></i> ${typeLabel}
+    <div class="detail-type">
+      <div class="type-badge ${post.type || ""}">
+        <i class="${(typeIcons[post.type] || "fa-regular fa-file")}"></i> ${typeLabel}
+      </div>
     </div>
-  </div>
 
-        <div class="detail-card">
-      <div class="detail-header">   
+    <div class="detail-card">
+      <div class="detail-header">
         <div class="title">${post.title || "-"}</div>
       </div>
 
@@ -113,39 +102,128 @@ function openPostModal(post) {
 
         <div class="detail-footer">
           <div class="author">
-            <img class="avatar" src="${post.user.profileImg ? (BASE_URL + post.user.profileImg) : '../img/profile.jpg'}" alt="${post.username}">
+            <img class="avatar" src="${avatarSrc}" alt="${post.username || ""}">
             <div>
-              <div class="name">ผู้เขียน : ${post.user.nickname}</div>
+              <div class="name">ผู้เขียน : ${post.username || "-"}</div>
               ${stars}
             </div>
           </div>
 
           ${
-    // แสดงปุ่มแก้ไขเฉพาะกรณีเจ้าของโพสต์ (ถ้ามี token/username เท่ากัน)
-    (localStorage.getItem("username") && localStorage.getItem("username") === post.username)
-      ? `<button class="edit-btn" id="editPostBtn">Edit</button>`
-      : ``
-    }
+            (localStorage.getItem("username") && localStorage.getItem("username") === post.username)
+              ? `<div class="owner-actions">
+                   <button class="edit-btn" id="editPostBtn">Edit</button>
+                   <button class="delete-btn" id="deletePostBtn">Delete</button>
+                 </div>`
+              : ``
+          }
         </div>
-        <div class="view-post-meta">เผยแพร่เมื่อ ${new Date(post.createdAt).toLocaleString()}</div>
+        <div class="view-post-meta">เผยแพร่เมื่อ ${post.createdAt ? new Date(post.createdAt).toLocaleString() : "-"}</div>
       </div>
     </div>
   `;
 
-  // event ปุ่มแก้ไข (ถ้ามี)
+  // --- Edit (เปิด Modal + พรีฟิล) ---
   const editBtn = document.getElementById("editPostBtn");
   if (editBtn) {
     editBtn.addEventListener("click", () => {
-      // ไปหน้า edit ที่คุณมีอยู่ หรือจะเปิด modal แก้ไขก็ได้
-      // ตัวอย่าง: location.href = `/community-edit.html?id=${post.id}`;
-      alert("ตัวอย่าง: ไปหน้าแก้ไขโพสต์ id=" + post.id);
+      const m = document.getElementById("editPostModal");
+      const f = document.getElementById("editPostForm");
+      if (!m || !f) return;
+
+      f.id.value = post.id;
+      f.title.value = post.title || "";
+      f.message.value = post.message || "";
+      f.discription.value = post.discription || "";
+      if (f.type) f.type.value = post.type || "Photo";
+
+      m.style.display = "flex";
+    });
+  }
+
+  // --- Delete (/api/community/{id}) ---
+  const deleteBtn = document.getElementById("deletePostBtn");
+  if (deleteBtn) {
+    deleteBtn.addEventListener("click", async () => {
+      if (!confirm("ต้องการลบโพสต์นี้หรือไม่?")) return;
+
+      const token = localStorage.getItem("token");
+      if (!token) { alert("กรุณาเข้าสู่ระบบ"); return; }
+
+      try {
+        const res = await fetch(`${BASE_URL}/api/community/${post.id}`, {
+          method: "DELETE",
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        const data = await res.json().catch(() => ({}));
+
+        if (res.ok) {
+          alert("ลบโพสต์สำเร็จ");
+          document.getElementById("viewPostModal").style.display = "none";
+          loadPosts();
+        } else {
+          alert("ลบไม่สำเร็จ: " + (data.message || res.status));
+        }
+      } catch (err) {
+        console.error(err);
+        alert("เกิดข้อผิดพลาดระหว่างลบ");
+      }
     });
   }
 
   modal.style.display = "flex";
 }
 
-// ปิด modal
+// ===== Edit Modal Controls & Submit =====
+document.getElementById("closeEditPostModal")?.addEventListener("click", () => {
+  document.getElementById("editPostModal").style.display = "none";
+});
+document.getElementById("cancelEditBtn")?.addEventListener("click", () => {
+  document.getElementById("editPostModal").style.display = "none";
+});
+
+// PUT /api/community/{id}
+document.getElementById("editPostForm")?.addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const token = localStorage.getItem("token");
+  if (!token) { alert("กรุณาเข้าสู่ระบบ"); return; }
+
+  const formEl = e.target;
+  const id = formEl.id.value;
+
+  const formData = new FormData();
+  formData.append("title", formEl.title.value);
+  formData.append("message", formEl.message.value);
+  formData.append("discription", formEl.discription.value);
+  formData.append("type", formEl.type.value);
+  if (formEl.image.files[0]) {
+    formData.append("image", formEl.image.files[0]);
+  }
+
+  try {
+    const res = await fetch(`${BASE_URL}/api/community/${id}`, {
+      method: "PUT",
+      headers: { Authorization: `Bearer ${token}` },
+      body: formData
+    });
+    const data = await res.json().catch(() => ({}));
+
+    if (res.ok) {
+      alert("บันทึกการแก้ไขแล้ว");
+      document.getElementById("editPostModal").style.display = "none";
+      document.getElementById("viewPostModal").style.display = "none";
+      loadPosts();
+    } else {
+      alert("แก้ไขไม่สำเร็จ: " + (data.message || res.status));
+    }
+  } catch (err) {
+    console.error(err);
+    alert("เกิดข้อผิดพลาดระหว่างแก้ไข");
+  }
+});
+
+// ปิด modal อ่านโพสต์
 document.getElementById("closeViewPost").addEventListener("click", () => {
   document.getElementById("viewPostModal").style.display = "none";
 });
@@ -168,12 +246,12 @@ document.getElementById("clearBtn").addEventListener("click", () => {
   loadPosts();
 });
 
-// new post modal
+// new post modal (อนุญาตเฉพาะผู้ล็อกอิน)
 document.getElementById("newPostBtn").addEventListener("click", () => {
   const token = localStorage.getItem("token");
   if (!token) {
     alert("กรุณาเข้าสู่ระบบก่อนสร้างโพสต์");
-    return; // ❌ หยุด ไม่เปิด modal
+    return;
   }
   document.getElementById("postModal").style.display = "flex";
 });
@@ -199,15 +277,13 @@ document.getElementById("postForm").addEventListener("submit", async (e) => {
       headers: { Authorization: `Bearer ${token}` },
       body: formData,
     });
-
     const data = await res.json();
 
     if (res.ok) {
       alert("✅ โพสต์สำเร็จ!");
       document.getElementById("postModal").style.display = "none";
       e.target.reset();
-      loadPosts(); // รีโหลดโพสต์ใหม่
-
+      loadPosts();
       localStorage.setItem("refreshProfile", "1");
     } else {
       alert("❌ " + (data.message || "เกิดข้อผิดพลาด"));
@@ -232,20 +308,16 @@ document.querySelectorAll('.search-bar .category-item').forEach(item => {
     const btn = dropdown.querySelector('.category-btn');
 
     hiddenInput.value = value;
-
-    // ✅ ใช้ innerHTML เพื่อคง icon + text
     btn.innerHTML = this.innerHTML;
     btn.classList.add("selected");
 
-    // ✅ ใช้สีจาก map
     const typeColors = {
-      "": "#6c757d",        // เทา สำหรับ "All Categories"
-      Photo: "#9d26ed ",
+      "": "#6c757d",
+      Photo: "#9d26ed",
       Painting: "#5174ff",
       Music: "#f158be",
       Writing: "#dd23dd"
     };
-    // เก็บค่าสีที่เลือกไว้ใน CSS variable
     btn.style.setProperty("--selected-bg", typeColors[value] || "#7209b7");
     btn.classList.add("selected");
     btn.style.color = "#fff";
@@ -266,15 +338,12 @@ document.querySelectorAll('#postForm .category-item').forEach(item => {
     const btn = dropdown.querySelector('.category-btn');
 
     hiddenInput.value = value;
-
-    // คงไอคอน + ชื่อไว้เหมือนเดิม
     btn.innerHTML = this.innerHTML;
     btn.classList.add('selected');
 
-    // ใช้สีเดียวกับ filter ด้านบน
     const typeColors = {
-      "": "#6c757d",        // เทา สำหรับ "All Categories"
-      Photo: "#9d26ed ",
+      "": "#6c757d",
+      Photo: "#9d26ed",
       Painting: "#5174ff",
       Music: "#f158be",
       Writing: "#dd23dd"
@@ -285,9 +354,8 @@ document.querySelectorAll('#postForm .category-item').forEach(item => {
     dropdown.classList.remove('show');
   });
 });
-// -----------------------------
+
 // toggle เปิด/ปิด dropdown
-// -----------------------------
 document.querySelectorAll('.category-btn').forEach(btn => {
   btn.addEventListener('click', function (e) {
     e.stopPropagation();
@@ -296,9 +364,7 @@ document.querySelectorAll('.category-btn').forEach(btn => {
   });
 });
 
-// -----------------------------
 // คลิกนอก dropdown ให้ปิด
-// -----------------------------
 document.addEventListener('click', () => {
   document.querySelectorAll('.category-dropdown').forEach(d => d.classList.remove('show'));
 });
