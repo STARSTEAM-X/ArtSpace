@@ -8,6 +8,13 @@ const typeIcons = {
   Writing: "fa-solid fa-pen-nib"
 };
 
+const typeColors = {
+  Photo: "#9d26ed",     // Photography
+  Painting: "#5174ff",  // Visual Art
+  Music: "#f158be",
+  Writing: "#dd23dd"
+};
+
 // โหลดโพสต์ + รองรับ search/filter
 async function loadPosts() {
   const search = document.getElementById("searchInput").value.trim().toLowerCase();
@@ -38,13 +45,14 @@ async function loadPosts() {
     }
 
     postList.innerHTML = filtered.map((p) => `
-      <div class="post-card simple" data-id="${p.id}">
-        <i class="${typeIcons[p.type] || "fa-regular fa-file"} post-icon"></i>
-        <span class="post-title">${p.title || "-"}</span>
-      </div>
-    `).join("");
+  <div class="post-card simple" data-id="${p.id}">
+    <i class="${typeIcons[p.type] || "fa-regular fa-file"} post-icon"
+       style="color:${typeColors[p.type] || "#6c757d"}"></i>
+    <span class="post-title">${p.title || "-"}</span>
+  </div>
+`).join("");
 
-    // ✅ event เปิด modal
+    // เปิด modal
     document.querySelectorAll(".post-card").forEach((card) => {
       card.addEventListener("click", () => {
         const id = card.getAttribute("data-id");
@@ -104,29 +112,34 @@ function openPostModal(post) {
         </div>
 
         <div class="detail-footer">
-          <div class="author">
+          <!-- ใช้ <a> ปกติ ให้คลิกขวา/เปิดแท็บใหม่ได้ -->
+          <a class="author" id="postAuthorLink"
+             href="./viewprofile.html?user=${encodeURIComponent(post.username)}" style="text-decoration:none;">
             <img class="avatar" src="${avatarSrc}" alt="${post.username || ""}">
             <div>
-              <div class="name">ผู้เขียน : ${post.username || "-"}</div>
+              <div class="name">
+                ผู้เขียน : <span class="author-name">${post.username || "-"}</span>
+              </div>
               ${stars}
             </div>
-          </div>
+          </a>
 
           ${
             (localStorage.getItem("username") && localStorage.getItem("username") === post.username)
               ? `<div class="owner-actions">
-                   <button class="edit-btn" id="editPostBtn">Edit</button>
-                   <button class="delete-btn" id="deletePostBtn">Delete</button>
+                  <button class="edit-btn" id="editPostBtn">Edit</button>
+                  <button class="delete-btn" id="deletePostBtn">Delete</button>
                  </div>`
               : ``
           }
         </div>
+
         <div class="view-post-meta">เผยแพร่เมื่อ ${post.createdAt ? new Date(post.createdAt).toLocaleString() : "-"}</div>
       </div>
     </div>
   `;
 
-  // --- Edit (เปิด Modal + พรีฟิล) ---
+  // --- Edit (Modal + พรีฟิล) ---
   const editBtn = document.getElementById("editPostBtn");
   if (editBtn) {
     editBtn.addEventListener("click", () => {
@@ -226,16 +239,6 @@ document.getElementById("editPostForm")?.addEventListener("submit", async (e) =>
   }
 });
 
-// ปิด modal อ่านโพสต์
-document.getElementById("closeViewPost").addEventListener("click", () => {
-  document.getElementById("viewPostModal").style.display = "none";
-});
-window.addEventListener("click", (e) => {
-  if (e.target.id === "viewPostModal") {
-    document.getElementById("viewPostModal").style.display = "none";
-  }
-});
-
 // ---------------- Events ---------------- //
 
 // search input / filter
@@ -262,43 +265,16 @@ document.getElementById("closePostModal").addEventListener("click", () => {
   document.getElementById("postModal").style.display = "none";
 });
 
-// ส่งโพสต์ใหม่
-document.getElementById("postForm").addEventListener("submit", async (e) => {
-  e.preventDefault();
-
-  const token = localStorage.getItem("token");
-  if (!token) {
-    alert("กรุณาเข้าสู่ระบบก่อนโพสต์");
-    return;
-  }
-
-  const formData = new FormData(e.target);
-
-  try {
-    const res = await fetch(`${BASE_URL}/api/community/create`, {
-      method: "POST",
-      headers: { Authorization: `Bearer ${token}` },
-      body: formData,
-    });
-    const data = await res.json();
-
-    if (res.ok) {
-      alert("✅ โพสต์สำเร็จ!");
-      document.getElementById("postModal").style.display = "none";
-      e.target.reset();
-      loadPosts();
-      localStorage.setItem("refreshProfile", "1");
-    } else {
-      alert("❌ " + (data.message || "เกิดข้อผิดพลาด"));
-    }
-  } catch (err) {
-    console.error("Error creating post:", err);
-    alert("เกิดข้อผิดพลาด");
+// ✅ โหลดครั้งแรก + รองรับเปิด modal ด้วยพารามิเตอร์ ?id=...
+document.addEventListener("DOMContentLoaded", async () => {
+  const posts = await loadPosts();
+  const params = new URLSearchParams(window.location.search);
+  const postId = params.get("id");
+  if (postId && Array.isArray(posts)) {
+    const post = posts.find(p => String(p.id) === String(postId));
+    if (post) openPostModal(post);
   }
 });
-
-// โหลดครั้งแรก
-document.addEventListener("DOMContentLoaded", loadPosts);
 
 // -----------------------------
 // Category Filter (หน้า Community)
@@ -367,31 +343,7 @@ document.querySelectorAll('.category-btn').forEach(btn => {
   });
 });
 
-// คลิกนอก dropdown ให้ปิด
+// คลิคนอก dropdown ให้ปิด
 document.addEventListener('click', () => {
   document.querySelectorAll('.category-dropdown').forEach(d => d.classList.remove('show'));
-});
-
-
-// ✅ เช็ค URL parameter และเปิด modal
-document.addEventListener("DOMContentLoaded", async () => {
-  const params = new URLSearchParams(window.location.search);
-  const postId = params.get("id");
-
-  if (postId) {
-    // โหลด posts ทั้งหมดก่อน
-    const posts = await loadPosts();
-    
-    // หา post ที่ตรงกับ id
-    const post = posts.find(p => p.id == postId);
-    
-    if (post) {
-      openPostModal(post);
-    } else {
-      console.warn("ไม่พบโพสต์ id:", postId);
-    }
-  } else {
-    // ถ้าไม่มี id ใน URL ก็โหลดปกติ
-    loadPosts();
-  }
 });

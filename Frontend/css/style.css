@@ -279,6 +279,7 @@ body {
   align-items: center;
   justify-content: center;
   font-size: 20px;
+  background:#000;
   color: #fff;
 }
 
@@ -311,21 +312,7 @@ body {
   color: #000000;
 }
 
-/* สีพื้นหลังแยกตาม type */
 
-.noti-item.start .icon { background: #000000; }
-
-
-.noti-item.success .icon { background: #000000; }
-
-
-.noti-item.error .icon { background: #000000; }
-
-
-.noti-item.info .icon { background: #000000; }
-
-
-.noti-item.warning .icon { background: #000000; color: #333; }
 
 /* ========== State ว่าง ========== */
 .notify-dropdown .empty {
@@ -1659,3 +1646,4 @@ body {
   .login-chip .avatar{ width: 32px; height: 32px; border-width: 3px; left:-6px; }
   .login-chip .pill{ --pad-left: 44px; padding: 7px 12px 7px var(--pad-left); font-size: 14px; }
 }
+

@@ -422,4 +422,3 @@ document.addEventListener("DOMContentLoaded", () => {
         setupScrollArrows('createdWrapper', 'createdList');
     });
 });
-
