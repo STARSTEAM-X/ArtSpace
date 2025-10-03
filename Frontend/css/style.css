@@ -223,10 +223,10 @@ body {
 
 /* Header ของ dropdown */
 .notify-dropdown::before {
-  content: "การแจ้งเตือน";
+  content: "🔔 Notifications";
   display: block;
   padding: 12px 16px;
-  font-size: 15px;
+  font-size: 30px;
   font-weight: bold;
   color: #333;
   border-bottom: 1px solid #eee;
@@ -268,9 +268,9 @@ body {
 }
 
 /* สีพื้นหลังแต่ละประเภท */
-.noti-item.success { background: #4caf50; }   /* เขียว */
+.noti-item.success { background: #7cda80; }   /* เขียว */
 .noti-item.error { background: #f44336; }     /* แดง */
-.noti-item.info { background: #2196f3; }      /* น้ำเงิน */
+.noti-item.info { background: #4bdcd7; }      /* น้ำเงิน */
 .noti-item.warning { background: #ff9800; }   /* ส้ม/เหลือง */
 .noti-item.start { background: #9c27b0; }     /* ม่วง */
 
@@ -292,29 +292,29 @@ body {
 .noti-item .text p {
   margin: 4px 0;
   font-size: 13px;
-  color: #333;
+  color: #000000;
 }
 .noti-item small {
   display: block;
   font-size: 12px;
-  color: #888;
+  color: #000000;
 }
 
 /* สีพื้นหลังแยกตาม type */
 
-.noti-item.start .icon { background: #7b1fa2; }
+.noti-item.start .icon { background: #000000; }
 
 
-.noti-item.success .icon { background: #2e7d32; }
+.noti-item.success .icon { background: #000000; }
 
 
-.noti-item.error .icon { background: #d32f2f; }
+.noti-item.error .icon { background: #000000; }
 
 
-.noti-item.info .icon { background: #0288d1; }
+.noti-item.info .icon { background: #000000; }
 
 
-.noti-item.warning .icon { background: #fbc02d; color: #333; }
+.noti-item.warning .icon { background: #000000; color: #333; }
 
 /* ========== State ว่าง ========== */
 .notify-dropdown .empty {
@@ -717,17 +717,11 @@ body {
   font-weight: bold;
   font-size: 20px;
 }
-.activity-card .card-icon {
-  width: 80px;
-  height: 80px;
-  background: white;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 auto 30px;
-  font-size: 30px;
-  color: #4a1a8c;
+.activity-card .card-icon { display: none; }
+.activity-card .card-image{
+  width: 1200px;      /* ปรับได้ */
+  height: auto;
+  display: block;
 }
 /* ปุ่ม */
 .card-btn {

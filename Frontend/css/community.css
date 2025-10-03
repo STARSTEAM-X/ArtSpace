@@ -698,13 +698,16 @@ body::before {
 
 /* View Post Modal */
 .view-post-modal {
-  width: 750px;
+  width: 1200px;
   max-width: 95%;
   max-height: 90vh;
   overflow-y: auto;
   padding: 40px;
+  
 }
-
+.view-post-modal .close{ 
+  display:none; 
+}
 .view-post-modal::-webkit-scrollbar {
   width: 10px;
 }
@@ -802,20 +805,26 @@ body::before {
 }
 
 /* ====== Community Detail Card (Modal) ====== */
-.detail-card{
-  background:#fff;
-  border-radius:28px;
-  overflow:hidden;
-  box-shadow:0 15px 35px rgba(0,0,0,.15), 0 5px 15px rgba(114,9,183,.10), inset 0 1px 0 rgba(255,255,255,.9);
-  border:1px solid rgba(255,255,255,.6);
+.detail-type{
+  display:flex;
+  justify-content:flex-end;
+  padding: 0 4px 8px 4px; /* ระยะห่างเล็กน้อย */
 }
 
 /* หัวม่วง */
 .detail-header{
-  position:relative;
+  position: relative;
   background:#2d0a57;
   color:#fff;
-  padding:24px 24px 52px;
+  border-radius:30px;
+
+  /* ทำให้ตัวอักษรอยู่กึ่งกลางทั้ง 2 แกน */
+  display:flex;             /* ← เพิ่ม */
+  align-items:center;       /* ← เพิ่ม (กึ่งกลางแนวตั้ง) */
+  justify-content:center;   /* ← เพิ่ม (กึ่งกลางแนวนอน) */
+
+  padding: 24px;            /* ลด padding ล่างที่เคยเผื่อไว้ */
+  min-height: 80px;         /* หรือใช้ height ถ้าต้องตายตัว */
 }
 .detail-header .title{
   font-size:32px;
@@ -824,17 +833,10 @@ body::before {
   letter-spacing:.3px;
   margin:0;
 }
-.detail-header .type-badge{
-  position:absolute; top:14px; right:14px;
-  background:#fff; color:#2d0a57;
-  padding:8px 14px; border-radius:999px;
-  font-weight:800; font-size:14px;
-  display:inline-flex; align-items:center; gap:8px;
-}
 
 /* ตัวกล่องขาวก้อนเดียว */
 .detail-body{
-  background:#fff;            /* ✅ ไม่มีพื้นม่วงอ่อนแล้ว */
+  background: transparent;
   padding:26px;
 }
 
@@ -843,10 +845,12 @@ body::before {
   width:100%;
   display:grid; place-items:center;
   margin-top:-44px; margin-bottom:16px;
+  background: transparent;
 }
 .detail-body .hero img{
   width:420px; max-width:92vw; height:260px; object-fit:cover;
-  border-radius:18px; border:6px solid #fff; box-shadow:0 18px 38px rgba(0,0,0,.18);
+  border: 0;                 /* ตัดกรอบออก */
+  box-shadow: none;          /* ตัดเงาออก */
 }
 
 /* ข้อความธรรมดา — ไม่มีการ์ดย่อยครอบ */
@@ -854,7 +858,6 @@ body::before {
   padding:0;                  /* ✅ เอากรอบ/เงาออก */
   background:transparent;     /* ✅ */
   box-shadow:none;            /* ✅ */
-  border-radius:0;            /* ✅ */
   color:#333; line-height:1.9;
 }
 .detail-body .text p{ margin:0 0 10px; }
@@ -866,28 +869,78 @@ body::before {
 .detail-footer{
   display:flex; align-items:center; justify-content:space-between; gap:14px; margin-top:14px;
 }
-.detail-footer .author{
-  display:flex; align-items:center; gap:12px;
-  background:transparent;     /* ✅ เอาพื้นขาวออก */
-  padding:0; border-radius:0; box-shadow:none; /* ✅ */
+.detail-footer .author {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 16px;
+  border-radius: 999px;                     /* เม็ดยา */
+  background: #f3f3f3;                      /* เทานุ่ม */
+  box-shadow:
+    0 8px 20px rgba(0,0,0,.12),
+    0 2px 6px rgba(0,0,0,.06),
+    inset 0 1px 0 rgba(255,255,255,.8);     /* ไลท์ใน */
 }
+/* รูปโปรไฟล์กลม + กรอบขาว + เงาบาง */
 .detail-footer .author .avatar{
-  width:42px; height:42px; border-radius:50%; object-fit:cover;
-  border:0; box-shadow:none;                     /* ✅ */
+  width: 30px; height: 30px; object-fit: cover; border-radius: 50%;
+  border: 3px solid #fff;
+  box-shadow: 0 3px 10px rgba(0,0,0,.15);
 }
-.detail-footer .author .name{ font-weight:800; font-size:14px; }
-.detail-footer .author .rating{ display:inline-flex; gap:2px; font-size:14px; color:#ffb400; }
+/* ชื่อ + ดาว อยู่เป็นคอลัมน์เหมือนเดิม */
+.detail-footer .author > div{
+  display: flex; flex-direction: column; line-height: 1.2;
+}
+/* ชื่อ + ดาว อยู่เป็นคอลัมน์เหมือนเดิม */
+.detail-footer .author > div{
+  display: flex; flex-direction: column; line-height: 1.2;
+}
+/* ดาวเรต */
+.detail-footer .author .rating{
+  display: inline-flex; gap: 2px; font-size: 14px; color: #ffb400;
+  margin-top: 3px;
+}
+/* เล็กลงบนจอแคบ */
+@media (max-width: 480px){
+  .detail-footer .author { padding: 8px 12px; }
+  .detail-footer .author .avatar{ width: 40px; height: 40px; }
+  .detail-footer .author .name{ max-width: 160px; font-size: 13px; }
+  .detail-footer .author .rating{ font-size: 13px; }
+}
 
 .detail-footer .edit-btn{
-  background:#eee3ff; color:#2d0a57; border:0; padding:10px 18px; border-radius:12px; font-weight:800; cursor:pointer;
+  background:#eee3ff; color:#2d0a57; border:0; padding:10px 18px;font-weight:800; cursor:pointer;
 }
 
+/* สไตล์พื้นฐานของป้าย */
+.type-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border-radius: 999px;      /* เม็ดยา */
+  font-weight: 800;
+  font-size: 14px;
+  line-height: 1;
+  white-space: nowrap;
+  color: #fff;               /* ให้ตัวอักษรขาว */
+  margin-bottom: 10px;
+  
+}
+.type-badge i { color: currentColor; font-size: 16px; }
 
-/* ป้ายสีตามหมวด */
-.type-badge.Photo { color:#9d26ed; }
-.type-badge.Painting { color:#5174ff; }
-.type-badge.Music { color:#f158be; }
-.type-badge.Writing { color:#dd23dd; }
+/* สีพื้นหลังตามประเภท (ใช้ชื่อคลาสเดียวกับ post.type) */
+
+.type-badge.Photo      { background: #9d26ed; }   /* ม่วงสด */
+.type-badge.Painting   { background: #5174ff; }   /* น้ำเงิน */
+.type-badge.Music      { background: #f158be; }   /* ชมพู */
+.type-badge.Writing    { background: #dd23dd; }   /* ม่วงชมพู */
+
+/* เผื่อประเภทที่ไม่รู้จัก ให้มีสีกลางๆ */
+.type-badge:not(.VisualArts):not(.Photo):not(.Painting):not(.Music):not(.Writing) {
+  background: #6b7280; /* เทา */
+  color: #fff;
+}
 
 /* (Bonus) แก้บั๊กเดิมของ .post-type สีไม่ขึ้น */
 .post-type.Photo    { background:#9d26ed; }
@@ -895,3 +948,372 @@ body::before {
 .post-type.Music    { background:#f158be; }
 .post-type.Writing  { background:#dd23dd;}
 
+/* ===== Responsive refinements ===== */
+
+/* แท็บเล็ตแนวนอนลงไป */
+@media (max-width: 1024px) {
+  .container { max-width: 96%; margin: 40px auto; }
+
+  .detail-header {
+    padding: 20px;
+    min-height: 70px;
+  }
+  .detail-header .title { font-size: 28px; }
+
+  .view-post-modal { width: 900px; padding: 32px; }
+}
+
+/* แท็บเล็ต/มือถือ (≤ 768px) – ปรับให้ทุกอย่างขึ้นบรรทัดเดียวและไม่ล้น */
+@media (max-width: 768px) {
+  /* search bar เป็นคอลัมน์ + ยกเลิก min-width ทั้งหมด */
+  .search-bar { flex-direction: column; align-items: stretch; gap: 10px; }
+  .search-bar input, .search-bar select, .search-bar button {
+    width: 100%;
+    min-width: 0;
+  }
+
+  /* หัวเรื่องเม็ดยา – กลางและสั้นลง */
+  .detail-header { padding: 18px; border-radius: 22px; }
+  .detail-header .title { font-size: 24px; line-height: 1.3; }
+
+  /* badge ประเภท สั้นลงไม่ล้น */
+  .type-badge { padding: 6px 12px; font-size: 13px; gap: 6px; }
+
+  /* รูป: กว้าง 100% สูงอัตโนมัติ ไม่ล้นจอ */
+  .detail-body .hero { margin-top: -28px; margin-bottom: 12px; }
+  .detail-body .hero img {
+    width: 100%;
+    height: auto;            /* แทนค่าคงที่ */
+    max-height: 320px;
+    object-fit: cover;
+  }
+
+  /* กล่อง modal อ่านโพสต์ */
+  .view-post-modal { width: 100%; max-width: 95%; padding: 24px; }
+}
+
+/* มือถือจอเล็ก (≤ 480px) – เก็บรายละเอียดให้พอดีมือเดียว */
+@media (max-width: 480px) {
+  .container { padding: 0 14px; margin: 30px auto; }
+
+  .container h1 { font-size: 28px; letter-spacing: .5px; }
+
+  .post-card { padding: 16px; border-radius: 18px; }
+
+  .post-title { font-size: 18px; margin: 10px 0; }
+
+  .detail-header { padding: 14px; min-height: 58px; border-radius: 18px; }
+  .detail-header .title { font-size: 20px; }
+
+  .type-badge { font-size: 12px; padding: 6px 10px; }
+
+  .detail-body { padding: 16px; }
+  .detail-body .text { font-size: 15px; line-height: 1.7; }
+
+  .modal-content { width: 100%; padding: 22px 16px; border-radius: 18px; }
+}
+
+/* กันการล้นแนวนอนจากองค์ประกอบที่ตั้งค่าคงที่มา */
+img, video, canvas, iframe { max-width: 100%; height: auto; }
+.post-image { width: 100%; height: auto; max-height: 300px; }
+
+/* --- กันล้นขอบขวาโดยรวม --- */
+.container,
+.search-panel,
+.search-wrapper {
+  max-width: 100%;
+  box-sizing: border-box;
+  padding-inline: 16px;  /* กันชนด้านข้างบนจอแคบ */
+}
+
+/* --- แถวค้นหาให้หักบรรทัดได้และมีช่องว่าง --- */
+.search-bar {
+  display: flex;
+  flex-wrap: wrap;      /* สำคัญ: ให้ปุ่มลงบรรทัดใหม่ได้ */
+  align-items: center;
+  gap: 12px;
+}
+
+/* ช่องค้นหา: ยืดกินที่หลัก และไม่บังคับ min-width */
+.search-bar input[type="text"],
+.search-bar input.search-input {
+  flex: 1 1 260px;      /* ยืดได้-หดได้ */
+  min-width: 0;         /* กัน overflow จากค่าเริ่มระบบ */
+}
+
+/* ปุ่มต่างๆ ในแถวค้นหา */
+.search-bar .btn,
+.search-bar button,
+.search-bar .category-btn,
+.search-bar .new-post-btn,
+.search-bar .clear-btn {
+  flex: 0 1 180px;      /* มีขนาดฐาน แต่ยอมหดเพื่อไม่ล้น */
+  min-width: 0;
+  white-space: nowrap;
+}
+
+/* ===== Breakpoints ===== */
+
+/* ≤ 992px: ลดขนาดปุ่มกับ input ลงเล็กน้อย */
+@media (max-width: 992px) {
+  .search-bar { gap: 10px; }
+  .search-bar .btn,
+  .search-bar button { flex-basis: 160px; }
+}
+
+/* ≤ 768px: เรียงเป็นคอลัมน์สวยๆ ทั้งหมดกว้าง 100% */
+@media (max-width: 768px) {
+  .search-bar { flex-direction: column; align-items: stretch; }
+
+  .search-bar input[type="text"],
+  .search-bar input.search-input,
+  .search-bar .btn,
+  .search-bar button,
+  .search-bar .category-btn,
+  .search-bar .new-post-btn,
+  .search-bar .clear-btn {
+    width: 100%;
+    flex: 1 1 auto;
+  }
+
+  /* จัดปุ่ม Clear ให้ชิดขวาแต่ไม่ล้น (ถ้าต้องการ) */
+  .search-bar .clear-btn {
+    align-self: flex-end;   /* อยู่ขวาของคอลัมน์ */
+    width: auto;            /* หรือปล่อย 100% ก็ได้ถ้าอยากเต็มแถว */
+    max-width: 180px;
+  }
+
+  /* การ์ดขาวบน ๆ ให้ชิดขอบอย่างปลอดภัย */
+  .search-panel,
+  .search-wrapper { padding-inline: 12px; }
+}
+
+/* ≤ 480px: ลด padding/รัศมีโค้งและฟอนต์อีกนิด */
+@media (max-width: 480px) {
+  .search-panel,
+  .search-wrapper { padding-inline: 10px; }
+
+  .post-card { border-radius: 16px; }
+  .search-bar input[type="text"],
+  .search-bar input.search-input { font-size: 15px; }
+}
+/* ===== Create Post modal = View Post modal (size & chrome) ===== */
+#postModal .modal-content{
+  width: 1200px;        /* เท่ากับ view-post-modal */
+  max-width: 95%;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 40px;        /* ระยะหายใจเท่ากัน */
+  border-radius: 24px;
+  box-shadow:
+    0 25px 70px rgba(0,0,0,.30),
+    0 10px 30px rgba(114, 9, 183, .20);
+  border: 1px solid rgba(255,255,255,.8);
+}
+
+/* หัวเรื่องให้เด่นและกึ่งกลาง */
+#postModal .modal-content h2{
+  margin: 0 0 24px;
+  text-align: center;
+  font-weight: 800;
+  font-size: 32px;
+  background: linear-gradient(135deg, #3a0ca3, #7209b7, #f72585);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ===== Form styling (สวย/อ่านง่าย/โปร) ===== */
+#postForm{
+  display: grid;
+  gap: 16px 24px;
+}
+
+/* อินพุตมาตรฐานให้สอดคล้องกับสไตล์ modal เดิม */
+#postForm input[type="text"],
+#postForm textarea,
+#postForm select,
+#postForm input[type="file"]{
+  width: 100%;
+  padding: 16px 18px;
+  border: 2px solid rgba(114, 9, 183, .20);
+  border-radius: 14px;
+  font-size: 14px;
+  background: rgba(249, 249, 249, .85);
+  transition: all .25s ease;
+  box-sizing: border-box;
+}
+
+#postForm input[type="text"]:focus,
+#postForm textarea:focus,
+#postForm select:focus{
+  border-color: #7209b7;
+  box-shadow:
+    0 0 0 4px rgba(114, 9, 183, .10),
+    0 4px 12px rgba(114, 9, 183, .15);
+  background: #fff;
+  outline: none;
+  transform: translateY(-2px);
+}
+
+#postForm textarea{
+  min-height: 140px;
+  resize: vertical;
+}
+
+/* ===== Category bar (กล่องสี) ===== */
+#postForm .category-dropdown{
+  width: 100%;
+}
+
+#postForm .category-btn{
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 16px 22px;
+  border-radius: 20px;
+  border: 0;
+  color: #fff;
+  font-weight: 800;
+  letter-spacing: .2px;
+  background: linear-gradient(135deg, #3a0ca3 0%, #7209b7 100%);  /* ดีฟอลต์ม่วงสวย */
+  box-shadow: 0 10px 24px rgba(114,9,183,.25);
+  transition: transform .15s ease, box-shadow .15s ease, filter .15s ease;
+}
+#postForm .category-btn:hover{ transform: translateY(-2px); box-shadow: 0 14px 30px rgba(114,9,183,.35); }
+
+/* ถ้าเลือกประเภทแล้ว ใช้สีของประเภทนั้น (ใช้ CSS var ที่ JS เซ็ตไว้เหมือนเดิม) */
+#postForm .category-btn.selected{
+  background: var(--selected-bg, linear-gradient(135deg, #3a0ca3, #7209b7));
+  color: #fff !important;
+}
+
+/* เมนูรายการ Category ให้เด้งสวย */
+#postForm .category-menu{
+  inset: auto auto 0 0;              /* โผล่ใต้ปุ่ม */
+  transform: translateY(8px);
+  border-radius: 16px;
+  padding: 10px;
+  box-shadow: 0 18px 40px rgba(0,0,0,.18);
+}
+
+/* สไตล์ input[type=file] ให้ดูเรียบร้อย */
+#postForm input[type="file"]{
+  background: #fff;
+}
+#postForm input[type="file"]::-webkit-file-upload-button{
+  appearance: none;
+  border: 0;
+  padding: 10px 14px;
+  margin-right: 10px;
+  border-radius: 10px;
+  background: #efefef;
+  font-weight: 700;
+  cursor: pointer;
+}
+#postForm input[type="file"]::file-selector-button{
+  border: 0;
+  padding: 10px 14px;
+  margin-right: 10px;
+  border-radius: 10px;
+  background: #efefef;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* ปุ่มส่งโพสต์: เต็มความกว้าง, ลุคเดียวกับปุ่มเดิม */
+#postForm button[type="submit"]{
+  background: linear-gradient(135deg, #3a0ca3 0%, #7209b7 100%);
+  color: #fff;
+  font-weight: 800;
+  padding: 16px 20px;
+  border-radius: 16px;
+  box-shadow: 0 4px 15px rgba(114, 9, 183, .30);
+  width: 100%;
+}
+#postForm button[type="submit"]:hover{
+  transform: translateY(-3px);
+  box-shadow: 0 6px 25px rgba(114, 9, 183, .40);
+}
+
+/* ===== Layout: 2 คอลัมน์บนจอใหญ่, รวมเป็น 1 คอลัมน์บนจอเล็ก ===== */
+@media (min-width: 992px){
+  #postForm{
+    grid-template-columns: 1fr 1fr;
+  }
+  /* Title + Description ครึ่ง/ครึ่ง */
+  #postForm input[name="title"]{ grid-column: span 1; }
+  #postForm input[name="discription"]{ grid-column: span 1; }
+
+  /* Message/Category/File/Submit กินเต็มแถว */
+  #postForm textarea,
+  #postForm .category-dropdown,
+  #postForm input[type="file"],
+  #postForm button[type="submit"]{
+    grid-column: 1 / -1;
+  }
+}
+
+/* มือถือ/แท็บเล็ต: 1 คอลัมน์ */
+@media (max-width: 991.98px){
+  #postForm{
+    grid-template-columns: 1fr;
+  }
+  #postModal .modal-content{ padding: 28px; }
+  #postModal .modal-content h2{ font-size: 28px; }
+}
+
+/* ปุ่มปิด (X) ให้เป็นโทนเดียวกับ view modal */
+#postModal .modal-content .close{
+  position: absolute;
+  top: 20px;
+  right: 24px;
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px; color: #999;
+  background: rgba(114, 9, 183, 0.05);
+  transition: all .25s ease;
+   display: none !important;
+}
+#postModal .modal-content .close:hover{
+  background: rgba(114, 9, 183, 0.15);
+  color: #7209b7;
+  transform: rotate(90deg) scale(1.06);
+}
+/* === Force Category dropdown to open BELOW the button === */
+#postForm .category-dropdown { position: relative; }
+
+#postForm .category-menu{
+  position: absolute;
+  top: calc(100% + 8px);  /* โผล่ใต้ปุ่ม + เว้น 8px */
+  left: 0;
+  right: auto;
+  bottom: auto;           /* ยกเลิก drop-up เดิม */
+  transform: none;        /* ยกเลิก translate เดิม */
+  min-width: 100%;        /* กว้างเท่าปุ่ม (เอาออกได้ถ้าไม่ต้องการ) */
+  z-index: 1000;
+}
+
+/* ถ้าต้องการให้เมนูติดขอบโค้ง/เงานุ่มเหมือนเดิม */
+#postForm .category-menu{
+  border-radius: 16px;
+  padding: 10px;
+  box-shadow: 0 18px 40px rgba(0,0,0,.18);
+}
+
+/* === Change POST button to Yellow === */
+#postForm button[type="submit"]{
+  background: #ffd700;
+  color: #232323;                      /* ตัวอักษรเข้มอ่านง่าย */
+  font-weight: 800;
+  padding: 16px 20px;
+  border-radius: 16px;
+
+  width: 100%;
+}
+#postForm button[type="submit"]:hover{
+  transform: translateY(-3px);
+  box-shadow: 0 10px 28px rgba(255, 215, 0, .45);
+}

@@ -88,11 +88,14 @@ function openPostModal(post) {
     : "";
 
   content.innerHTML = `
-    <div class="detail-card">
-      <div class="detail-header">
-        <div class="type-badge ${post.type || ""}">
-          <i class="${(typeIcons[post.type] || "fa-regular fa-file")}"></i> ${typeLabel}
-        </div>
+         <div class="detail-type">
+    <div class="type-badge ${post.type || ""}">
+      <i class="${(typeIcons[post.type] || "fa-regular fa-file")}"></i> ${typeLabel}
+    </div>
+  </div>
+
+        <div class="detail-card">
+      <div class="detail-header">   
         <div class="title">${post.title || "-"}</div>
       </div>
 
