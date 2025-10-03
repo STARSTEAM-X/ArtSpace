@@ -8,7 +8,8 @@
     <link rel="stylesheet" href="./css/activity.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- ใส่ใน <head> -->
-    <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
 
 </head>
 
@@ -134,7 +135,7 @@
 
     <!-- Modal สำหรับรายละเอียด -->
     <div class="modal" id="activityModal">
-        <div class="modal-content">
+        <div class="modal-content" id="more">
             <span class="close" id="modalClose">&times;</span>
             <div id="modalBody"></div>
         </div>
@@ -142,76 +143,142 @@
 
     <!-- ===== Modal: Create Activity ===== -->
     <div class="modal" id="createModal">
-        <div class="modal-content large">
-            
-            <img class="backgroup-create" src="/ArtSpace/Frontend/img/create_act.png">
+        <div class="modal-content large" id="model">
+            <div class="image-container">
+                <img class="backgroup-create" src="/ArtSpace/Frontend/img/create_act.png"
+                    alt="create activity illustration">
+                <img class="overlay-img" src="/ArtSpace/Frontend/img/logo.png" alt="ArtSpace">
+            </div>
             <span class="close" id="createClose">&times;</span>
-            <h2>Create Activity Form</h2>
-            
+
             <form id="createActivityForm" enctype="multipart/form-data" class="form-grid">
-                <label>
-                    ชื่อกิจกรรม
+                <h2>Create Activity</h2>
+                <label class="nameAct">
+                    ชื่อกิจกรรม :
                     <input type="text" name="ActivityName" required>
                 </label>
 
                 <label class="full">
-                    รายละเอียด
+                    รายละเอียด :
                     <textarea name="ActivityDescription" rows="3"></textarea>
                 </label>
 
-                <label>
-                    วันที่เริ่ม
-                    <input type="date" name="ActivityDateStart" required>
+                <div class="dateandtime-row">
+                    <label>
+                        วันที่เริ่ม :
+                        <div class="input-with-icon">
+                            <input type="date" name="ActivityDateStart">
+                            <img src="/ArtSpace/Frontend/img/calendar.png" alt="calendar icon">
+                        </div>
+                    </label>
+
+                    <label class="dateandtimeblock">
+                        เวลาเริ่ม :
+                        <div class="input-with-icon">
+                            <input type="time" name="ActivityTimeStart">
+                            <img src="/ArtSpace/Frontend/img/time.png" alt="clock icon">
+                        </div>
+                    </label>
+                </div>
+
+                <div class="dateandtime-row">
+                    <label>
+                        วันที่สิ้นสุด :
+                        <div class="input-with-icon">
+                            <input type="date" name="ActivityDateEnd">
+                            <img src="/ArtSpace/Frontend/img/calendar.png" alt="calendar icon">
+                        </div>
+                    </label>
+                    <label class="dateandtimeblock">
+                        เวลาสิ้นสุด :
+                        <div class="input-with-icon">
+                            <input type="time" name="ActivityTimeEnd">
+                            <img src="/ArtSpace/Frontend/img/time.png" alt="clock icon">
+                        </div>
+                    </label>
+                </div>
+
+                <label class="loca">
+                    สถานที่ :
+                    <div class="input-with-icon">
+                        <input name="location" required>
+                    </div>
                 </label>
                 <label>
-                    เวลาเริ่ม
-                    <input type="time" name="ActivityTimeStart" required>
-                </label>
-                <label>
-                    วันที่สิ้นสุด
-                    <input type="date" name="ActivityDateEnd" required>
-                </label>
-                <label>
-                    เวลาสิ้นสุด
-                    <input type="time" name="ActivityTimeEnd" required>
+                    จำนวนสูงสุด :
+                    <div class="input-with-icon">
+                        <input type="number" name="MaxParticipants" min="1" required><img
+                            src="/ArtSpace/Frontend/img/people.jpg" alt="clock icon">
+                    </div>
                 </label>
 
-                <label class="full">
-                    สถานที่จัด
-                    <input type="text" name="Location" required>
-                </label>
+                <div class="dateandtime-row">
+                    <label>
+                        วันปิดรับประกาศ :
+                        <div class="input-with-icon">
+                            <input type="date" name="AnnounceDateEnd">
+                            <img src="/ArtSpace/Frontend/img/calendar.png" alt="calendar icon">
+                        </div>
+                    </label>
+                    <label class="dateandtimeblock">
+                        เวลาปิดรับประกาศ :
+                        <div class="input-with-icon">
+                            <input type="time" name="AnnounceTimeEnd">
+                            <img src="/ArtSpace/Frontend/img/time.png" alt="clock icon">
+                        </div>
+                    </label>
+                </div>
+                <div id="category">
+                    <span>กรุณาเลือกหมวด :</span>
+                    <div class="category-select">
+                        <button type="button" class="sign visual" data-value="Visual Arts">
+                            <p><img src="/ArtSpace/Frontend/img/VisualArts.png" alt="Visual Arts">Visual Arts</p>
+                        </button>
 
-                <label>
-                    วันปิดรับประกาศ
-                    <input type="date" name="AnnounceDateEnd">
-                </label>
-                <label>
-                    เวลาปิดรับประกาศ
-                    <input type="time" name="AnnounceTimeEnd">
-                </label>
+                        <button type="button" class="sign photo" data-value="Photography">
+                            <p><img src="/ArtSpace/Frontend/img/photo.png" alt="Photography">Photography</p>
 
-                <label>
-                    กรุณาเลือกหมวด
-                    <select name="ActivityType" required>
-                        <option value="Visual Arts">Visual Arts</option>
-                        <option value="Photography">Photography</option>
-                        <option value="Writing">Writing</option>
-                        <option value="Music">Music</option>
-                    </select>
-                </label>
+                        </button>
 
-                <label>
-                    จำนวนสูงสุด
-                    <input type="number" name="MaxParticipants" min="1" required>
-                </label>
+                        <button type="button" class="sign writing" data-value="Writing">
+                            <p><img src="/ArtSpace/Frontend/img/writ.png" alt="Writing">Writing</p>
 
-                <label class="full">
-                    รูปกิจกรรม
-                    <input type="file" name="activityImage" accept="image/*">
-                </label>
+                        </button>
 
-                <div class="form-actions full">
-                    <button type="submit" class="btn-primary">บันทึกกิจกรรม</button>
+                        <button type="button" class="sign music" data-value="Music">
+                            <p><img src="/ArtSpace/Frontend/img/music.png" alt="Music">Music</p>
+                        </button>
+                    </div>
+                    <input type="hidden" name="activityType" id="activityType">
+                </div>
+                <script>
+                    const categoryButtons = document.querySelectorAll(".category-select button");
+                    const hiddenInput = document.getElementById("activityType");
+
+                    categoryButtons.forEach(btn => {
+                        btn.addEventListener("click", () => {
+                            // เอา active ออกจากปุ่มอื่น
+                            categoryButtons.forEach(b => b.classList.remove("active"));
+
+                            // ใส่ active ให้ปุ่มที่เลือก
+                            btn.classList.add("active");
+
+                            // เก็บค่าใส่ hidden input
+                            hiddenInput.value = btn.dataset.value;
+                        });
+                    });
+                </script>
+                <div class="upload-img">
+                    <label for="activityImage">รูปกิจกรรม :</label>
+                    <div class="upload-btn">
+                        <img src="/ArtSpace/Frontend/img/up.png" alt="upload icon">
+                        <span>อัปโหลดรูปโปรไฟล์</span>
+                        <input type="file" id="activityImage" name="activityImage" accept="image/*">
+                    </div>
+                </div>
+                <div class="ActionsAct">
+                    <button type="button" id="cancle-act" class="btn-gray">CANALE</button>
+                    <button type="submit" id="post-act" class="btn-yellow">POST</button>
                 </div>
             </form>
         </div>
