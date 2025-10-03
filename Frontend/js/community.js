@@ -18,6 +18,8 @@ async function loadPosts() {
     const res = await fetch(`${BASE_URL}/api/community`);
     const posts = await res.json();
 
+    // console.log(posts)
+
     // filter
     let filtered = posts.filter((p) => {
       const matchSearch =
@@ -67,6 +69,9 @@ function openPostModal(post) {
   const modal = document.getElementById("viewPostModal");
   const content = document.getElementById("viewPostContent");
 
+  console.log(post)
+  console.log(post.user.nickname)
+
   // แผนที่ "type" ไปเป็นป้ายบนขวา
   const typeLabelMap = {
     Photo: "Photography",
@@ -84,7 +89,7 @@ function openPostModal(post) {
   // ดาวเรต: ถ้ามี post.rating (1–5) ให้โชว์ดาว ไม่งั้นซ่อนไว้
   const rating = Number(post.rating || 0);
   const stars = rating
-    ? `<span class="rating">${"★".repeat(rating)}${"☆".repeat(5-rating)}</span>`
+    ? `<span class="rating">${"★".repeat(rating)}${"☆".repeat(5 - rating)}</span>`
     : "";
 
   content.innerHTML = `
@@ -105,19 +110,19 @@ function openPostModal(post) {
 
         <div class="detail-footer">
           <div class="author">
-            <img class="avatar" src="${post.avatar ? (BASE_URL + post.avatar) : 'https://i.pravatar.cc/80'}" alt="${post.username}">
+            <img class="avatar" src="${post.user.profileImg ? (BASE_URL + post.user.profileImg) : '../img/profile.jpg'}" alt="${post.username}">
             <div>
-              <div class="name">ผู้เขียน : ${post.username}</div>
+              <div class="name">ผู้เขียน : ${post.user.nickname}</div>
               ${stars}
             </div>
           </div>
 
           ${
-            // แสดงปุ่มแก้ไขเฉพาะกรณีเจ้าของโพสต์ (ถ้ามี token/username เท่ากัน)
-            (localStorage.getItem("username") && localStorage.getItem("username") === post.username)
-            ? `<button class="edit-btn" id="editPostBtn">Edit</button>`
-            : ``
-          }
+    // แสดงปุ่มแก้ไขเฉพาะกรณีเจ้าของโพสต์ (ถ้ามี token/username เท่ากัน)
+    (localStorage.getItem("username") && localStorage.getItem("username") === post.username)
+      ? `<button class="edit-btn" id="editPostBtn">Edit</button>`
+      : ``
+    }
         </div>
         <div class="view-post-meta">เผยแพร่เมื่อ ${new Date(post.createdAt).toLocaleString()}</div>
       </div>
@@ -231,7 +236,7 @@ document.querySelectorAll('.search-bar .category-item').forEach(item => {
 
     // ✅ ใช้สีจาก map
     const typeColors = {
-        "": "#6c757d",        // เทา สำหรับ "All Categories"
+      "": "#6c757d",        // เทา สำหรับ "All Categories"
       Photo: "#9d26ed ",
       Painting: "#5174ff",
       Music: "#f158be",
@@ -265,7 +270,7 @@ document.querySelectorAll('#postForm .category-item').forEach(item => {
 
     // ใช้สีเดียวกับ filter ด้านบน
     const typeColors = {
-          "": "#6c757d",        // เทา สำหรับ "All Categories"
+      "": "#6c757d",        // เทา สำหรับ "All Categories"
       Photo: "#9d26ed ",
       Painting: "#5174ff",
       Music: "#f158be",
