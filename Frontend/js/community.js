@@ -252,6 +252,50 @@ document.getElementById("clearBtn").addEventListener("click", () => {
   loadPosts();
 });
 
+// สร้างโพสต์ใหม่ (POST /api/community/create)
+document.getElementById("postForm")?.addEventListener("submit", async (e) => {
+  e.preventDefault(); // กันการรีเฟรชหน้าและกัน ?title=... ไปต่อท้าย URL
+
+  const token = localStorage.getItem("token");
+  if (!token) {
+    alert("กรุณาเข้าสู่ระบบก่อนสร้างโพสต์");
+    return;
+  }
+
+  const form = e.target;
+  const fd = new FormData(form);
+
+  // กันเคสยังไม่เลือกหมวด
+  if (!fd.get("type")) {
+    alert("กรุณาเลือกหมวด (Category)");
+    return;
+  }
+
+  try {
+    const res = await fetch(`${BASE_URL}/api/community/create`, {
+      method: "POST",
+      headers: { Authorization: `Bearer ${token}` },
+      body: fd, // รองรับรูปภาพด้วย
+    });
+    const data = await res.json().catch(() => ({}));
+
+    if (res.ok) {
+      alert("โพสต์สำเร็จ!");
+      form.reset();
+      // เคลียร์ปุ่มหมวดให้กลับเป็นค่าเริ่มต้น (ถ้าจำเป็น)
+      const catBtn = form.querySelector(".category-btn");
+      if (catBtn) { catBtn.textContent = "📂 Category"; catBtn.classList.remove("selected"); }
+      document.getElementById("postModal").style.display = "none";
+      loadPosts(); // โหลดรายการใหม่
+    } else {
+      alert("โพสต์ไม่สำเร็จ: " + (data.message || res.status));
+    }
+  } catch (err) {
+    console.error(err);
+    alert("เกิดข้อผิดพลาดในการโพสต์");
+  }
+});
+
 // new post modal (อนุญาตเฉพาะผู้ล็อกอิน)
 document.getElementById("newPostBtn").addEventListener("click", () => {
   const token = localStorage.getItem("token");
