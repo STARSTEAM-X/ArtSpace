@@ -1,11 +1,28 @@
 :root {
   --thai-font: "Chakra Petch", "Noto Sans Thai", Tahoma, sans-serif;
 }
-body{background-color: #ffffff !important;}
+
+body {
+  background-color: #ffffff !important;
+}
+
 body,
 button {
   font-family: var(--thai-font);
 }
+
+
+#previewImage {
+  border: 2px solid #000000;
+  padding: 5px;
+  width:50px;
+  height:50px;
+  object-fit:cover;
+  display:block;
+  margin: 10px;
+}
+
+
 
 #model.modal-content button {
   padding: 10px;
@@ -63,8 +80,6 @@ Search Bar Container .search-bar {
   .search-bar button {
     width: 100%;
     /* เต็มบรรทัด */
-
-
   }
 }
 
@@ -88,7 +103,7 @@ Search Bar Container .search-bar {
   border-radius: 12px;
   font-weight: 700;
   text-decoration: none;
-  transition: transform .05s, filter .15s, box-shadow .15s;
+  transition: transform 0.05s, filter 0.15s, box-shadow 0.15s;
   min-width: 200px;
 }
 
@@ -109,7 +124,7 @@ Search Bar Container .search-bar {
 .btnCreate {
   display: flex;
   flex-direction: row;
-  padding: 10px 20px;
+  padding: 8px 20px;
   align-items: center;
   color: #000000;
   background-color: #ffde59;
@@ -119,7 +134,12 @@ Search Bar Container .search-bar {
   font-weight: 700;
   gap: 8px;
   white-space: nowrap;
-
+  cursor: pointer;
+  ;
+}
+.btnFind img,
+.btnCreate img{
+  padding-top: 5px !important;
 }
 
 .or-text {
@@ -148,7 +168,7 @@ Search Bar Container .search-bar {
 .btn-img {
   cursor: pointer;
   border-radius: 6px;
-  transition: transform .1s, filter .2s;
+  transition: transform 0.1s, filter 0.2s;
   margin: 0;
 }
 
@@ -205,11 +225,15 @@ Search Bar Container .search-bar {
   flex-direction: column;
   gap: 8px;
 }
+
 .dropdown-content .sort button {
   display: flex;
-  align-items: center;   /* จัดแนวกลางในแนวตั้ง */
-  justify-content: center; /* จัดข้อความให้อยู่กลาง */
-  width: 100%;           /* ปุ่มกว้างเต็ม */
+  align-items: center;
+  /* จัดแนวกลางในแนวตั้ง */
+  justify-content: center;
+  /* จัดข้อความให้อยู่กลาง */
+  width: 100%;
+  /* ปุ่มกว้างเต็ม */
   padding: 10px 30px;
   border: none;
   border-radius: 50px;
@@ -221,14 +245,14 @@ Search Bar Container .search-bar {
 }
 
 .dropdown-content .sort button img {
-  position: absolute;   /* ดันรูปไปชิดซ้าย */
+  position: absolute;
+  /* ดันรูปไปชิดซ้าย */
   left: 10px;
   top: 50%;
   transform: translateY(-50%);
   width: 20px;
   height: 20px;
 }
-
 
 .dropdown.open .dropdown-content {
   display: flex;
@@ -338,7 +362,7 @@ Search Bar Container .search-bar {
 
 .empty-ill {
   width: 120px;
-  opacity: .7;
+  opacity: 0.7;
   margin-bottom: 16px;
 }
 
@@ -361,38 +385,70 @@ Search Bar Container .search-bar {
   color: white;
 }
 
-
-/* Actions */
-.actions {
+/* Actions activity */
+.actions-cardAct {
   display: flex;
   justify-content: space-between;
-  margin-top: auto;
+  gap: 12px;
+  margin-top: 12px;
+  width: 100%;
 }
 
-.actions .detail,
-.actions .join {
+.actions-cardAct button {
+  flex: 1;
+  /* ปุ่มกินพื้นที่เท่ากัน */
+  border: none;
+  border-radius: 30px;
+  padding: 10px 0;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  text-align: center;
+  transition: background 0.2s;
+}
+
+.actions-cardAct .detail,
+.actions-cardAct .join,
+.actions-cardAct .manage,
+.actions-cardAct .leave {
   border: none;
   border-radius: 25px;
   padding: 8px 16px;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
   transition: background 0.2s;
 }
 
-.actions .detail {
-  background: #eee;
+.actions-cardAct .detail {
+  background: #bebebe;
 }
 
-.actions .detail:hover {
-  background: #ddd;
+.actions-cardAct .detail:hover {
+  background: #838383;
 }
 
-.actions .join {
-  background: #ffd700;
+.actions-cardAct .join {
+  background: #f6d51f;
 }
 
-.actions .join:hover {
-  background: #ffca28;
+.actions-cardAct .join:hover {
+  background: #ddbc00;
+}
+
+.actions-cardAct .leave {
+  background: #ff3e3e;
+}
+
+.actions-cardAct .leave:hover {
+  background: #ff0000;
+}
+
+.actions-cardAct .manage {
+  background: #3eff78;
+}
+
+.actions-cardAct .manage:hover {
+  background: #00ff4c;
 }
 
 /* Modal */
@@ -471,7 +527,7 @@ Search Bar Container .search-bar {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  background: #6A1B9A;
+  background: #6a1b9a;
   color: #fff;
   border-radius: 999px;
   padding: 6px 12px;
@@ -498,9 +554,22 @@ Search Bar Container .search-bar {
   text-align: center;
   align-items: center;
 }
+.title-head,
+.info-chip{
+  white-space: nowrap;        /* ห้ามขึ้นบรรทัดใหม่ */
+  overflow: hidden;           /* ตัดส่วนเกิน */
+  text-overflow: ellipsis;    /* แสดง ... เมื่อเกินพื้นที่ */
+  display: block;             /* เพื่อให้ width มีผล */
+  max-width: 100%;            /* จำกัดให้ไม่เกินกล่อง */
+}
+
+/* ถ้าเป็น div แบบ flex แล้วอยากให้ ... ทำงาน */
+.title-head {
+  min-width: 0;
+}
 
 .title-head {
-  background: #6A1B9A;
+  background: #6a1b9a;
   color: #fff;
   border-radius: 12px;
   padding: 10px 12px;
@@ -514,7 +583,7 @@ Search Bar Container .search-bar {
   width: 100%;
   height: 130px;
   border-radius: 12px;
-  object-fit: cover
+  object-fit: cover;
 }
 
 .info-stack {
@@ -539,10 +608,14 @@ Search Bar Container .search-bar {
   font-size: 13px;
   text-align: left;
 
-  white-space: nowrap;        /* ไม่ตัดบรรทัด */
-  overflow: hidden;           /* ซ่อนส่วนเกิน */
-  text-overflow: ellipsis;    /* แสดง … */
-  display: block;             /* หรือ inline-block */
+  white-space: nowrap;
+  /* ไม่ตัดบรรทัด */
+  overflow: hidden;
+  /* ซ่อนส่วนเกิน */
+  text-overflow: ellipsis;
+  /* แสดง … */
+  display: block;
+  /* หรือ inline-block */
   max-width: 200px;
 }
 
@@ -563,7 +636,7 @@ Search Bar Container .search-bar {
   border-radius: 999px;
   padding: 8px 14px;
   width: max-content;
-  font-weight: 700
+  font-weight: 700;
 }
 
 .image-count-badge {
@@ -572,12 +645,50 @@ Search Bar Container .search-bar {
   padding: 2px;
 }
 
+.org-info {
+  flex: 1;
+  /* กินพื้นที่ที่เหลือ */
+  display: flex;
+  flex-direction: column;
+  /* ชื่ออยู่บรรทัดบน, คะแนน+ดาวอยู่บรรทัดล่าง */
+  align-items: start;
+  padding-left: 20%;
+}
+
+p.nickname {
+  font-weight: 700;
+}
+
+.org-info p {
+  font-size: 13px;
+  margin: 2px;
+}
+
+.org-rating {
+  display: flex;
+  align-items: center;
+  /* จัดให้ตัวเลขกับดาวอยู่กลางแนวตั้ง */
+  gap: 5px;
+  /* ระยะห่างระหว่างตัวเลขกับดาว */
+}
+
+.org-rating p {
+  display: inline-block;
+  align-items: center;
+}
+
+.org-rating img {
+  display: inline-block;
+  margin-top: 0;
+
+  align-items: center;
+}
+
 .org {
   display: flex;
   align-items: center;
   gap: 10px;
-  margin-top: 4px;
-  padding: 5px;
+  padding: 2px;
   width: 100%;
   border-radius: 999px;
   background-color: #e9e9ee;
@@ -588,7 +699,7 @@ Search Bar Container .search-bar {
   height: 34px;
   border-radius: 999px;
   border: 2px solid #eee;
-  object-fit: cover
+  object-fit: cover;
 }
 
 .org div {
@@ -598,50 +709,11 @@ Search Bar Container .search-bar {
   line-height: 1.3;
 }
 
-.actions-cardAct {
-  display: flex;
-  justify-content: space-between;
-  gap: 12px;
-  margin-top: 12px;
-  width: 100%;
-}
-
-.actions-cardAct button {
-  flex: 1;
-  /* ปุ่มกินพื้นที่เท่ากัน */
-  border: none;
-  border-radius: 30px;
-  padding: 10px 0;
-  font-weight: 700;
-  font-size: 14px;
-  cursor: pointer;
-  text-align: center;
-  transition: background 0.2s;
-}
 
 .btn-ghost {
   background: #e6e6e6;
   border: 0;
-  color: #000000
-}
-
-.actions-cardAct .detail {
-  background: #f6d51f;
-  color: #000;
-}
-
-.actions-cardAct .join {
-  background: #a9a9a9;
-  color: #000;
-}
-
-.btn-dark {
-  background: #f6d51f;
   color: #000000;
-}
-
-.btn-dark:hover {
-  filter: brightness(1.1)
 }
 
 /*Create Activity*/
@@ -662,6 +734,7 @@ Search Bar Container .search-bar {
 #createClose:hover {
   color: #000000;
 }
+
 input[type="date"]::-webkit-calendar-picker-indicator,
 input[type="time"]::-webkit-calendar-picker-indicator {
   opacity: 0;
@@ -699,7 +772,7 @@ input[type="time"]::-webkit-calendar-picker-indicator {
   max-width: 1000px;
   width: 90%;
   overflow-y: scroll;
-  font-family: 'Chakra Petch', sans-serif;
+  font-family: "Chakra Petch", sans-serif;
 }
 
 .image-container {
@@ -750,7 +823,7 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 #createModal label {
   display: flex;
   flex-direction: column;
-  font-weight: 600;
+  font-weight: 700;
   font-size: 1rem;
   width: 50%;
 }
@@ -815,11 +888,13 @@ input[type="time"]::-webkit-calendar-picker-indicator {
   gap: 100px;
   width: 100%;
   margin-top: 10px;
+  margin-bottom: 20px;
+  position: static !important;
 }
 
 /*ปุ่มเลือกประเภท*/
 #category span {
-  font-weight: 600;
+  font-weight: 700;
 }
 
 .category-select {
@@ -841,7 +916,7 @@ input[type="time"]::-webkit-calendar-picker-indicator {
   align-items: center;
   justify-content: center;
   /* ✅ ให้ข้อความอยู่กึ่งกลาง */
-  font-family: 'Chakra Petch', sans-serif;
+  font-family: "Chakra Petch", sans-serif;
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
@@ -861,7 +936,6 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 .category-select button p {
   margin-left: 20px;
 }
-
 
 .visual img,
 .photo img,
@@ -924,14 +998,14 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 
 /*อัปรูปกิจจกรมห*/
 .upload-img {
-  margin: 15px 0;
+  margin: 15px 0 0 0;
   font-family: "Chakra Petch", "Noto Sans Thai", sans-serif;
 }
 
 .upload-img label {
   display: block;
   margin-bottom: 6px;
-  font-weight: 600;
+  font-weight: 700;
   color: #000;
 }
 
@@ -969,7 +1043,6 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 }
 
 
-
 /* Responsive */
 
 @media (max-width: 768px) {
@@ -987,15 +1060,11 @@ input[type="time"]::-webkit-calendar-picker-indicator {
     display: none;
   }
 
-
   #createModal form {
     grid-template-columns: 1fr;
     padding: 20px;
   }
-
 }
-
-
 
 @media (max-width: 786px) {
   .card-body {
@@ -1042,8 +1111,6 @@ input[type="time"]::-webkit-calendar-picker-indicator {
     align-items: start;
     /* ✅ ป้องกันการ์ดสูงไม่เท่ากันแล้วทับกัน */
   }
-
-
 }
 
 @media (max-width: 550px) {
@@ -1057,15 +1124,13 @@ input[type="time"]::-webkit-calendar-picker-indicator {
     align-items: start;
     /* ✅ ป้องกันการ์ดสูงไม่เท่ากันแล้วทับกัน */
   }
+
   .empty {
     min-width: 600px;
   }
 }
 
-
-
-
-                                                                          /* moredetail */
+/* moredetail */
 #activityModal {
   display: none;
   position: fixed;
@@ -1077,6 +1142,11 @@ input[type="time"]::-webkit-calendar-picker-indicator {
   background-color: rgba(0, 0, 0, 0.5);
   align-items: center;
   justify-content: center;
+}
+
+#modalManage {
+  z-index: 2000;
+  /* ให้อยู่เหนือกว่า */
 }
 
 /* Modal Content Wrapper */
@@ -1133,29 +1203,28 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 .type-more {
   display: flex;
   margin: 10px;
-  
 }
 
 .pill-category-modal.visual,
-.modal-activity-title.visual{
+.modal-activity-title.visual {
   background-color: #5e17eb !important;
   color: #fff;
 }
 
 .pill-category-modal.photo,
-.modal-activity-title.photo{
+.modal-activity-title.photo {
   background-color: #8c52ff !important;
   color: #fff;
 }
 
 .pill-category-modal.writing,
-.modal-activity-title.writing{
+.modal-activity-title.writing {
   background-color: #ce6cb6 !important;
   color: #fff;
 }
 
 .pill-category-modal.music,
-.modal-activity-title.music{
+.modal-activity-title.music {
   background-color: #ff87d1 !important;
   color: #fff;
 }
@@ -1165,7 +1234,7 @@ input[type="time"]::-webkit-calendar-picker-indicator {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  background: #6A1B9A;
+  background: #6a1b9a;
   color: #fff;
   border-radius: 999px;
   padding: 12px 12px;
@@ -1176,6 +1245,9 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 }
 
 .modal-activity-title {
+  white-space: normal;      /* ✅ อนุญาตให้ขึ้นบรรทัดใหม่ */
+  word-break: break-word;   /* ✅ ตัดคำยาว */
+  overflow-wrap: break-word; /* ✅ รองรับเบราว์เซอร์ใหม่ */
   color: rgb(255, 255, 255) !important;
   padding: 15px 30px;
   border-radius: 25px;
@@ -1184,6 +1256,7 @@ input[type="time"]::-webkit-calendar-picker-indicator {
   flex: 1;
   text-align: center;
   margin: 0;
+  
 }
 
 /* Modal Content Layout */
@@ -1206,7 +1279,7 @@ input[type="time"]::-webkit-calendar-picker-indicator {
   height: 90%;
   border-radius: 20px;
   object-fit: cover;
-  max-height: 300px;
+  max-height: 320px;
 }
 
 .modal-organizer-section {
@@ -1214,7 +1287,8 @@ input[type="time"]::-webkit-calendar-picker-indicator {
   border-radius: 20px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
 }
-#img-star.star-img{
+
+#img-star.star-img {
   width: auto;
   margin-left: 5px;
   height: 16px;
@@ -1236,57 +1310,41 @@ input[type="time"]::-webkit-calendar-picker-indicator {
   width: 100%;
 }
 
+p.organizer-label {
+  font-weight: 700;
+}
+
 .organizer-info {
   display: flex;
   align-items: center;
   background-color: #e2e2e2;
   border-radius: 999px;
-  gap: 10px;
-  margin-left: 30px;
-  padding: 5px;
-  width: 60%;
   gap: 15px;
-} 
+  width: 60%;
+}
 
 .organizer-info img {
+  display: inline-block;
   margin: 0;
-  width: 34px;
-  height: 34px;
+  width: 40px;
+  height: 40px;
   border-radius: 999px;
   border: 2px solid #eee;
   object-fit: cover;
 }
 
-.organizer-details {
+
+.rating {
   display: flex;
-  flex-direction: column;
-  gap: 5px;
+  /* ให้ดาวเรียงเป็นแถว */
 }
 
-.organizer-nickname {
-  font-size: 18px;
-  font-weight: 600;
-  color: #2d3436;
-}
-
-.organizer-rating {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  font-size: 16px;
-  color: #fdcb6e;
-}
-
-.rating{
-  display: inline-block;
-}
-.rating img{
-  display: inline-block;
+.rating img {
+  display: inline;
   border: 0;
   width: 15px;
   height: 15px;
 }
-
 
 /* Right Side */
 .modal-right-side {
@@ -1296,18 +1354,26 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 }
 
 .modal-description {
+  white-space: normal;      /* ✅ อนุญาตให้ขึ้นบรรทัดใหม่ */
+  word-break: break-word;   /* ✅ ตัดคำยาว */
+  overflow-wrap: break-word;
   background: white;
   padding: 20px;
   border-radius: 20px;
   min-height: 100px;
 
-  white-space: normal;        /* ให้ขึ้นบรรทัดใหม่ได้ */
-  word-wrap: break-word;      /* ตัดคำยาว ๆ */
-  overflow-wrap: break-word;  /* รองรับ browser ใหม่ */
-  
-  font-size: 16px;            /* บังคับไม่ให้ browser ลดขนาด */
-  line-height: 1.5;  
-  max-width: 600px;      /* จำกัดความกว้างสูงสุด */
+  white-space: normal;
+  /* ให้ขึ้นบรรทัดใหม่ได้ */
+  word-wrap: break-word;
+  /* ตัดคำยาว ๆ */
+  overflow-wrap: break-word;
+  /* รองรับ browser ใหม่ */
+
+  font-size: 16px;
+  /* บังคับไม่ให้ browser ลดขนาด */
+  line-height: 1.5;
+  max-width: 600px;
+  /* จำกัดความกว้างสูงสุด */
   max-height: 300px;
 }
 
@@ -1319,12 +1385,11 @@ input[type="time"]::-webkit-calendar-picker-indicator {
   align-self: center;
 }
 
-
-
 /* Participants Badge */
 .participants-wrapper {
   display: flex;
-  justify-content: center; /* จัดกลางแนวนอน */
+  justify-content: center;
+  /* จัดกลางแนวนอน */
 }
 
 .participants-badge {
@@ -1333,10 +1398,10 @@ input[type="time"]::-webkit-calendar-picker-indicator {
   justify-content: center;
   gap: 8px;
 
-  border: 2px solid #00B894;
+  border: 2px solid #00b894;
   border-radius: 30px;
   padding: 12px 25px;
-  color: #00B894;
+  color: #00b894;
   font-size: 24px;
   font-family: "Chakra Petch", "Noto Sans Thai", sans-serif;
 }
@@ -1356,6 +1421,7 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 }
 
 .participants-badge img {
+  margin-bottom: 2px;
   width: 28px;
   height: 28px;
 }
@@ -1375,7 +1441,7 @@ input[type="time"]::-webkit-calendar-picker-indicator {
   border-radius: 20px;
 }
 
-.modal-info-item {  
+.modal-info-item {
   display: flex;
   gap: 12px;
   font-size: 16px;
@@ -1388,20 +1454,25 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 }
 
 .info-label-text {
-  font-weight: 600;
+  font-weight: 700;
   color: #2d3436;
   min-width: 80px;
 }
 
 .info-value-text {
   color: #636e72;
-  white-space: normal;        /* ให้ขึ้นบรรทัดใหม่ได้ */
-  word-wrap: break-word;      /* ตัดคำยาว ๆ */
-  overflow-wrap: break-word;  /* รองรับ browser ใหม่ */
-  
-  font-size: 16px;            /* บังคับไม่ให้ browser ลดขนาด */
-  line-height: 1.5;  
-  max-width: 300px;      /* จำกัดความกว้างสูงสุด */
+  white-space: normal;
+  /* ให้ขึ้นบรรทัดใหม่ได้ */
+  word-wrap: break-word;
+  /* ตัดคำยาว ๆ */
+  overflow-wrap: break-word;
+  /* รองรับ browser ใหม่ */
+
+  font-size: 16px;
+  /* บังคับไม่ให้ browser ลดขนาด */
+  line-height: 1.5;
+  max-width: 300px;
+  /* จำกัดความกว้างสูงสุด */
   max-height: 300px;
 }
 
@@ -1411,6 +1482,52 @@ input[type="time"]::-webkit-calendar-picker-indicator {
   justify-content: center;
   margin-top: 10px;
 }
+
+.modal-action-button .detail,
+.modal-action-button .join,
+.modal-action-button .manage,
+.modal-action-button .leave {
+  border: none;
+  border-radius: 25px;
+  padding: 8px 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.modal-action-button .detail {
+  background: #bebebe;
+}
+
+.modal-action-button .detail:hover {
+  background: #838383;
+}
+
+.modal-action-button .join {
+  background: #f6d51f;
+}
+
+.modal-action-button .join:hover {
+  background: #ddbc00;
+}
+
+.modal-action-button .leave {
+  background: #ff3e3e;
+}
+
+.modal-action-button .leave:hover {
+  background: #ff0000;
+}
+
+.modal-action-button .manage {
+  background: #3eff78;
+}
+
+.modal-action-button .manage:hover {
+  background: #00ff4c;
+}
+
+
 
 /* Join Now Button - สีเหลือง */
 .btn-join-activity {
@@ -1423,12 +1540,10 @@ input[type="time"]::-webkit-calendar-picker-indicator {
   font-size: 20px;
   font-weight: bold;
   cursor: pointer;
-  box-shadow: 0 4px 15px rgba(253, 203, 110, 0.4);
 }
 
 .btn-join-activity:hover {
   background: #ffaf02 !important;
-  box-shadow: 0 6px 20px rgba(253, 203, 110, 0.5);
 }
 
 /* Leave Activity Button - สีแดง */
@@ -1436,19 +1551,32 @@ input[type="time"]::-webkit-calendar-picker-indicator {
   background: #ff7675;
   color: white;
   border: none;
-  padding: 15px 50px;
+  margin-bottom: 20px;
+  padding: 20px 50px;
   border-radius: 50px;
   font-size: 20px;
   font-weight: bold;
   cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(255, 118, 117, 0.4);
 }
 
 .btn-leave-activity:hover {
   background: #fd5e5e;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(255, 118, 117, 0.5);
+}
+
+.btn-manage-activity {
+  background: #3eff78;
+  color: white;
+  border: none;
+  margin-bottom: 20px;
+  padding: 20px 50px;
+  border-radius: 50px;
+  font-size: 20px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.btn-manage-activity:hover {
+  background: #00ff4c;
 }
 
 /* Responsive Design */
@@ -1456,7 +1584,8 @@ input[type="time"]::-webkit-calendar-picker-indicator {
   .modal-content-wrapper {
     grid-template-columns: 1fr;
   }
-  .modal-content{
+
+  .modal-content {
     width: 75%;
   }
 
@@ -1482,9 +1611,8 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 
   .type-more {
     padding-left: auto;
-
-
   }
+
   .empty {
     min-width: 600px;
   }
@@ -1507,4 +1635,589 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 
 #modalBody::-webkit-scrollbar-thumb:hover {
   background: #5f4fd1;
+}
+
+
+
+/* ====manage=== */
+#manageActivityForm {
+  border-bottom: 2px solid #d1d1d1;
+  padding-bottom: 30px;
+}
+
+#modalManage input[type="date"]::-webkit-calendar-picker-indicator,
+#modalManage input[type="time"]::-webkit-calendar-picker-indicator {
+  opacity: 0;
+  /* มองไม่เห็น */
+  pointer-events: auto;
+  /* ยังกดได้ */
+  position: absolute;
+  right: 14px;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+}
+
+/* icon custom */
+#modalManage .input-with-icon.people img {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  pointer-events: none;
+  /* รูปไม่บังการคลิก */
+}
+
+#modalManage .close {
+  position: absolute;
+  top: 5px;
+  right: 30px;
+  font-size: 32px;
+  font-weight: bold;
+  color: #7f7f7f;
+  cursor: pointer;
+  background: none;
+  border: none;
+  z-index: 10;
+}
+
+#modalManage .close:hover {
+  color: #000000;
+}
+
+h2.header-manage {
+  font-size: 2rem;
+  text-align: center;
+  font-weight: 700;
+  padding: 40px 0 !important;
+  border-bottom: 2px solid #d1d1d1;
+}
+
+#modalManage form {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  padding: 0 40px 30px;
+}
+
+/* label ให้หัวข้อชิดซ้าย */
+#modalManage label {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  /* ชิดซ้าย */
+  text-align: left;
+  /* ข้อความชิดซ้าย */
+  font-weight: 700;
+  font-size: 1rem;
+  width: 100%;
+}
+
+/* ช่อง input/textarea กว้างเต็ม */
+#modalManage input,
+#modalManage textarea,
+#modalManage select {
+  margin-top: 6px;
+  padding: 10px 14px;
+  border: 1.5px solid #ccc;
+  border-radius: 25px;
+  font-size: 1rem;
+  outline: none;
+  width: 100%;
+  /* กินเต็มบรรทัด */
+  box-sizing: border-box;
+}
+
+/* ช่องวันที่+เวลาให้เต็มพื้นที่แบ่งครึ่ง */
+#modalManage .dateandtime-row {
+  display: flex;
+  width: 100% !important;
+  gap: 20px;
+}
+
+#modalManage .dateandtime-row label {
+  flex: 1;
+  /* แต่ละช่องกินครึ่ง */
+}
+
+/* input+icon */
+#modalManage .input-with-icon {
+  position: relative;
+  width: 100%;
+}
+
+#modalManage .input-with-icon input {
+  width: 100%;
+  padding-right: 48px;
+  /* กัน icon ทับ */
+  box-sizing: border-box;
+}
+
+/* ปุ่มอัปโหลดชิดซ้าย */
+
+#modalManage .upload-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #f0f0f0;
+  border-radius: 25px;
+  padding: 8px 14px;
+  cursor: pointer;
+}
+
+#modalManage .upload-btn img {
+  width: 18px;
+  height: 18px;
+}
+
+
+#modalManage .sign {
+  min-width: 160px;
+  max-width: 160px;
+}
+/* label หมวดหมู่ */
+#modalManage .category span {
+  display: block;
+  text-align: left;
+  /* ชิดซ้าย */
+  font-weight: 700;
+  margin: 15px 0 8px;
+}
+
+/* กล่องปุ่มหมวด */
+#modalManage .category-select {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  /* ปุ่มเรียงจากซ้าย */
+}
+
+/* ครอบ input + icon */
+#modalManage .input-with-icon.people {
+  position: relative;
+  /* ป้องกันล้น */
+}
+
+/* ช่อง input ครึ่งบรรทัด */
+#modalManage .input-with-icon.people input {
+  width: 50;
+  padding-right: 40px;
+  /* เผื่อพื้นที่ทางขวา */
+  border-radius: 999px;
+}
+
+
+/* Section หลัก แบ่งซ้าย-ขวา */
+#joined-manageActivityForm .upload-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+#modalManage .upload-text {
+  display: block;
+  white-space: nowrap;
+  /* ไม่ตัดบรรทัด */
+  font-size: 14px;
+  font-weight: bold;
+  color: #333;
+}
+
+#modalManage .upload-img {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+#modalManage .upload-btn {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center; /* จัดให้อยู่กึ่งกลางแนวตั้ง */
+  gap: 8px;
+  width: 30% !important;
+  padding: 5px !important;
+  border-radius: 12px;
+  background: #f4f4f4;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+  transition: background 0.2s;
+}
+#modalManage .upload-btn img{
+  margin: 10px !important;
+}
+
+#modalManage .preview-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
+  padding: 10px;
+}
+
+#modalManage #previewImage {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 0;
+}
+
+
+
+
+/* icon คนอยู่ด้านในช่อง ขอบขวา */
+
+/*=====================*/
+/* Container หลัก */
+/* Container */
+#joined-manageActivityForm {
+  margin-top: 20px;
+}
+
+#joined-manageActivityForm .manage-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+}
+
+/* Control Bar */
+#joined-manageActivityForm .control-bar {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+/* ปุ่มทั่วไป */
+#joined-manageActivityForm .dropbtn,
+#joined-manageActivityForm .btn-clear,
+#joined-manageActivityForm .btn-auto {
+  border: none;
+  padding: 8px 16px;
+  min-width: 120px;
+  /* ความกว้างบังคับให้เท่ากัน */
+  height: 38px;
+  /* ความสูงบังคับให้เท่ากัน */
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  background: #f2f2f2;
+  color: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ปุ่มสุ่ม */
+#joined-manageActivityForm .btn-auto {
+  background: #a259ff;
+  color: #fff;
+}
+
+/* Counter ด้านขวา */
+#joined-manageActivityForm .right-counter {
+  font-size: 24px;
+  width: auto;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: bold;
+  color: #4caf50;
+  border: 2px solid #4caf50;
+  padding: 4px 14px;
+  border-radius: 20px;
+}
+
+#joined-manageActivityForm .right-counter img {
+  width: 20px;
+  height: 20px;
+  margin: 0;
+  object-fit: contain;
+}
+
+
+
+/* ==== Upload Image Section (เฉพาะใน joined-manageActivityForm) ==== */
+#manageActivityForm .upload-img {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+#manageActivityForm .upload-img label {
+  font-weight: 700;
+  color: #000;
+  text-align: left;
+}
+
+/* ปุ่มอยู่บน */
+#manageActivityForm .upload-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: start;
+  background: #f5f5f5;
+  border-radius: 12px;
+  padding: 14px 20px;
+  gap: 10px;
+  cursor: pointer;
+  width: 50%;
+}
+
+#manageActivityForm .upload-btn:hover {
+  background: #e0e0e0;
+}
+
+#manageActivityForm .upload-btn input[type="file"] {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  opacity: 0;
+  cursor: pointer;
+}
+
+#manageActivityForm .upload-btn span {
+  margin-top: 2px;
+  font-size: 16px;
+  color: #000;
+  font-weight: 600;
+}
+
+#manageActivityForm .upload-btn input[type="file"] {
+  display: none;
+}
+
+/* รูปอยู่ล่าง */
+#manageActivityForm .preview-box {
+  margin-top: 8px;
+  width: 160px;
+  height: 160px;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #fff;
+  border: 1.5px solid #ccc;
+  margin: 10px 0 0 50px;
+}
+
+#manageActivityForm .preview-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ==== Responsive ==== */
+@media (max-width: 600px) {
+  #manageActivityForm .upload-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  #manageActivityForm .preview-box {
+    width: 140px;
+    height: 140px;
+    margin: 0 auto;
+  }
+}
+
+
+
+
+
+
+/* Grid Layout */
+/* Grid Layout */
+#joined-manageActivityForm .participants-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  /* 2 คอลัมน์ */
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+/* Card */
+#joined-manageActivityForm .participant-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+
+/* ซ้าย - รูปโปรไฟล์ */
+#joined-manageActivityForm .participant-card .card-left {
+  flex-shrink: 0;
+}
+
+#joined-manageActivityForm .participant-card .avatar {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+/* กลาง - ข้อมูล */
+#joined-manageActivityForm .participant-card .card-center {
+  flex: 1;
+  margin-left: 12px;
+}
+
+#joined-manageActivityForm .participant-card .nickname {
+  font-weight: bold;
+  margin: 0;
+}
+
+#joined-manageActivityForm .participant-card .username {
+  font-size: 14px;
+  color: #777;
+  margin: 2px 0;
+}
+
+#joined-manageActivityForm .participant-card .rating {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 14px;
+  color: #444;
+}
+
+/* ขวา - สถานะ + ปุ่ม */
+#joined-manageActivityForm .participant-card .card-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+}
+
+#joined-manageActivityForm .participant-card .status {
+  font-size: 12px;
+  font-weight: bold;
+  padding: 2px 8px;
+  border-radius: 10px;
+}
+
+/* Status Colors */
+#joined-manageActivityForm .participant-card.accepted .status {
+  background: #d4f7d4;
+  color: #2e7d32;
+}
+
+#joined-manageActivityForm .participant-card.rejected .status {
+  background: #ffd6d6;
+  color: #c62828;
+}
+
+#joined-manageActivityForm .participant-card.pending .status {
+  background: #fff0d4;
+  color: #e69500;
+}
+
+/* ปุ่ม */
+#joined-manageActivityForm .actions {
+  display: flex;
+  gap: 8px;
+}
+
+#joined-manageActivityForm .btn-reject {
+  background: #555;
+  color: #fff;
+  border: none;
+  border-radius: 30px;
+  padding: 6px 12px;
+  cursor: pointer;
+}
+
+#joined-manageActivityForm .btn-accept {
+  background: #4caf50;
+  color: #fff;
+  border: none;
+  border-radius: 30px;
+  padding: 6px 12px;
+  cursor: pointer;
+}
+
+
+
+/* กล่องรวมปุ่ม */
+#joined-manageActivityForm .ActionsAct-manage {
+  display: flex;
+  justify-content: center;
+  gap: 60px;
+  margin-top: 30px;
+}
+
+/* ปุ่มเท่ากัน */
+#joined-manageActivityForm .btn-gray,
+#joined-manageActivityForm .btn-yellow {
+  width: 20px;
+  height: 48px;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+/* ปุ่ม CANCEL */
+#joined-manageActivityForm .btn-gray {
+  background: #9e9e9e;
+  color: #000000;
+}
+
+#joined-manageActivityForm .btn-gray:hover {
+  background: #7a7a7a;
+}
+
+/* ปุ่ม SAVE */
+#joined-manageActivityForm .btn-yellow {
+  background: #ffc107;
+  color: #000;
+}
+
+#joined-manageActivityForm .btn-yellow:hover {
+  background: #ffb300;
+}
+
+@media (max-width: 786px) {
+  #joined-manageActivityForm .participants-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* ปุ่มเรียงแนวตั้ง */
+  #joined-manageActivityForm .ActionsAct-manage {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  #joined-manageActivityForm .btn-gray,
+  #joined-manageActivityForm .btn-yellow {
+    width: 100%;
+  }
+
+  .category-buttons {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  #joined-manageActivityForm .control-bar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  #joined-manageActivityForm .right-counter {
+    margin-top: 10px;
+  }
 }

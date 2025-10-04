@@ -206,12 +206,11 @@
                 </label>
                 <label>
                     จำนวนสูงสุด :
-                    <div class="input-with-icon">
-                        <input type="number" name="MaxParticipants" min="1" required><img
-                            src="/img/people.png" alt="clock icon">
+                    <div class="input-with-icon people">
+                        <img src="/img/people.png" alt="icon">
+                        <input type="number" name="MaxParticipants" required>
                     </div>
                 </label>
-
                 <div class="dateandtime-row">
                     <label>
                         วันปิดรับประกาศ :
@@ -251,23 +250,7 @@
                     </div>
                     <input type="hidden" name="activityType" id="activityType">
                 </div>
-                <script>
-                    const categoryButtons = document.querySelectorAll(".category-select button");
-                    const hiddenInput = document.getElementById("activityType");
 
-                    categoryButtons.forEach(btn => {
-                        btn.addEventListener("click", () => {
-                            // เอา active ออกจากปุ่มอื่น
-                            categoryButtons.forEach(b => b.classList.remove("active"));
-
-                            // ใส่ active ให้ปุ่มที่เลือก
-                            btn.classList.add("active");
-
-                            // เก็บค่าใส่ hidden input
-                            hiddenInput.value = btn.dataset.value;
-                        });
-                    });
-                </script>
                 <div class="upload-img">
                     <label for="activityImage">รูปกิจกรรม :</label>
                     <div class="upload-btn">
@@ -275,6 +258,7 @@
                         <span>อัปโหลดรูปโปรไฟล์</span>
                         <input type="file" id="activityImage" name="activityImage" accept="image/*">
                     </div>
+                    <img id="previewImage" src="" alt="preview" style="display:none;">
                 </div>
                 <div class="ActionsAct">
                     <button type="button" id="cancle-act" class="btn-gray">CANALE</button>
@@ -284,8 +268,8 @@
         </div>
     </div>
 
-    <script src="./js/app.js"></script>
-    <script src="./js/activity.js"></script>
+    <script defer src="./js/app.js"></script>
+    <script defer src="./js/activity.js"></script>
 </body>
 
 </html>
