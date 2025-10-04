@@ -1,23 +1,6 @@
 // ====== กันเรียกซ้ำ ======
 let __isLoadingProfile = false;
 
-// สร้าง status UI ไว้แสดงข้อความโหลด/เออเรอร์ (ถ้ายังไม่มี)
-function ensureStatusEl() {
-  let el = document.getElementById("statusMessage");
-  if (!el) {
-    el = document.createElement("div");
-    el.id = "statusMessage";
-    el.style.cssText = "margin:12px 0;font-size:14px;";
-    document.body.prepend(el);
-  }
-  return el;
-}
-function setStatus(msg, type = "info") {
-  const el = ensureStatusEl();
-  el.textContent = msg || "";
-  el.style.color = (type === "error") ? "#b00020" : "#444";
-}
-
 // ไอคอนประเภทงาน (ใช้ในรายการโพสต์ของผู้ใช้)
 function getActivityIcon(type = "") {
   const map = {
@@ -48,29 +31,13 @@ async function loadProfile() {
   const headers = token ? { Authorization: `Bearer ${token}` } : {};
 
   try {
-    setStatus("กำลังโหลดโปรไฟล์...");
-
+    
     // ✅ ใช้เส้นทางที่ถูกต้อง + แนบโทเคน (ถ้ามี)
     const res = await fetch(`${BASE_URL}/api/profile/${encodeURIComponent(username)}`, { headers });
 
-    if (res.status === 401) {
-      // ผู้ใช้ยังไม่ได้ล็อกอินหรือโทเคนไม่ถูกต้อง
-      setStatus("โปรดเข้าสู่ระบบก่อนเพื่อดูโปรไฟล์ผู้ใช้", "error");
-      __isLoadingProfile = false;
-      return;
-    }
-    if (res.status === 404) {
-      setStatus("ไม่พบผู้ใช้นี้", "error");
-      __isLoadingProfile = false;
-      return;
-    }
-    if (!res.ok) {
-      setStatus("Error loading profile: โหลดข้อมูลล้มเหลว", "error");
-      __isLoadingProfile = false;
-      return;
-    }
-
+  
     const data = await res.json();
+
 
     // ----------------- ข้อมูลผู้ใช้ -----------------
     const profileImgEl = document.getElementById("profileImg");

@@ -68,11 +68,14 @@ async function loadPosts() {
   }
 }
 
+// --- เช็คว่าเป็นโปรไฟล์ตัวเองหรือไม่ ---
+  
+  
+
 // เปิด modal แสดงรายละเอียด
 function openPostModal(post) {
   const modal = document.getElementById("viewPostModal");
   const content = document.getElementById("viewPostContent");
-
   // รองรับ avatar ทั้ง post.avatar และ post.user.profileImg (หรือ ProfileImg)
   const rawAvatar = post.avatar || post.profileImg || (post.user && (post.user.profileImg || post.user.ProfileImg));
   const avatarSrc = rawAvatar
@@ -114,7 +117,7 @@ function openPostModal(post) {
         <div class="detail-footer">
           <!-- ใช้ <a> ปกติ ให้คลิกขวา/เปิดแท็บใหม่ได้ -->
           <a class="author" id="postAuthorLink"
-             href="./viewprofile.html?user=${encodeURIComponent(post.username)}" style="text-decoration:none;">
+             href="#" style="text-decoration:none;">
             <img class="avatar" src="${avatarSrc}" alt="${post.username || ""}">
             <div>
               <div class="name">
@@ -136,8 +139,24 @@ function openPostModal(post) {
 
         <div class="view-post-meta">เผยแพร่เมื่อ ${post.createdAt ? new Date(post.createdAt).toLocaleString() : "-"}</div>
       </div>
+      
     </div>
   `;
+    const authorLink = document.getElementById("postAuthorLink");
+    if (authorLink) {
+      authorLink.addEventListener("click", (e) => {
+        e.preventDefault();
+        const currentUsername = localStorage.getItem("username");
+        if (currentUsername && currentUsername === post.username) {
+          // ถ้าเป็นตัวเอง ไปหน้า myprofile.html
+          window.location.href = "./myprofile.html";
+        } else {
+          // ถ้าเป็นคนอื่น ไปหน้า viewprofile.html
+          window.location.href = `./viewprofile.html?user=${encodeURIComponent(post.username)}`;
+        }
+      });
+    }
+  
 
   // --- Edit (Modal + พรีฟิล) ---
   const editBtn = document.getElementById("editPostBtn");
