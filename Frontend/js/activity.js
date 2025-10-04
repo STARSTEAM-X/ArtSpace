@@ -13,6 +13,18 @@ let allActivities = [];
 let selectedCategory = ""; // Visual Arts / Photography / Writing / Music
 let sortBy = "";           // "participants" | "date"
 
+function getCurrentUserName() {
+  try {
+    const userStr = localStorage.getItem("loggedInUser");
+    if (!userStr) return "";
+    const user = JSON.parse(userStr);
+    return user.username || "";
+  } catch (err) {
+    console.error("Error parsing loggedInUser:", err);
+    return "";
+  }
+}
+
 // ====== LOAD & RENDER ======
 async function loadActivities() {
     try {
@@ -75,7 +87,7 @@ function renderActivities(list) {
                 </div>
                 <div class="count-badge status ${act.currentParticipants < act.maxParticipants ? "success" : "danger"}"><img class="image-count-badge" src="/img/account.png" width="18" height="18" alt=""> ${act.currentParticipants}/${act.maxParticipants}</div>     
                 <div class="org">
-                    <img class="btn-img" src="${BASE_URL + act.createdBy.profileImg}" alt="" onclick="viewProfile(${act.id})">
+                    <img class="btn-img" src="${BASE_URL + act.createdBy.profileImg}" alt="" onclick="viewProfile(${act.createdByUserName})">
                     <div>
                         ${act.createdBy.nickname} 
                         <div>
@@ -129,83 +141,40 @@ function applyFilters() {
 }
 
 // ====== MODAL DETAIL ======
-function getCurrentUserId() {
-    try {
-        // ตรวจสอบจาก localStorage หลายรูปแบบ
-        const userStr = localStorage.getItem("user");
-        if (userStr) {
-            const user = JSON.parse(userStr);
-            // ลองหาจากหลาย field ที่เป็นไปได้
-            return String(user.id || user.userId || user.uid || user._id || "");
-        }
-        // ถ้าไม่มี user object ลองหาจาก userId โดยตรง
-        return String(localStorage.getItem("userId") || "");
-    } catch (err) {
-        console.error("Error getting user ID:", err);
-        return "";
-    }
-}
 
-// ====== ปรับปรุงฟังก์ชัน viewDetail ======
+// View Detail
 async function viewDetail(id) {
-    try {
-        const res = await fetch(`${BASE_URL}/api/activity/detail/${id}`);
-        if (!res.ok) throw new Error("โหลดรายละเอียดกิจกรรมล้มเหลว");
-        const act = await res.json();
+  try {
+    const res = await fetch(`${BASE_URL}/api/activity/detail/${id}`);
+    if (!res.ok) throw new Error("โหลดรายละเอียดกิจกรรมล้มเหลว");
+    const act = await res.json();
 
-        // Debug: แสดงข้อมูลเพื่อตรวจสอบ
-        console.log("Activity detail:", act);
-        console.log("Current user ID:", getCurrentUserId());
-        console.log("Activity owner:", act.createdBy);
+    const currentUserName = getCurrentUserName();
+    const ownerName = act.createdByUserName || "";
 
-        // ดึง ID ของผู้ใช้ปัจจุบัน
-        const currentUserId = getCurrentUserId();
-        
-        // ดึง ID ของเจ้าของกิจกรรม (ลองหลายรูปแบบ)
-        let ownerId = "";
-        if (act.createdBy) {
-            ownerId = String(
-                act.createdBy.id || 
-                act.createdBy.userId || 
-                act.createdBy._id || 
-                act.createdBy.uid || 
-                ""
-            );
+    const isOwner = currentUserName === ownerName;
+    const isJoined = act.isJoined === true;
+
+    console.log("=== Debug Info ===");
+    console.log("Current Username:", currentUserName);
+    console.log("Owner Activity:", ownerName);
+    console.log("Is Owner:", isOwner, "Is Joined:", isJoined);
+    console.log("Activity ID:", act.id);
+    console.log("Activity detail object =", act);
+
+
+
+    const participantClass = isJoined ? "participants-joined" : "participants-not-joined";
+
+    let actionHtml = "";
+        if (isOwner) {
+            actionHtml = `<button class="btn-manage-activity" onclick="openManageActivity(${act.id})">Manage Activity</button>`;
+        } else if (isJoined) {
+            actionHtml = `<button class="btn-leave-activity" onclick="leaveActivity(${act.id})">Leave Activity</button>`;
+        } else {
+            actionHtml = `<button class="btn-join-activity" onclick="joinActivity(${act.id})">Join Now</button>`;
         }
 
-        // ตรวจสอบว่าเป็นเจ้าของกิจกรรมหรือไม่
-        const isOwner = currentUserId && ownerId && currentUserId === ownerId;
-        
-        // ตรวจสอบว่าเข้าร่วมกิจกรรมแล้วหรือไม่
-        const isJoined = act.isJoined || false;
-
-        console.log("Is owner:", isOwner);
-        console.log("Is joined:", isJoined);
-
-        // กำหนด class สำหรับ badge ผู้เข้าร่วม
-        const participantClass = isJoined ? "participants-joined" : "participants-not-joined";
-
-        // สร้างปุ่ม action ตามสถานะ
-        let actionHtml = "";
-        
-        if (isOwner) {
-            // เจ้าของกิจกรรม → ปุ่ม Manage Activity
-            actionHtml = `
-                <button class="btn-manage-activity" onclick="openManageActivity(${act.id})">
-                    Manage Activity
-                </button>`;
-        } else if (isJoined) {
-            // เข้าร่วมแล้ว → ปุ่ม Leave Activity
-            actionHtml = `
-                <button class="btn-leave-activity" onclick="confirmLeaveActivity(${act.id})">
-                    Leave Activity
-                </button>`;
-        } else {
-                actionHtml = `
-                    <button class="btn-join-activity" onclick="joinActivity(${act.id})">
-                        Join Now
-                    </button>`;
-            }
         modalBody.innerHTML = `
         <div class="type-more">
                 <span class="pill-category-modal ${mapTagClass(act.activityType)}">
@@ -226,7 +195,7 @@ async function viewDetail(id) {
                         <p class="organizer-label">ผู้จัดกิจกรรม :</p>
                         <div class="organizer-info">
                             <img class="btn-img" src="${BASE_URL + act.createdBy.profileImg}" alt="" 
-                                 onclick="viewProfile(${act.createdBy.id || act.createdBy.userId})">
+                                 onclick="viewProfile(${act.createdByUserName})">
                             <div>
                                 ${act.createdBy.nickname}
                                 <div>
@@ -290,7 +259,7 @@ async function viewDetail(id) {
         alert("ไม่สามารถโหลดรายละเอียดได้");
     }
 }
-
+//====== star (rating)======
 function renderStars() {
   document.querySelectorAll(".rating").forEach(rating => {
     const score = parseFloat(rating.dataset.score) || 0;
@@ -317,12 +286,9 @@ function renderStars() {
   });
 }
 
-
-// ฟังก์ชันยืนยันก่อน Leave Activity
-function confirmLeaveActivity(id) {
-    if (alert("คุณแน่ใจหรือไม่ที่จะออกจากกิจกรรมนี้?")) {
-        leaveActivity(id);
-    }
+// ======เปิดหน้า Manage Activity (สำหรับเจ้าของ) ======
+function openManageActivity(activityId) {
+  location.href = `/manage-activity.html?id=${act.createdByUserName}`;
 }
 
 // ====== LEAVE ACTIVITY ======
@@ -373,12 +339,14 @@ async function joinActivity(id) {
             body: JSON.stringify({ activityId: id })
         });
         const data = await res.json();
+        console.log("jvdaljakd",data);
         if (res.ok) {
             alert("เข้าร่วมกิจกรรมสำเร็จ");
             await loadActivities(); // รีโหลดข้อมูลให้ตัวเลขผู้เข้าร่วมอัปเดต
         } else {
             alert("ไม่สามารถเข้าร่วม: " + (data.message || "unknown"));
         }
+        await viewDetail(activityId);
     } catch (err) {
         console.error(err);
     }
