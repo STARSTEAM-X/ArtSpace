@@ -187,63 +187,152 @@ const notifyBtn = document.getElementById("notifyBtn");
 const notifyDropdown = document.getElementById("notifyDropdown");
 const notifyCount = document.getElementById("notifyCount");
 let notiWorker = null;
-
+let currentNotiFilter = "all"; // "all" | "unread"
 /* ============================
    Render Notification UI
 ============================ */
 function renderNotifications(notis) {
-    const unreadCount = notis.filter(n => !n.isRead).length;
-    notifyCount.textContent = unreadCount;
+  // badge = จำนวน Unread
+  const unreadCount = notis.filter(n => !n.isRead).length;
+  notifyCount.textContent = unreadCount;
 
-    if (notifyDropdown.classList.contains("active")) {
-        if (notis.length === 0) {
-            notifyDropdown.innerHTML = `<div class="empty">ไม่มีการแจ้งเตือน</div>`;
-            return;
-        }
+  if (!notifyDropdown.classList.contains("active")) return;
 
-        notifyDropdown.innerHTML = notis.map(n => {
-            let iconClass = "fa-info-circle"; // default
-            if (n.type === "success") iconClass = "fa-check-circle";
-            else if (n.type === "error") iconClass = "fa-times-circle";
-            else if (n.type === "warning") iconClass = "fa-exclamation-triangle";
-            else if (n.type === "start") iconClass = "fa-flag";
+  // ฟิลเตอร์ list ตามแท็บ
+  const list = currentNotiFilter === "unread"
+    ? notis.filter(n => !n.isRead)
+    : notis;
 
-            return `
-                <div class="noti-item ${n.isRead ? "" : "unread"} ${n.type}" data-id="${n.id}">
-                    <div class="icon"><i class="fas ${iconClass}"></i></div>
-                    <div class="text">
-                        <h3>${n.title}</h3>
-                        <p>${n.message}</p>
-                        <small>${new Date(n.createdAt).toLocaleString()}</small>
-                    </div>
-                </div>
-            `;
-        }).join("");
+  // Header + Tabs + ปุ่ม
+  const headerHTML = `
+    <div class="notify-tabs">
+      <div class="tabs">
+        <button class="tab-btn ${currentNotiFilter === "all" ? "active" : ""}" data-tab="all">All</button>
+        <button class="tab-btn ${currentNotiFilter === "unread" ? "active" : ""}" data-tab="unread">Unread (${unreadCount})</button>
+      </div>
+      <button class="mark-all" id="markAllReadBtn">Mark all as read</button>
+    </div>
+  `;
 
-        notifyDropdown.querySelectorAll(".noti-item").forEach(item => {
-            item.onclick = async () => {
-                const id = item.dataset.id;
-                if (id) await markAsRead(id);
-            };
-        });
+  if (list.length === 0) {
+    notifyDropdown.innerHTML = headerHTML + `<div class="empty">ไม่มีการแจ้งเตือน</div>`;
+    bindTabs();
+    bindMarkAll();
+    return;
+  }
+
+  const itemsHTML = list.map(n => {
+    let iconClass = "fa-info-circle";
+    if (n.type === "success") iconClass = "fa-check-circle";
+    else if (n.type === "error") iconClass = "fa-times-circle";
+    else if (n.type === "warning") iconClass = "fa-exclamation-triangle";
+    else if (n.type === "start") iconClass = "fa-flag";
+
+    return `
+      <div class="noti-item ${n.isRead ? "read" : "unread"} ${n.type}" data-id="${n.id}">
+        <div class="icon"><i class="fas ${iconClass}"></i></div>
+        <div class="text">
+          <h3>${n.title}</h3>
+          <p>${n.message}</p>
+          <small>${new Date(n.createdAt).toLocaleString()}</small>
+        </div>
+      </div>
+    `;
+  }).join("");
+
+  notifyDropdown.innerHTML = headerHTML + itemsHTML;
+
+  // คลิกไอเท็ม = mark read + เปลี่ยนสีเทาทันที
+  notifyDropdown.querySelectorAll(".noti-item").forEach(item => {
+  item.onclick = async (e) => {
+    e.stopPropagation(); // กันไปชน outside click
+    const id = item.dataset.id;
+    if (!id) return;
+    await markAsRead(id);
+    item.classList.remove("unread");
+    item.classList.add("read");
+    const idx = lastNotis.findIndex(x => String(x.id) === String(id));
+    if (idx > -1) lastNotis[idx].isRead = true;
+    notifyCount.textContent = lastNotis.filter(n => !n.isRead).length;
+    if (currentNotiFilter === "unread") {
+      item.remove();
+      if (!notifyDropdown.querySelector(".noti-item")) {
+        notifyDropdown.insertAdjacentHTML("beforeend", `<div class="empty">ไม่มีการแจ้งเตือน</div>`);
+      }
     }
+  };
+});
+
+  bindTabs();
+  bindMarkAll();
+
+  function bindTabs() {
+  notifyDropdown.querySelectorAll(".tab-btn").forEach(btn => {
+    btn.onclick = (e) => {
+      e.preventDefault();
+      e.stopPropagation(); // กันไปชน outside click
+      currentNotiFilter = btn.dataset.tab; // "all" | "unread"
+      renderNotifications(lastNotis);
+      // ย้ำให้กล่องยังเปิดอยู่หลัง re-render
+      notifyDropdown.classList.add("active");
+    };
+  });
+}
+
+  function bindMarkAll() {
+    const markBtn = document.getElementById("markAllReadBtn");
+    if (!markBtn) return;
+    markBtn.onclick = async () => {
+      await markAllAsRead();
+      renderNotifications(lastNotis);
+    };
+  }
 }
 
 /* ============================
    Mark as Read API
 ============================ */
 async function markAsRead(id) {
-    const token = localStorage.getItem("token");
-    if (!token) return;
+  const token = localStorage.getItem("token");
+  if (!token) return;
 
-    try {
-        await fetch(`${BASE_URL}/api/notification/read/${id}`, {
-            method: "PUT",
-            headers: { "Authorization": `Bearer ${token}` }
-        });
-    } catch (err) {
-        console.error("MarkAsRead error:", err);
-    }
+  try {
+    // อัปเดตฝั่งเซิร์ฟเวอร์
+    await fetch(`${BASE_URL}/api/notification/read/${id}`, {
+      method: "PUT",
+      headers: { "Authorization": `Bearer ${token}` }
+    });
+    // อัปเดต cache ทันที
+    const idx = lastNotis.findIndex(n => String(n.id) === String(id));
+    if (idx > -1) lastNotis[idx].isRead = true;
+  } catch (err) {
+    console.error("MarkAsRead error:", err);
+  }
+}
+
+async function markAllAsRead() {
+  const token = localStorage.getItem("token");
+  if (!token) return;
+
+  const unreadIds = lastNotis.filter(n => !n.isRead).map(n => n.id);
+  if (unreadIds.length === 0) return;
+
+  try {
+    // ทำเป็นชุดแบบขนาน
+    await Promise.all(
+      unreadIds.map(id =>
+        fetch(`${BASE_URL}/api/notification/read/${id}`, {
+          method: "PUT",
+          headers: { "Authorization": `Bearer ${token}` }
+        })
+      )
+    );
+    // อัปเดต cache ทั้งหมด
+    lastNotis = lastNotis.map(n => ({ ...n, isRead: true }));
+    notifyCount.textContent = "0";
+  } catch (err) {
+    console.error("MarkAllAsRead error:", err);
+  }
 }
 
 /* ============================
@@ -317,22 +406,22 @@ function stopNotificationWorker() {
 /* ============================
    UI Events
 ============================ */
-notifyBtn.addEventListener("click", () => {
+notifyBtn.addEventListener("click", (e) => {
+    e.stopPropagation(); // กันไปชน outside click
     notifyDropdown.classList.toggle("active");
-
     if (notifyDropdown.classList.contains("active")) {
-        // ✅ render notis ล่าสุดทันที
         renderNotifications(lastNotis);
     }
 });
 
 
 document.addEventListener("click", (e) => {
-    if (!notifyBtn.contains(e.target)) {
-        notifyDropdown.classList.remove("active");
-    }
+  const clickedOutsideBtn = !notifyBtn.contains(e.target);
+  const clickedOutsideDropdown = !notifyDropdown.contains(e.target);
+  if (clickedOutsideBtn && clickedOutsideDropdown) {
+    notifyDropdown.classList.remove("active");
+  }
 });
-
 // --------------------Hamburger Toggle----------------------- //
 document.addEventListener("DOMContentLoaded", () => {
     const menuToggle = document.getElementById("menuToggle");
