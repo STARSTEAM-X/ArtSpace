@@ -528,7 +528,7 @@ body {
 /* ปุ่มหลักสีเหลือง */
 .btn-primary-xl {
   width: 100%;
-  background: #5e00bd;
+  background: #FFD54F;
   border: none;
   color: #171717;
   font-weight: 800;
@@ -538,7 +538,7 @@ body {
   cursor: pointer;
   transition: transform .15s ease, box-shadow .15s ease, background .2s;
 }
-.btn-primary-xl:hover { transform: translateY(-1px); box-shadow: 0 8px 20px rgba(255,214,80,.35); background: #4a1a8c;  }
+.btn-primary-xl:hover { transform: translateY(-1px); box-shadow: 0 8px 20px rgba(255,214,80,.35); background: #FFC107;   }
 
 /* ปุ่มรอง (ยกเลิก) */
 .btn-secondary.ghost {
@@ -1050,15 +1050,15 @@ body {
   width: 100%;
   padding: 10px;
   border: none;
-  background: #6c23b5;
-  color: white;
+  background: #ffd700;
+  color: rgb(0, 0, 0);
   font-weight: bold;
   border-radius: 8px;
   cursor: pointer;
   transition: background 0.3s;
 }
 .modal-content button:hover {
-  background: #4a1a8c;
+  background: #ffd700;
 }
 
 /* Grid Form */

@@ -582,7 +582,7 @@ body::before {
   to { opacity: 1; }
 }
 
-.modal-content {
+#postModal .modal-content {
   background: white;
   padding: 40px;
   border-radius: 24px;
@@ -607,7 +607,7 @@ body::before {
   }
 }
 
-.modal-content h2 {
+#postModal .modal-content h2 {
   margin-top: 0;
   margin-bottom: 25px;
   font-size: 28px;
@@ -617,9 +617,9 @@ body::before {
   font-weight: 800;
 }
 
-.modal-content input,
-.modal-content textarea,
-.modal-content select {
+#postModal .modal-content input,
+#postModal .modal-content textarea,
+#postModal .modal-content select {
   width: 100%;
   padding: 16px 18px;
   margin: 12px 0;
@@ -632,9 +632,9 @@ body::before {
   box-sizing: border-box;
 }
 
-.modal-content input:focus,
-.modal-content textarea:focus,
-.modal-content select:focus {
+#postModal .modal-content input:focus,
+#postModal .modal-content textarea:focus,
+#postModal .modal-content select:focus {
   border-color: #7209b7;
   box-shadow: 
     0 0 0 4px rgba(114, 9, 183, 0.1),
@@ -644,12 +644,12 @@ body::before {
   transform: translateY(-2px);
 }
 
-.modal-content textarea {
+#postModal .modal-content textarea {
   min-height: 120px;
   resize: vertical;
 }
 
-.modal-content button {
+#postModal .modal-content button {
   margin-top: 18px;
   padding: 14px 30px;
   border-radius: 14px;
@@ -661,19 +661,16 @@ body::before {
   font-family: "Prompt", sans-serif;
 }
 
-.modal-content button[type="submit"] {
-  background: linear-gradient(135deg, #3a0ca3 0%, #7209b7 100%);
-  color: white;
+#postModal .modal-content button[type="submit"] {
+  background: #ffd700;
+  color: rgb(0, 0, 0);
   box-shadow: 0 4px 15px rgba(114, 9, 183, 0.3);
   width: 100%;
 }
 
-.modal-content button[type="submit"]:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 6px 25px rgba(114, 9, 183, 0.4);
-}
 
-.modal-content .close {
+
+#postModal .modal-content .close {
   position: absolute;
   top: 20px;
   right: 24px;
@@ -690,7 +687,7 @@ body::before {
   background: rgba(114, 9, 183, 0.05);
 }
 
-.modal-content .close:hover {
+#postModal .modal-content .close:hover {
   background: rgba(114, 9, 183, 0.15);
   color: #7209b7;
   transform: rotate(90deg) scale(1.1);
